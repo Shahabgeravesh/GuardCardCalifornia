@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
-import { StyleSheet, ScrollView, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, ScrollView, TouchableOpacity, View, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Text } from 'react-native';
+import { useTheme } from '../context/ThemeContext';
 
 export default function HomeScreen() {
+  const theme = useTheme();
   const [expandedStep, setExpandedStep] = useState(null);
-
-  // Progress tracking - based on real 3-step process
-  const registrationProgress = 33; // Step 1 completed
+  
+  // Interactive progress tracking
+  const [completedSteps, setCompletedSteps] = useState([0]); // Step 1 starts completed
   const totalSteps = 3;
-  const completedSteps = 1;
+  const registrationProgress = (completedSteps.length / totalSteps) * 100;
 
   const quickActions = [
     {
@@ -18,30 +20,41 @@ export default function HomeScreen() {
       title: 'Training Centers',
       subtitle: 'Find BSIS approved providers',
       icon: 'school',
-      color: '#34C759',
+      color: theme.colors.systemGreen,
     },
     {
       id: 2,
       title: 'Study Materials',
       subtitle: 'PTA & AUOF course content',
       icon: 'book',
-      color: '#FF9500',
+      color: theme.colors.systemOrange,
     },
     {
       id: 3,
       title: 'Practice Tests',
       subtitle: 'Test your knowledge',
       icon: 'help-circle',
-      color: '#AF52DE',
+      color: theme.colors.systemPurple,
     },
     {
       id: 4,
       title: 'Live Scan Locations',
       subtitle: 'Find fingerprint locations',
       icon: 'location',
-      color: '#007AFF',
+      color: theme.colors.systemBlue,
     },
   ];
+
+  // Function to toggle step completion
+  const toggleStepCompletion = (stepId) => {
+    setCompletedSteps(prev => {
+      if (prev.includes(stepId - 1)) {
+        return prev.filter(id => id !== stepId - 1);
+      } else {
+        return [...prev, stepId - 1].sort();
+      }
+    });
+  };
 
   // Real California Guard Card 3-Step Process
   const guardCardSteps = [
@@ -52,6 +65,7 @@ export default function HomeScreen() {
       status: 'completed',
       timeEstimate: '1-2 days',
       costEstimate: '$50-150',
+      image: require('../../assets/images/Verified.png'),
       details: [
         '3-Hour Power to Arrest (PTA) - Online Part A',
         '5-Hour Appropriate Use of Force (AUOF) - In-Person Part B',
@@ -71,6 +85,7 @@ export default function HomeScreen() {
       status: 'in-progress',
       timeEstimate: '30 minutes',
       costEstimate: '$50',
+      image: require('../../assets/images/BSIS Application.png'),
       details: [
         'Create account on CA Breeze system',
         'Complete Security Guard Registration application',
@@ -90,6 +105,7 @@ export default function HomeScreen() {
       status: 'pending',
       timeEstimate: '30 minutes',
       costEstimate: '$32-75',
+      image: require('../../assets/images/Livescan.png'),
       details: [
         'Download Live Scan form from BSIS website',
         'Visit authorized Live Scan location',
@@ -99,50 +115,34 @@ export default function HomeScreen() {
       requirements: [
         'Completed Live Scan form',
         'Valid government-issued photo ID',
-        'Payment for Live Scan fees'
+        'Payment for Live Scan services'
       ]
-    }
-  ];
-
-  const importantLinks = [
-    {
-      id: 1,
-      title: 'BSIS Breeze Application',
-      subtitle: 'Submit your guard card application',
-      url: 'https://www.breeze.ca.gov/datamart/loginCADCA.do',
-      icon: 'globe',
-    },
-    {
-      id: 2,
-      title: 'Live Scan Locations',
-      subtitle: 'Find fingerprint locations near you',
-      url: 'https://oag.ca.gov/fingerprints/locations',
-      icon: 'location',
-    },
-    {
-      id: 3,
-      title: 'Check License Status',
-      subtitle: 'Verify your application status',
-      url: 'https://search.dca.ca.gov/',
-      icon: 'search',
     }
   ];
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'completed': return '#34C759';
-      case 'in-progress': return '#FF9500';
-      case 'pending': return '#8E8E93';
-      default: return '#8E8E93';
+      case 'completed':
+        return theme.colors.systemGreen;
+      case 'in-progress':
+        return theme.colors.systemOrange;
+      case 'pending':
+        return theme.colors.systemBlue;
+      default:
+        return theme.colors.systemBlue;
     }
   };
 
   const getStatusIcon = (status) => {
     switch (status) {
-      case 'completed': return 'checkmark-circle';
-      case 'in-progress': return 'time';
-      case 'pending': return 'ellipse-outline';
-      default: return 'ellipse-outline';
+      case 'completed':
+        return 'checkmark-circle';
+      case 'in-progress':
+        return 'time';
+      case 'pending':
+        return 'ellipse';
+      default:
+        return 'ellipse';
     }
   };
 
@@ -150,52 +150,87 @@ export default function HomeScreen() {
     setExpandedStep(expandedStep === stepId ? null : stepId);
   };
 
+  // Function to get step status based on completion
+  const getStepStatus = (stepId) => {
+    return completedSteps.includes(stepId - 1) ? 'completed' : 'pending';
+  };
+
+  // Function to get status icon based on completion
+  const getStatusIconByStep = (stepId) => {
+    return completedSteps.includes(stepId - 1) ? 'checkmark-circle' : 'ellipse-outline';
+  };
+
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.systemBackground }]}>
       <ScrollView 
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
+        {/* Header Section */}
+        <View style={styles.header}>
+          <Text style={[styles.headerTitle, { color: theme.colors.label }, theme.typography.largeTitle]}>
+            GuardCard California
+          </Text>
+          <Text style={[styles.headerSubtitle, { color: theme.colors.secondaryLabel }, theme.typography.body]}>
+            Your complete guide to becoming a licensed security guard in California
+          </Text>
+        </View>
+
         {/* Progress Overview */}
-        <View style={styles.progressCard}>
+        <View style={[styles.progressCard, { backgroundColor: theme.colors.secondarySystemBackground }, theme.shadows.md]}>
           <View style={styles.progressHeader}>
-            <Text style={styles.progressTitle}>
+            <Text style={[styles.progressTitle, { color: theme.colors.label }, theme.typography.headline]}>
               Registration Progress
             </Text>
-            <Text style={styles.progressPercentage}>
+            <Text style={[styles.progressPercentage, { color: theme.colors.systemBlue }, theme.typography.title2]}>
               {registrationProgress}%
             </Text>
           </View>
           
-          <View style={styles.progressBar}>
+          <View style={[styles.progressBar, { backgroundColor: theme.colors.separator }]}>
             <View 
-              style={[styles.progressFill, { width: `${registrationProgress}%` }]} 
+              style={[styles.progressFill, { 
+                width: `${registrationProgress}%`,
+                backgroundColor: theme.colors.systemBlue
+              }]} 
             />
           </View>
           
           <View style={styles.progressStats}>
             <View style={styles.statItem}>
-              <Text style={styles.statNumber}>{completedSteps}</Text>
-              <Text style={styles.statLabel}>Completed</Text>
+              <Text style={[styles.statNumber, { color: theme.colors.label }, theme.typography.title3]}>
+                {completedSteps}
+              </Text>
+              <Text style={[styles.statLabel, { color: theme.colors.secondaryLabel }, theme.typography.footnote]}>
+                Completed
+              </Text>
             </View>
             <View style={styles.statItem}>
-              <Text style={styles.statNumber}>{totalSteps - completedSteps}</Text>
-              <Text style={styles.statLabel}>Remaining</Text>
+              <Text style={[styles.statNumber, { color: theme.colors.label }, theme.typography.title3]}>
+                {totalSteps - completedSteps}
+              </Text>
+              <Text style={[styles.statLabel, { color: theme.colors.secondaryLabel }, theme.typography.footnote]}>
+                Remaining
+              </Text>
             </View>
             <View style={styles.statItem}>
-              <Text style={styles.statNumber}>{totalSteps}</Text>
-              <Text style={styles.statLabel}>Total Steps</Text>
+              <Text style={[styles.statNumber, { color: theme.colors.label }, theme.typography.title3]}>
+                {totalSteps}
+              </Text>
+              <Text style={[styles.statLabel, { color: theme.colors.secondaryLabel }, theme.typography.footnote]}>
+                Total Steps
+              </Text>
             </View>
           </View>
         </View>
 
         {/* 3-Step Guard Card Process */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>
+          <Text style={[styles.sectionTitle, { color: theme.colors.label }, theme.typography.title2]}>
             How to Get Your California Guard Card
           </Text>
-          <Text style={styles.sectionSubtitle}>
+          <Text style={[styles.sectionSubtitle, { color: theme.colors.secondaryLabel }, theme.typography.body]}>
             Follow these 3 required steps to obtain your BSIS Guard Card
           </Text>
           
@@ -205,16 +240,16 @@ export default function HomeScreen() {
                 <View style={styles.stepHeader}>
                   <View style={styles.stepNumberContainer}>
                     <View style={[styles.stepNumber, { 
-                      backgroundColor: getStatusColor(step.status),
-                      borderColor: getStatusColor(step.status)
+                      backgroundColor: getStatusColor(getStepStatus(step.id)),
+                      borderColor: getStatusColor(getStepStatus(step.id))
                     }]}>
-                      <Text style={styles.stepNumberText}>
+                      <Text style={[styles.stepNumberText, { color: '#FFFFFF' }, theme.typography.headline]}>
                         {step.id}
                       </Text>
                     </View>
                     {index < guardCardSteps.length - 1 && (
                       <View style={[styles.stepConnector, { 
-                        backgroundColor: step.status === 'completed' ? getStatusColor(step.status) : '#E5E5EA'
+                        backgroundColor: completedSteps.includes(step.id - 1) ? getStatusColor('completed') : theme.colors.separator
                       }]} />
                     )}
                   </View>
@@ -224,25 +259,36 @@ export default function HomeScreen() {
                       style={styles.stepTitleRow}
                       onPress={() => toggleStep(step.id)}
                       activeOpacity={0.7}
+                      accessibilityRole="button"
+                      accessibilityLabel={`Step ${step.id}: ${step.title}`}
+                      accessibilityHint="Double tap to expand or collapse step details"
                     >
                       <View style={styles.stepTitleContainer}>
-                        <Text style={styles.stepTitle}>
+                        <Text style={[styles.stepTitle, { color: theme.colors.label }, theme.typography.headline]}>
                           {step.title}
                         </Text>
-                        <Text style={styles.stepDescription}>
+                        <Text style={[styles.stepDescription, { color: theme.colors.secondaryLabel }, theme.typography.footnote]}>
                           {step.description}
                         </Text>
                       </View>
                       <View style={styles.stepStatusContainer}>
-                        <Ionicons 
-                          name={getStatusIcon(step.status)} 
-                          size={24} 
-                          color={getStatusColor(step.status)} 
-                        />
+                        <TouchableOpacity
+                          onPress={() => toggleStepCompletion(step.id)}
+                          style={styles.completionToggle}
+                          activeOpacity={0.7}
+                          accessibilityRole="button"
+                          accessibilityLabel={`Mark step ${step.id} as ${completedSteps.includes(step.id - 1) ? 'incomplete' : 'complete'}`}
+                        >
+                          <Ionicons 
+                            name={getStatusIconByStep(step.id)} 
+                            size={24} 
+                            color={getStatusColor(getStepStatus(step.id))} 
+                          />
+                        </TouchableOpacity>
                         <Ionicons 
                           name={expandedStep === step.id ? "chevron-up" : "chevron-down"} 
                           size={16} 
-                          color="#8E8E93" 
+                          color={theme.colors.secondaryLabel} 
                         />
                       </View>
                     </TouchableOpacity>
@@ -250,39 +296,57 @@ export default function HomeScreen() {
                     {/* Step Details (Expandable) */}
                     {expandedStep === step.id && (
                       <View style={styles.stepDetails}>
-                        <View style={styles.detailsSection}>
-                          <Text style={styles.detailsTitle}>
-                            What You'll Do
-                          </Text>
-                          {step.details.map((detail, detailIndex) => (
-                            <View key={detailIndex} style={styles.detailItem}>
-                              <View style={[styles.detailDot, { backgroundColor: getStatusColor(step.status) }]} />
-                              <Text style={styles.detailText}>{detail}</Text>
-                            </View>
-                          ))}
-                        </View>
-
-                        <View style={styles.detailsSection}>
-                          <Text style={styles.detailsTitle}>
-                            What You'll Need
-                          </Text>
-                          {step.requirements.map((requirement, reqIndex) => (
-                            <View key={reqIndex} style={styles.detailItem}>
-                              <View style={[styles.detailDot, { backgroundColor: getStatusColor(step.status) }]} />
-                              <Text style={styles.detailText}>{requirement}</Text>
-                            </View>
-                          ))}
+                        {/* Step Image */}
+                        <View style={styles.stepImageContainer}>
+                          <Image 
+                            source={step.image} 
+                            style={styles.stepImage}
+                            resizeMode="contain"
+                            accessibilityLabel={`${step.title} illustration`}
+                          />
                         </View>
 
                         <View style={styles.stepMetrics}>
                           <View style={styles.metricItem}>
-                            <Ionicons name="time" size={16} color="#8E8E93" />
-                            <Text style={styles.metricText}>{step.timeEstimate}</Text>
+                            <Ionicons name="time" size={16} color={theme.colors.secondaryLabel} />
+                            <Text style={[styles.metricText, { color: theme.colors.secondaryLabel }, theme.typography.footnote]}>
+                              {step.timeEstimate}
+                            </Text>
                           </View>
                           <View style={styles.metricItem}>
-                            <Ionicons name="card" size={16} color="#8E8E93" />
-                            <Text style={styles.metricText}>{step.costEstimate}</Text>
+                            <Ionicons name="card" size={16} color={theme.colors.secondaryLabel} />
+                            <Text style={[styles.metricText, { color: theme.colors.secondaryLabel }, theme.typography.footnote]}>
+                              {step.costEstimate}
+                            </Text>
                           </View>
+                        </View>
+
+                        <View style={styles.detailsSection}>
+                          <Text style={[styles.detailsTitle, { color: theme.colors.label }, theme.typography.subheadline]}>
+                            What You'll Do:
+                          </Text>
+                          {step.details.map((detail, detailIndex) => (
+                            <View key={detailIndex} style={styles.detailRow}>
+                              <View style={[styles.detailDot, { backgroundColor: theme.colors.systemBlue }]} />
+                              <Text style={[styles.detailText, { color: theme.colors.secondaryLabel }, theme.typography.footnote]}>
+                                {detail}
+                              </Text>
+                            </View>
+                          ))}
+                        </View>
+
+                        <View style={styles.detailsSection}>
+                          <Text style={[styles.detailsTitle, { color: theme.colors.label }, theme.typography.subheadline]}>
+                            What You'll Need:
+                          </Text>
+                          {step.requirements.map((requirement, reqIndex) => (
+                            <View key={reqIndex} style={styles.detailRow}>
+                              <View style={[styles.detailDot, { backgroundColor: theme.colors.systemBlue }]} />
+                              <Text style={[styles.detailText, { color: theme.colors.secondaryLabel }, theme.typography.footnote]}>
+                                {requirement}
+                              </Text>
+                            </View>
+                          ))}
                         </View>
                       </View>
                     )}
@@ -293,56 +357,81 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        {/* Quick Actions */}
+        {/* Important Links */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>
+          <Text style={[styles.sectionTitle, { color: theme.colors.label }, theme.typography.title2]}>
+            Important Links
+          </Text>
+          <View style={styles.linksContainer}>
+            <View style={[styles.linkCard, { backgroundColor: theme.colors.systemBackground }, theme.shadows.sm]}>
+              <View style={styles.linkHeader}>
+                <View style={styles.linkInfo}>
+                  <Text style={[styles.linkTitle, { color: theme.colors.label }, theme.typography.headline]}>
+                    BSIS Website
+                  </Text>
+                  <Text style={[styles.linkSubtitle, { color: theme.colors.secondaryLabel }, theme.typography.footnote]}>
+                    Official Bureau of Security and Investigative Services
+                  </Text>
+                </View>
+                <Ionicons name="open-outline" size={20} color={theme.colors.systemBlue} />
+              </View>
+            </View>
+
+            <View style={[styles.linkCard, { backgroundColor: theme.colors.systemBackground }, theme.shadows.sm]}>
+              <View style={styles.linkHeader}>
+                <View style={styles.linkInfo}>
+                  <Text style={[styles.linkTitle, { color: theme.colors.label }, theme.typography.headline]}>
+                    CA Breeze System
+                  </Text>
+                  <Text style={[styles.linkSubtitle, { color: theme.colors.secondaryLabel }, theme.typography.footnote]}>
+                    Online application portal for guard card registration
+                  </Text>
+                </View>
+                <Ionicons name="open-outline" size={20} color={theme.colors.systemBlue} />
+              </View>
+            </View>
+
+            <View style={[styles.linkCard, { backgroundColor: theme.colors.systemBackground }, theme.shadows.sm]}>
+              <View style={styles.linkHeader}>
+                <View style={styles.linkInfo}>
+                  <Text style={[styles.linkTitle, { color: theme.colors.label }, theme.typography.headline]}>
+                    Live Scan Locations
+                  </Text>
+                  <Text style={[styles.linkSubtitle, { color: theme.colors.secondaryLabel }, theme.typography.footnote]}>
+                    Find authorized fingerprinting locations
+                  </Text>
+                </View>
+                <Ionicons name="open-outline" size={20} color={theme.colors.systemBlue} />
+              </View>
+            </View>
+          </View>
+        </View>
+
+        {/* Quick Actions - Moved to bottom */}
+        <View style={styles.section}>
+          <Text style={[styles.sectionTitle, { color: theme.colors.label }, theme.typography.title2]}>
             Quick Actions
           </Text>
           <View style={styles.quickActionsGrid}>
             {quickActions.map((action) => (
-              <TouchableOpacity 
-                key={action.id} 
-                style={styles.actionCard}
+              <TouchableOpacity
+                key={action.id}
+                style={[styles.actionCard, { backgroundColor: theme.colors.systemBackground }, theme.shadows.sm]}
                 activeOpacity={0.7}
+                accessibilityRole="button"
+                accessibilityLabel={`${action.title}: ${action.subtitle}`}
+                accessibilityHint={`Double tap to access ${action.title.toLowerCase()}`}
               >
-                <View style={[styles.actionIcon, { backgroundColor: action.color + '20' }]}>
-                  <Ionicons name={action.icon} size={24} color={action.color} />
+                <View style={[styles.actionIcon, { backgroundColor: action.color }]}>
+                  <Ionicons name={action.icon} size={24} color="#FFFFFF" />
                 </View>
                 <View style={styles.actionContent}>
-                  <Text style={styles.actionTitle}>
+                  <Text style={[styles.actionTitle, { color: theme.colors.label }, theme.typography.headline]}>
                     {action.title}
                   </Text>
-                  <Text style={styles.actionSubtitle}>
+                  <Text style={[styles.actionSubtitle, { color: theme.colors.secondaryLabel }, theme.typography.footnote]}>
                     {action.subtitle}
                   </Text>
-                </View>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </View>
-
-        {/* Important Links */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>
-            Official BSIS Resources
-          </Text>
-          <View style={styles.linksContainer}>
-            {importantLinks.map((link) => (
-              <TouchableOpacity 
-                key={link.id} 
-                style={styles.linkCard}
-                activeOpacity={0.7}
-              >
-                <View style={styles.linkHeader}>
-                  <View style={styles.linkInfo}>
-                    <Text style={styles.linkTitle}>
-                      {link.title}
-                    </Text>
-                    <Text style={styles.linkSubtitle}>
-                      {link.subtitle}
-                    </Text>
-                  </View>
-                  <Ionicons name={link.icon} size={24} color="#007AFF" />
                 </View>
               </TouchableOpacity>
             ))}
@@ -356,28 +445,29 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F2F2F7',
   },
   scrollView: {
     flex: 1,
   },
   scrollContent: {
     paddingBottom: 100,
+    paddingTop: 20,
+  },
+  header: {
+    paddingHorizontal: 20,
+    paddingBottom: 24,
+  },
+  headerTitle: {
+    marginBottom: 8,
+  },
+  headerSubtitle: {
+    lineHeight: 22,
   },
   progressCard: {
     marginHorizontal: 20,
-    marginTop: 20,
     marginBottom: 24,
-    borderRadius: 16,
     padding: 20,
-    backgroundColor: '#FFFFFF',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 3,
+    borderRadius: 12,
   },
   progressHeader: {
     flexDirection: 'row',
@@ -386,25 +476,19 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   progressTitle: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: '#000000',
+    flex: 1,
   },
   progressPercentage: {
-    fontSize: 24,
     fontWeight: '700',
-    color: '#007AFF',
   },
   progressBar: {
     height: 8,
-    backgroundColor: '#F2F2F7',
     borderRadius: 4,
     overflow: 'hidden',
-    marginBottom: 20,
+    marginBottom: 16,
   },
   progressFill: {
     height: '100%',
-    backgroundColor: '#007AFF',
     borderRadius: 4,
   },
   progressStats: {
@@ -416,14 +500,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   statNumber: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#007AFF',
     marginBottom: 4,
   },
   statLabel: {
-    fontSize: 12,
-    color: '#8E8E93',
     textAlign: 'center',
   },
   section: {
@@ -431,16 +510,38 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   sectionTitle: {
-    fontSize: 22,
-    fontWeight: '600',
     marginBottom: 8,
-    color: '#000000',
   },
   sectionSubtitle: {
-    fontSize: 14,
-    color: '#8E8E93',
     marginBottom: 16,
-    lineHeight: 20,
+    lineHeight: 22,
+  },
+  quickActionsGrid: {
+    gap: 12,
+  },
+  actionCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+    borderRadius: 12,
+    minHeight: 44, // iOS minimum touch target
+  },
+  actionIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 16,
+  },
+  actionContent: {
+    flex: 1,
+  },
+  actionTitle: {
+    marginBottom: 4,
+  },
+  actionSubtitle: {
+    lineHeight: 18,
   },
   stepsContainer: {
     gap: 16,
@@ -461,17 +562,15 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 2,
+    marginBottom: 8,
   },
   stepNumberText: {
-    fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
   },
   stepConnector: {
     width: 2,
     height: 40,
-    marginTop: 8,
+    borderRadius: 1,
   },
   stepContent: {
     flex: 1,
@@ -480,42 +579,61 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
+    minHeight: 44, // iOS minimum touch target
   },
   stepTitleContainer: {
     flex: 1,
     marginRight: 12,
   },
   stepTitle: {
-    fontSize: 16,
     marginBottom: 4,
-    fontWeight: '600',
-    color: '#000000',
   },
   stepDescription: {
-    fontSize: 14,
-    color: '#8E8E93',
-    lineHeight: 20,
+    lineHeight: 18,
   },
   stepStatusContainer: {
     alignItems: 'center',
     gap: 4,
   },
+  completionToggle: {
+    padding: 4,
+    borderRadius: 20,
+  },
   stepDetails: {
     marginTop: 16,
-    borderRadius: 12,
-    padding: 16,
-    backgroundColor: '#F2F2F7',
+    paddingTop: 16,
+    borderTopWidth: 1,
+    borderTopColor: '#E5E5EA',
+  },
+  stepImageContainer: {
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  stepImage: {
+    width: 200,
+    height: 120,
+    borderRadius: 8,
+  },
+  stepMetrics: {
+    flexDirection: 'row',
+    gap: 24,
+    marginBottom: 16,
+  },
+  metricItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  metricText: {
+    lineHeight: 18,
   },
   detailsSection: {
-    marginBottom: 20,
+    marginBottom: 16,
   },
   detailsTitle: {
-    fontSize: 16,
-    marginBottom: 12,
-    fontWeight: '600',
-    color: '#000000',
+    marginBottom: 8,
   },
-  detailItem: {
+  detailRow: {
     flexDirection: 'row',
     alignItems: 'flex-start',
     marginBottom: 8,
@@ -529,60 +647,7 @@ const styles = StyleSheet.create({
   },
   detailText: {
     flex: 1,
-    fontSize: 14,
-    color: '#8E8E93',
-    lineHeight: 20,
-  },
-  stepMetrics: {
-    flexDirection: 'row',
-    gap: 24,
-  },
-  metricItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  metricText: {
-    fontSize: 14,
-    color: '#8E8E93',
-  },
-  quickActionsGrid: {
-    gap: 12,
-  },
-  actionCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 16,
-    borderRadius: 12,
-    backgroundColor: '#FFFFFF',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.08,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  actionIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 16,
-  },
-  actionContent: {
-    flex: 1,
-  },
-  actionTitle: {
-    fontSize: 16,
-    marginBottom: 4,
-    fontWeight: '600',
-    color: '#000000',
-  },
-  actionSubtitle: {
-    fontSize: 14,
-    color: '#8E8E93',
+    lineHeight: 18,
   },
   linksContainer: {
     gap: 12,
@@ -590,14 +655,7 @@ const styles = StyleSheet.create({
   linkCard: {
     padding: 16,
     borderRadius: 12,
-    backgroundColor: '#FFFFFF',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.08,
-    shadowRadius: 4,
-    elevation: 2,
+    minHeight: 44, // iOS minimum touch target
   },
   linkHeader: {
     flexDirection: 'row',
@@ -606,15 +664,12 @@ const styles = StyleSheet.create({
   },
   linkInfo: {
     flex: 1,
+    marginRight: 12,
   },
   linkTitle: {
-    fontSize: 16,
     marginBottom: 4,
-    fontWeight: '600',
-    color: '#000000',
   },
   linkSubtitle: {
-    fontSize: 14,
-    color: '#8E8E93',
+    lineHeight: 18,
   },
 });

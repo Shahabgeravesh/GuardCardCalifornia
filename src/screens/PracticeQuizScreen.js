@@ -183,8 +183,21 @@ const PracticeQuizScreen = () => {
   const [selectedAnswers, setSelectedAnswers] = useState([]);
 
   const resetStudy = () => {
-    setCurrentQuestion(0);
-    setSelectedAnswers([]);
+    Alert.alert(
+      'Reset Quiz',
+      'Are you sure you want to reset your progress? This will clear all your answers.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { 
+          text: 'Reset', 
+          style: 'destructive',
+          onPress: () => {
+            setCurrentQuestion(0);
+            setSelectedAnswers([]);
+          }
+        },
+      ]
+    );
   };
 
   const selectAnswer = (answerIndex) => {
@@ -222,26 +235,48 @@ const PracticeQuizScreen = () => {
     return ((currentQuestion + 1) / studyQuestions.length) * 100;
   };
 
+  const getScore = () => {
+    let correct = 0;
+    selectedAnswers.forEach((answer, index) => {
+      if (answer === studyQuestions[index].correctAnswer) {
+        correct++;
+      }
+    });
+    return { correct, total: selectedAnswers.filter(a => a !== undefined).length };
+  };
+
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.systemBackground }]}>
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View style={styles.header}>
-          <Text style={[styles.headerTitle, { color: theme.colors.text }]}>
-            Power to Arrest Study
+          <Text style={[styles.headerTitle, { color: theme.colors.label }, theme.typography.title1]}>
+            Practice Quiz
           </Text>
-          <Text style={[styles.headerSubtitle, { color: theme.colors.secondaryText }]}>
+          <Text style={[styles.headerSubtitle, { color: theme.colors.secondaryLabel }, theme.typography.body]}>
             Question {currentQuestion + 1} of {studyQuestions.length}
           </Text>
+          
+          {/* Score Display */}
+          {getScore().total > 0 && (
+            <View style={styles.scoreContainer}>
+              <Text style={[styles.scoreText, { color: theme.colors.systemBlue }, theme.typography.headline]}>
+                Score: {getScore().correct}/{getScore().total}
+              </Text>
+              <Text style={[styles.scorePercentage, { color: theme.colors.secondaryLabel }, theme.typography.footnote]}>
+                {Math.round((getScore().correct / getScore().total) * 100)}% Correct
+              </Text>
+            </View>
+          )}
         </View>
 
         {/* Progress Bar */}
-        <View style={[styles.progressContainer, { backgroundColor: theme.colors.border }]}>
+        <View style={[styles.progressContainer, { backgroundColor: theme.colors.separator }]}>
           <View 
             style={[
               styles.progressBar, 
               { 
-                backgroundColor: theme.colors.primary,
+                backgroundColor: theme.colors.systemBlue,
                 width: `${getProgressPercentage()}%`
               }
             ]} 
@@ -249,8 +284,8 @@ const PracticeQuizScreen = () => {
         </View>
 
         {/* Question Card */}
-        <View style={[styles.questionCard, { backgroundColor: theme.colors.card }]}>
-          <Text style={[styles.questionText, { color: theme.colors.text }]}>
+        <View style={[styles.questionCard, { backgroundColor: theme.colors.systemBackground }, theme.shadows.md]}>
+          <Text style={[styles.questionText, { color: theme.colors.label }, theme.typography.headline]}>
             {getCurrentQuestion().question}
           </Text>
         </View>
@@ -262,70 +297,97 @@ const PracticeQuizScreen = () => {
               key={index}
               style={[
                 styles.optionCard,
-                { backgroundColor: theme.colors.card },
-                isAnswerSelected(index) && { borderColor: theme.colors.primary, borderWidth: 2 }
+                { backgroundColor: theme.colors.systemBackground },
+                isAnswerSelected(index) && { 
+                  borderColor: theme.colors.systemBlue, 
+                  borderWidth: 2,
+                  backgroundColor: theme.colors.secondarySystemBackground
+                },
+                theme.shadows.sm
               ]}
               onPress={() => selectAnswer(index)}
+              activeOpacity={0.7}
+              accessibilityRole="button"
+              accessibilityLabel={`Option ${String.fromCharCode(65 + index)}: ${option}`}
+              accessibilityHint="Double tap to select this answer"
             >
-              <View style={[styles.optionLetter, { backgroundColor: theme.colors.primary }]}>
-                <Text style={styles.optionLetterText}>
+              <View style={[styles.optionLetter, { backgroundColor: theme.colors.systemBlue }]}>
+                <Text style={[styles.optionLetterText, { color: '#FFFFFF' }, theme.typography.headline]}>
                   {String.fromCharCode(65 + index)}
                 </Text>
               </View>
-              <Text style={[styles.optionText, { color: theme.colors.text }]}>
+              <Text style={[styles.optionText, { color: theme.colors.label }, theme.typography.body]}>
                 {option}
               </Text>
+              
+              {/* Show correct/incorrect indicator */}
+              {selectedAnswers[currentQuestion] !== undefined && (
+                <View style={styles.answerIndicator}>
+                  {isAnswerCorrect(index) ? (
+                    <Ionicons name="checkmark-circle" size={24} color={theme.colors.systemGreen} />
+                  ) : isAnswerSelected(index) && !isAnswerCorrect(index) ? (
+                    <Ionicons name="close-circle" size={24} color={theme.colors.systemRed} />
+                  ) : null}
+                </View>
+              )}
             </TouchableOpacity>
           ))}
         </View>
 
         {/* Explanation */}
         {selectedAnswers[currentQuestion] !== undefined && (
-          <View style={[styles.explanationCard, { backgroundColor: theme.colors.card }]}>
-            <Text style={[styles.explanationTitle, { color: theme.colors.text }]}>
-              Explanation
-            </Text>
-            <Text style={[styles.explanationText, { color: theme.colors.secondaryText }]}>
+          <View style={[styles.explanationCard, { backgroundColor: theme.colors.systemBackground }, theme.shadows.md]}>
+            <View style={styles.explanationHeader}>
+              <Ionicons 
+                name={isAnswerCorrect(selectedAnswers[currentQuestion]) ? "checkmark-circle" : "close-circle"} 
+                size={24} 
+                color={isAnswerCorrect(selectedAnswers[currentQuestion]) ? theme.colors.systemGreen : theme.colors.systemRed} 
+              />
+              <Text style={[styles.explanationTitle, { color: theme.colors.label }, theme.typography.headline]}>
+                {isAnswerCorrect(selectedAnswers[currentQuestion]) ? 'Correct!' : 'Incorrect'}
+              </Text>
+            </View>
+            <Text style={[styles.explanationText, { color: theme.colors.secondaryLabel }, theme.typography.body]}>
               {getCurrentQuestion().explanation}
             </Text>
           </View>
         )}
 
         {/* BSIS Exam Preparation */}
-        <View style={[styles.bsisCard, { backgroundColor: theme.colors.card }]}>
+        <View style={[styles.bsisCard, { backgroundColor: theme.colors.systemBackground }, theme.shadows.md]}>
           <View style={styles.bsisHeader}>
-            <Ionicons name="school" size={24} color={theme.colors.primary} />
-            <Text style={[styles.bsisTitle, { color: theme.colors.text }]}>
+            <Ionicons name="school" size={24} color={theme.colors.systemBlue} />
+            <Text style={[styles.bsisTitle, { color: theme.colors.label }, theme.typography.headline]}>
               BSIS Exam Preparation
             </Text>
           </View>
-          <Text style={[styles.bsisText, { color: theme.colors.secondaryText }]}>
+          <Text style={[styles.bsisText, { color: theme.colors.secondaryLabel }, theme.typography.body]}>
             This study material covers the essential topics you'll need to know for your California security guard certification exam. Take your time to understand each concept thoroughly.
           </Text>
         </View>
 
         {/* Additional BSIS Training Required */}
-        <View style={[styles.trainingCard, { backgroundColor: theme.colors.card }]}>
+        <View style={[styles.trainingCard, { backgroundColor: theme.colors.systemBackground }, theme.shadows.md]}>
           <View style={styles.trainingHeader}>
-            <Ionicons name="alert-circle" size={24} color="#FF9500" />
-            <Text style={[styles.trainingTitle, { color: theme.colors.text }]}>
+            <Ionicons name="alert-circle" size={24} color={theme.colors.systemOrange} />
+            <Text style={[styles.trainingTitle, { color: theme.colors.label }, theme.typography.headline]}>
               Additional BSIS Training Required
             </Text>
           </View>
-          <Text style={[styles.trainingText, { color: theme.colors.secondaryText }]}>
+          <Text style={[styles.trainingText, { color: theme.colors.secondaryLabel }, theme.typography.body]}>
             Remember: You must also complete the 5-hour "Appropriate Use of Force" training at a licensed facility before applying for your guard card.
           </Text>
         </View>
 
         {/* BSIS Contact Information */}
-        <View style={[styles.contactCard, { backgroundColor: theme.colors.card }]}>
+        <View style={[styles.contactCard, { backgroundColor: theme.colors.systemBackground }, theme.shadows.md]}>
           <View style={styles.contactHeader}>
-            <Ionicons name="information-circle" size={24} color="#007AFF" />
-            <Text style={[styles.contactTitle, { color: theme.colors.text }]}>
+            <Ionicons name="information-circle" size={24} color={theme.colors.systemBlue} />
+            <Text style={[styles.contactTitle, { color: theme.colors.label }, theme.typography.headline]}>
               BSIS Contact Information
             </Text>
           </View>
-          <Text style={[styles.contactText, { color: theme.colors.secondaryText }]}>
+          <Text style={[styles.contactText, { color: theme.colors.secondaryLabel }, theme.typography.body]}>
             Bureau of Security and Investigative Services{'\n'}
             Phone: (800) 952-5210{'\n'}
             Website: www.bsis.ca.gov{'\n'}
@@ -335,43 +397,46 @@ const PracticeQuizScreen = () => {
       </ScrollView>
 
       {/* Navigation Bar */}
-      <View style={[styles.navigationBar, { backgroundColor: theme.colors.card }]}>
+      <View style={[styles.navigationBar, { backgroundColor: theme.colors.systemBackground, borderTopColor: theme.colors.separator }]}>
         <TouchableOpacity
           style={[
             styles.navButton,
             { 
-              backgroundColor: currentQuestion > 0 ? theme.colors.primary : theme.colors.border,
+              backgroundColor: currentQuestion > 0 ? theme.colors.systemBlue : theme.colors.separator,
               opacity: currentQuestion > 0 ? 1 : 0.3
             }
           ]}
           onPress={previousStudyQuestion}
           disabled={currentQuestion === 0}
           accessibilityLabel="Previous question"
+          accessibilityHint="Go to the previous question"
         >
-          <Text style={styles.navButtonText}>Previous</Text>
+          <Text style={[styles.navButtonText, { color: '#FFFFFF' }, theme.typography.headline]}>Previous</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={[styles.resetButton, { backgroundColor: '#FF3B30' }]}
+          style={[styles.resetButton, { backgroundColor: theme.colors.systemRed }]}
           onPress={resetStudy}
-          accessibilityLabel="Reset study session"
+          accessibilityLabel="Reset quiz"
+          accessibilityHint="Reset your quiz progress and start over"
         >
-          <Text style={styles.resetButtonText}>Reset</Text>
+          <Text style={[styles.resetButtonText, { color: '#FFFFFF' }, theme.typography.headline]}>Reset</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={[
             styles.navButton,
             { 
-              backgroundColor: currentQuestion < studyQuestions.length - 1 ? theme.colors.primary : theme.colors.border,
+              backgroundColor: currentQuestion < studyQuestions.length - 1 ? theme.colors.systemBlue : theme.colors.separator,
               opacity: currentQuestion < studyQuestions.length - 1 ? 1 : 0.3
             }
           ]}
           onPress={nextStudyQuestion}
           disabled={currentQuestion >= studyQuestions.length - 1}
           accessibilityLabel="Next question"
+          accessibilityHint="Go to the next question"
         >
-          <Text style={styles.navButtonText}>Next</Text>
+          <Text style={[styles.navButtonText, { color: '#FFFFFF' }, theme.typography.headline]}>Next</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -391,13 +456,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headerTitle: {
-    fontSize: 28,
-    fontWeight: '700',
     marginBottom: 8,
   },
   headerSubtitle: {
-    fontSize: 16,
-    fontWeight: '500',
+    marginBottom: 16,
+  },
+  scoreContainer: {
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  scoreText: {
+    marginBottom: 4,
+  },
+  scorePercentage: {
+    textAlign: 'center',
   },
   progressContainer: {
     height: 8,
@@ -413,18 +485,8 @@ const styles = StyleSheet.create({
     padding: 24,
     borderRadius: 16,
     marginBottom: 24,
-    shadowColor: '#000000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 4,
   },
   questionText: {
-    fontSize: 18,
-    fontWeight: '600',
     lineHeight: 24,
   },
   optionsContainer: {
@@ -437,14 +499,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginBottom: 12,
     minHeight: 60,
-    shadowColor: '#000000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
   },
   optionLetter: {
     width: 32,
@@ -455,50 +509,35 @@ const styles = StyleSheet.create({
     marginRight: 16,
   },
   optionLetterText: {
-    color: 'white',
-    fontSize: 16,
     fontWeight: '600',
   },
   optionText: {
     flex: 1,
-    fontSize: 16,
-    fontWeight: '500',
     lineHeight: 20,
+  },
+  answerIndicator: {
+    marginLeft: 12,
   },
   explanationCard: {
     padding: 24,
     borderRadius: 16,
     marginBottom: 24,
-    shadowColor: '#000000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 4,
   },
-  explanationTitle: {
-    fontSize: 18,
-    fontWeight: '600',
+  explanationHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 12,
   },
+  explanationTitle: {
+    marginLeft: 12,
+  },
   explanationText: {
-    fontSize: 16,
     lineHeight: 20,
   },
   bsisCard: {
     padding: 24,
     borderRadius: 16,
     marginBottom: 24,
-    shadowColor: '#000000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 4,
   },
   bsisHeader: {
     flexDirection: 'row',
@@ -506,26 +545,15 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   bsisTitle: {
-    fontSize: 18,
-    fontWeight: '600',
     marginLeft: 12,
   },
   bsisText: {
-    fontSize: 16,
     lineHeight: 20,
   },
   trainingCard: {
     padding: 24,
     borderRadius: 16,
     marginBottom: 24,
-    shadowColor: '#000000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 4,
   },
   trainingHeader: {
     flexDirection: 'row',
@@ -533,26 +561,15 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   trainingTitle: {
-    fontSize: 18,
-    fontWeight: '600',
     marginLeft: 12,
   },
   trainingText: {
-    fontSize: 16,
     lineHeight: 20,
   },
   contactCard: {
     padding: 24,
     borderRadius: 16,
     marginBottom: 24,
-    shadowColor: '#000000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 4,
   },
   contactHeader: {
     flexDirection: 'row',
@@ -560,12 +577,9 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   contactTitle: {
-    fontSize: 18,
-    fontWeight: '600',
     marginLeft: 12,
   },
   contactText: {
-    fontSize: 16,
     lineHeight: 20,
   },
   navigationBar: {
@@ -575,7 +589,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingVertical: 16,
     borderTopWidth: 0.5,
-    borderTopColor: '#E5E5EA',
   },
   navButton: {
     flex: 1,
@@ -588,9 +601,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
   },
   navButtonText: {
-    fontSize: 16,
     fontWeight: '600',
-    color: 'white',
     letterSpacing: 0.5,
   },
   resetButton: {
@@ -603,9 +614,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
   },
   resetButtonText: {
-    fontSize: 16,
     fontWeight: '600',
-    color: 'white',
     letterSpacing: 0.5,
   },
 });

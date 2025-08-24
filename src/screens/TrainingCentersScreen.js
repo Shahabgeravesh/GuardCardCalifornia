@@ -14,6 +14,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
 import * as Location from 'expo-location';
+import { realTrainingFacilities, realLiveScanLocations } from '../data/trainingData';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -28,98 +29,11 @@ const TrainingCentersScreen = () => {
   const [selectedFacility, setSelectedFacility] = useState(null);
   const [selectedLiveScan, setSelectedLiveScan] = useState(null);
 
-  // Sample BSIS training facilities data
-  const trainingFacilities = [
-    {
-      id: '1',
-      name: 'California Security Training Academy',
-      address: '123 Main Street',
-      city: 'Los Angeles',
-      zipCode: '90210',
-      phone: '(310) 555-0123',
-      website: 'https://www.californiasecuritytraining.com',
-      courses: ['Power to Arrest (PTA)', 'Appropriate Use of Force (AUOF)', 'Firearms Training'],
-      rating: 4.8,
-      distance: 0,
-      isApproved: true,
-      offersLiveScan: true,
-      coordinates: { lat: 34.0522, lng: -118.2437 },
-      bsisLicenseNumber: 'BSIS-12345',
-      lastVerified: '2024-01-15'
-    },
-    {
-      id: '2',
-      name: 'Guardian Security Training Center',
-      address: '456 Oak Avenue',
-      city: 'San Francisco',
-      zipCode: '94102',
-      phone: '(415) 555-0456',
-      website: 'https://www.guardiansecuritytraining.com',
-      courses: ['Power to Arrest (PTA)', 'Appropriate Use of Force (AUOF)'],
-      rating: 4.6,
-      distance: 0,
-      isApproved: true,
-      offersLiveScan: false,
-      coordinates: { lat: 37.7749, lng: -122.4194 },
-      bsisLicenseNumber: 'BSIS-67890',
-      lastVerified: '2024-01-10'
-    },
-    {
-      id: '3',
-      name: 'Pacific Coast Security Institute',
-      address: '789 Pine Street',
-      city: 'San Diego',
-      zipCode: '92101',
-      phone: '(619) 555-0789',
-      courses: ['Power to Arrest (PTA)', 'Appropriate Use of Force (AUOF)', 'First Aid Training'],
-      rating: 4.9,
-      distance: 0,
-      isApproved: true,
-      offersLiveScan: true,
-      coordinates: { lat: 32.7157, lng: -117.1611 },
-      bsisLicenseNumber: 'BSIS-11111',
-      lastVerified: '2024-01-20'
-    }
-  ];
+  // Use real BSIS training facilities data
+  const trainingFacilities = realTrainingFacilities;
 
-  // Sample LiveScan locations data
-  const liveScanLocations = [
-    {
-      id: '1',
-      name: 'Fingerprint Express LiveScan',
-      address: '321 Business Blvd',
-      city: 'Los Angeles',
-      zipCode: '90211',
-      phone: '(310) 555-0321',
-      website: 'https://www.fingerprintexpress.com',
-      distance: 0,
-      coordinates: { lat: 34.0622, lng: -118.2537 },
-      bsisApproved: true
-    },
-    {
-      id: '2',
-      name: 'QuickScan LiveScan Services',
-      address: '654 Market Street',
-      city: 'San Francisco',
-      zipCode: '94103',
-      phone: '(415) 555-0654',
-      distance: 0,
-      coordinates: { lat: 37.7849, lng: -122.4094 },
-      bsisApproved: true
-    },
-    {
-      id: '3',
-      name: 'Professional Fingerprinting',
-      address: '987 Harbor Drive',
-      city: 'San Diego',
-      zipCode: '92102',
-      phone: '(619) 555-0987',
-      website: 'https://www.professionalfingerprinting.com',
-      distance: 0,
-      coordinates: { lat: 32.7257, lng: -117.1711 },
-      bsisApproved: true
-    }
-  ];
+  // Use real LiveScan locations data
+  const liveScanLocations = realLiveScanLocations;
 
   // Request location permissions
   const requestLocationPermission = async () => {
@@ -339,6 +253,14 @@ const TrainingCentersScreen = () => {
               {facility.distance.toFixed(1)} miles
             </Text>
           </View>
+          {facility.lastVerified && (
+            <View style={styles.metaItem}>
+              <Ionicons name="checkmark-circle" size={16} color="#34C759" />
+              <Text style={[styles.metaText, { color: theme.colors.secondaryText }]}>
+                Verified {facility.lastVerified}
+              </Text>
+            </View>
+          )}
         </View>
 
         <View style={styles.coursesContainer}>
@@ -353,9 +275,12 @@ const TrainingCentersScreen = () => {
         </View>
 
         {facility.bsisLicenseNumber && (
-          <Text style={[styles.bsisInfo, { color: theme.colors.secondaryText }]}>
-            BSIS License: {facility.bsisLicenseNumber}
-          </Text>
+          <View style={styles.bsisLicenseContainer}>
+            <Ionicons name="shield-checkmark" size={16} color="#34C759" />
+            <Text style={[styles.bsisInfo, { color: theme.colors.secondaryText }]}>
+              BSIS License: {facility.bsisLicenseNumber}
+            </Text>
+          </View>
         )}
 
         <View style={styles.facilityActions}>
@@ -472,14 +397,14 @@ const TrainingCentersScreen = () => {
                 Training Locator
               </Text>
               <Text style={[styles.headerSubtitle, { color: theme.colors.secondaryText, fontSize: 16 }]}>
-                Find BSIS facilities near you
+                Find verified BSIS facilities near you
               </Text>
             </View>
           </View>
         </View>
 
         {/* Search Type Selector */}
-        <View style={[styles.searchTypeContainer, { backgroundColor: theme.colors.card }]}>
+        <View style={styles.searchTypeContainer}>
           <TouchableOpacity
             style={[
               styles.searchTypeButton,
@@ -572,25 +497,6 @@ const TrainingCentersScreen = () => {
             </Text>
           </View>
         )}
-
-        {/* BSIS Information */}
-        <View style={[styles.bsisInfoCard, { backgroundColor: theme.colors.card }]}>
-          <Text style={[styles.bsisInfoTitle, { color: theme.colors.text }]}>
-            About BSIS-Approved Training
-          </Text>
-          <Text style={[styles.bsisInfoText, { color: theme.colors.secondaryText }]}>
-            All facilities listed are verified by the Bureau of Security and Investigative Services (BSIS). 
-            For the most current and complete list, visit the official BSIS website.
-          </Text>
-          <TouchableOpacity
-            style={[styles.bsisButton, { backgroundColor: theme.colors.primary }]}
-            onPress={() => handleWebsite('https://www.bsis.ca.gov', 'BSIS')}
-          >
-            <Text style={[styles.bsisButtonText, { color: '#ffffff' }]}>
-              Visit BSIS Website
-            </Text>
-          </TouchableOpacity>
-        </View>
       </ScrollView>
     </View>
   );
@@ -779,6 +685,11 @@ const styles = StyleSheet.create({
   bsisInfo: {
     fontSize: 12,
     fontStyle: 'italic',
+    marginTop: 8,
+  },
+  bsisLicenseContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginTop: 8,
   },
   facilityActions: {

@@ -4,7 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StatusBar } from 'expo-status-bar';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { Text, View } from 'react-native';
+import { Text, View, Platform } from 'react-native';
 
 // Import screens
 import HomeScreen from './src/screens/HomeScreen';
@@ -22,10 +22,7 @@ function TabNavigator() {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused }) => {
-          const iconColor = focused ? '#007AFF' : '#8E8E93';
-          const iconSize = 24;
-
+        tabBarIcon: ({ focused, color, size }) => {
           let iconName;
           
           switch (route.name) {
@@ -48,20 +45,21 @@ function TabNavigator() {
           return (
             <Ionicons
               name={iconName}
-              size={iconSize}
-              color={iconColor}
+              size={size}
+              color={color}
             />
           );
         },
-        tabBarActiveTintColor: '#007AFF', // Apple system blue
-        tabBarInactiveTintColor: '#8E8E93', // Apple tertiary label
+        // iOS Standard Tab Bar Colors
+        tabBarActiveTintColor: '#007AFF', // iOS System Blue
+        tabBarInactiveTintColor: '#8E8E93', // iOS Tertiary Label
         tabBarStyle: {
           backgroundColor: '#FFFFFF',
           borderTopWidth: 0.5,
-          borderTopColor: '#E5E5EA', // iOS separator color
-          paddingBottom: 8,
-          paddingTop: 8,
-          height: 83, // iOS standard tab bar height
+          borderTopColor: '#E5E5EA', // iOS Separator
+          paddingBottom: Platform.OS === 'ios' ? 8 : 8,
+          paddingTop: Platform.OS === 'ios' ? 8 : 8,
+          height: Platform.OS === 'ios' ? 83 : 60, // iOS Standard Tab Bar Height
           shadowColor: '#000000',
           shadowOffset: {
             width: 0,
@@ -69,18 +67,20 @@ function TabNavigator() {
           },
           shadowOpacity: 0.1,
           shadowRadius: 0.5,
-          elevation: 8,
+          elevation: Platform.OS === 'android' ? 8 : 0,
         },
         tabBarLabelStyle: {
-          fontSize: 10, // iOS-standard tab bar label size
-          fontWeight: '500', // iOS-standard medium weight
+          fontSize: 10, // iOS Standard Tab Bar Label Size
+          fontWeight: '500', // iOS Medium Weight
           marginTop: 2,
+          letterSpacing: 0.12, // iOS Standard Letter Spacing
         },
         tabBarIconStyle: {
           marginTop: 4,
         },
+        // iOS Standard Navigation Bar Styling
         headerStyle: {
-          backgroundColor: '#007AFF', // iOS system blue for consistency
+          backgroundColor: '#007AFF', // iOS System Blue
           shadowColor: '#000000',
           shadowOffset: {
             width: 0,
@@ -88,14 +88,18 @@ function TabNavigator() {
           },
           shadowOpacity: 0.12,
           shadowRadius: 4,
-          elevation: 3,
+          elevation: Platform.OS === 'android' ? 3 : 0,
         },
-        headerTintColor: '#ffffff',
+        headerTintColor: '#FFFFFF',
         headerTitleStyle: {
-          fontWeight: '600', // iOS-standard semibold
-          fontSize: 17, // iOS-standard navigation title size
+          fontWeight: '600', // iOS Semibold
+          fontSize: 17, // iOS Standard Navigation Title Size
+          letterSpacing: -0.41, // iOS Standard Letter Spacing
         },
-        headerShadowVisible: true, // iOS navigation bars have subtle shadows
+        headerShadowVisible: true,
+        // iOS Standard Safe Area Handling
+        headerSafeAreaInsets: { top: 0 },
+        tabBarSafeAreaInsets: { bottom: 0 },
       })}
     >
       <Tab.Screen 
@@ -104,7 +108,8 @@ function TabNavigator() {
         options={{ 
           title: 'GuardCard California',
           tabBarLabel: 'Home',
-          tabBarAccessibilityLabel: 'Dashboard tab. View your security guard registration progress and overview.'
+          tabBarAccessibilityLabel: 'Dashboard tab. View your security guard registration progress and overview.',
+          tabBarAccessibilityHint: 'Double tap to view your dashboard and registration progress.'
         }}
       />
 
@@ -114,7 +119,8 @@ function TabNavigator() {
         options={{ 
           title: 'Training Centers',
           tabBarLabel: 'Training',
-          tabBarAccessibilityLabel: 'Training tab. Find nearby BSIS-approved training centers.'
+          tabBarAccessibilityLabel: 'Training tab. Find nearby BSIS-approved training centers and LiveScan locations.',
+          tabBarAccessibilityHint: 'Double tap to find training facilities and LiveScan centers near you.'
         }}
       />
       
@@ -124,7 +130,8 @@ function TabNavigator() {
         options={{ 
           title: 'Study Materials',
           tabBarLabel: 'Study',
-          tabBarAccessibilityLabel: 'Study tab. Learn essential content for your security guard training.'
+          tabBarAccessibilityLabel: 'Study tab. Learn essential content for your security guard training.',
+          tabBarAccessibilityHint: 'Double tap to access study materials and training content.'
         }}
       />
       
@@ -134,7 +141,8 @@ function TabNavigator() {
         options={{ 
           title: 'Practice Quiz',
           tabBarLabel: 'Quiz',
-          tabBarAccessibilityLabel: 'Quiz tab. Take sample quizzes to prepare for your security guard exam.'
+          tabBarAccessibilityLabel: 'Practice test tab. Take sample quizzes to prepare for your security guard exam.',
+          tabBarAccessibilityHint: 'Double tap to take practice quizzes and test your knowledge.'
         }}
       />
     </Tab.Navigator>
@@ -149,9 +157,9 @@ export default function App() {
           <NavigationContainer>
             <TabNavigator />
             <StatusBar 
-              style="auto" 
-              backgroundColor="transparent"
-              translucent={true}
+              style="light" 
+              backgroundColor="#007AFF"
+              translucent={false}
               animated={true}
             />
           </NavigationContainer>
