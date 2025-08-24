@@ -17,11 +17,11 @@ const { width: screenWidth } = Dimensions.get('window');
 const studyQuestions = [
   {
     id: '1',
-    question: 'What is the primary role of a security guard?',
-    options: ['To arrest criminals', 'To observe and report', 'To carry weapons', 'To investigate crimes'],
+    question: 'What is the main duty of a security officer?',
+    options: ['Enforce laws', 'To protect individuals and property', 'Act like police', 'Make arrests'],
     correctAnswer: 1,
     category: 'Basic Role',
-    explanation: 'Security guards primarily observe and report suspicious activities rather than taking law enforcement actions.'
+    explanation: 'The main duty of a security officer is to protect individuals and property, not to enforce laws or act like police.'
   },
   {
     id: '2',
@@ -35,9 +35,9 @@ const studyQuestions = [
     id: '3',
     question: 'Security officers are not legally allowed to:',
     options: ['Arrest someone', 'Protect property', 'Observe and report', 'Act like law enforcement'],
-    correctAnswer: 3,
+    correctAnswer: 0,
     category: 'Legal Limitations',
-    explanation: 'Security officers cannot act like law enforcement. They have limited authority and must stay within their legal boundaries.'
+    explanation: 'Security officers cannot arrest someone. They have limited authority and must stay within their legal boundaries.'
   },
   {
     id: '4',
@@ -101,15 +101,15 @@ const studyQuestions = [
     options: ['A warning', 'Criminal charges', 'Civil and criminal liability', 'Loss of contract'],
     correctAnswer: 2,
     category: 'Legal Consequences',
-    explanation: 'False arrest exposes you to both civil lawsuits and criminal charges.'
+    explanation: 'False arrest can result in both civil lawsuits and criminal charges against the security officer.'
   },
   {
     id: '12',
     question: 'If someone sues you for money, it\'s called:',
     options: ['Civil liability', 'Criminal liability', 'Legal immunity', 'Corporate defense'],
     correctAnswer: 0,
-    category: 'Legal Terms',
-    explanation: 'Civil liability involves lawsuits for monetary damages, separate from criminal charges.'
+    category: 'Legal Consequences',
+    explanation: 'Civil liability refers to being sued for money damages, while criminal liability involves criminal charges.'
   },
   {
     id: '13',
@@ -117,7 +117,7 @@ const studyQuestions = [
     options: ['How others saw it', 'What was happening at the time', 'If there\'s a video', 'Officer\'s gut feeling'],
     correctAnswer: 1,
     category: 'Use of Force',
-    explanation: 'Force is evaluated based on the totality of circumstances at the moment it was used.'
+    explanation: 'Use of force is judged based on the circumstances that existed at the time the force was used.'
   },
   {
     id: '14',
@@ -125,55 +125,311 @@ const studyQuestions = [
     options: ['Something may happen next week', 'Danger could happen at any moment', 'The suspect is nervous', 'None of the above'],
     correctAnswer: 1,
     category: 'Use of Force',
-    explanation: 'Imminent threat means danger is about to happen immediately, not in the future.'
+    explanation: 'An imminent threat means danger could happen at any moment, requiring immediate action.'
   },
   {
     id: '15',
-    question: 'What is the minimum force you should use?',
-    options: ['Whatever it takes', 'Reasonable force', 'Deadly force if needed', 'No force at all'],
-    correctAnswer: 1,
+    question: 'When considering force, what matters?',
+    options: ['Suspect\'s size', 'Intoxication', 'Number of suspects', 'Backup availability', 'All of the above'],
+    correctAnswer: 4,
     category: 'Use of Force',
-    explanation: 'Security officers must use only reasonable force necessary to accomplish their lawful objectives.'
+    explanation: 'All factors must be considered when determining the appropriate level of force to use.'
   },
   {
     id: '16',
-    question: 'When can you use deadly force?',
-    options: ['To protect property', 'To stop a fleeing suspect', 'To prevent serious injury or death', 'When you feel threatened'],
-    correctAnswer: 2,
+    question: 'A uniform and clear instructions are considered a type of force.',
+    options: ['True', 'False'],
+    correctAnswer: 0,
     category: 'Use of Force',
-    explanation: 'Deadly force is only justified to prevent serious injury or death to yourself or others.'
+    explanation: 'A uniform and clear instructions are considered a form of psychological force.'
   },
   {
     id: '17',
-    question: 'What should you do after using force?',
-    options: ['Forget about it', 'Document everything', 'Tell only your supervisor', 'Keep it confidential'],
+    question: 'If someone is passive but ignoring you, you should:',
+    options: ['Use force', 'Try more verbal techniques', 'Detain them immediately', 'Threaten to call police'],
     correctAnswer: 1,
-    category: 'Documentation',
-    explanation: 'All use of force incidents must be thoroughly documented for legal protection.'
+    category: 'De-escalation',
+    explanation: 'When someone is passive but non-compliant, try additional verbal techniques before using force.'
   },
   {
     id: '18',
-    question: 'Who is responsible for your actions on duty?',
-    options: ['Your employer only', 'You only', 'Both you and your employer', 'The police'],
-    correctAnswer: 2,
-    category: 'Liability',
-    explanation: 'Both the security officer and their employer can be held liable for actions taken on duty.'
+    question: 'Use of force is always okay to protect property.',
+    options: ['True', 'False'],
+    correctAnswer: 1,
+    category: 'Use of Force',
+    explanation: 'Use of force to protect property alone is generally not justified. It must be reasonable and necessary.'
   },
   {
     id: '19',
-    question: 'What is the purpose of the Power to Arrest training?',
-    options: ['To learn how to fight', 'To understand legal limitations', 'To become a police officer', 'To carry weapons'],
+    question: 'You must stop a fight near your post, even off property.',
+    options: ['True', 'False'],
     correctAnswer: 1,
-    category: 'Training Purpose',
-    explanation: 'The training teaches security guards to understand their legal limitations and proper procedures.'
+    category: 'Authority Limits',
+    explanation: 'Security officers generally cannot act outside their assigned property unless there\'s an immediate threat to life.'
   },
   {
     id: '20',
-    question: 'How long is the Power to Arrest training?',
-    options: ['4 hours', '8 hours', '16 hours', '24 hours'],
+    question: 'If you can\'t stop something from happening, you should:',
+    options: ['Look away', 'Observe and report', 'Only act if it\'s serious', 'Both b and c'],
+    correctAnswer: 3,
+    category: 'Duties',
+    explanation: 'When you cannot prevent an incident, observe and report, especially if it\'s serious.'
+  },
+  {
+    id: '21',
+    question: 'Bad decisions have no consequences for security personnel.',
+    options: ['True', 'False'],
     correctAnswer: 1,
-    category: 'Training Requirements',
-    explanation: 'The Power to Arrest training is 8 hours total, including both online and in-person components.'
+    category: 'Professional Responsibility',
+    explanation: 'Bad decisions can have serious consequences including legal liability, job loss, and criminal charges.'
+  },
+  {
+    id: '22',
+    question: 'You may be held responsible if you don\'t act when required.',
+    options: ['True', 'False'],
+    correctAnswer: 0,
+    category: 'Professional Responsibility',
+    explanation: 'Security officers can be held liable for failing to act when they have a duty to do so.'
+  },
+  {
+    id: '23',
+    question: 'You only report incidents if someone gets hurt.',
+    options: ['True', 'False'],
+    correctAnswer: 1,
+    category: 'Reporting',
+    explanation: 'All incidents should be reported, not just those involving injuries.'
+  },
+  {
+    id: '24',
+    question: 'Failing to report a physical conflict could result in:',
+    options: ['Suspension', 'Fines', 'Losing your license', 'All of the above'],
+    correctAnswer: 3,
+    category: 'Reporting',
+    explanation: 'Failing to report incidents can result in suspension, fines, and loss of license.'
+  },
+  {
+    id: '25',
+    question: 'When must a physical incident be reported to the Bureau?',
+    options: ['Within 7 days', '3 days', '14 days', 'It\'s optional'],
+    correctAnswer: 0,
+    category: 'Reporting',
+    explanation: 'Physical incidents must be reported to BSIS within 7 days.'
+  },
+  {
+    id: '26',
+    question: 'The incident report must include:',
+    options: ['Injuries', 'Who was involved', 'If police were called', 'All of the above'],
+    correctAnswer: 3,
+    category: 'Reporting',
+    explanation: 'Incident reports must include all relevant details including injuries, parties involved, and police involvement.'
+  },
+  {
+    id: '27',
+    question: 'Force decisions should be based on:',
+    options: ['The guard\'s experience', 'Witness statements', 'The full circumstances', 'Supervisor\'s advice'],
+    correctAnswer: 2,
+    category: 'Use of Force',
+    explanation: 'Force decisions must be based on the full circumstances of the situation.'
+  },
+  {
+    id: '28',
+    question: 'Reasonable force is:',
+    options: ['Whatever works', 'What\'s necessary and not excessive', 'Based on your size', 'Always up to the client'],
+    correctAnswer: 1,
+    category: 'Use of Force',
+    explanation: 'Reasonable force is what is necessary to accomplish the objective and is not excessive.'
+  },
+  {
+    id: '29',
+    question: 'Which of these is NOT a benefit of de-escalation?',
+    options: ['Helps wellness', 'Increases trust', 'Reduces injuries', 'It\'s for people lacking courage'],
+    correctAnswer: 3,
+    category: 'De-escalation',
+    explanation: 'De-escalation is a professional skill, not a sign of weakness or lack of courage.'
+  },
+  {
+    id: '30',
+    question: 'What doesn\'t help assess a scene?',
+    options: ['Identifying threats', 'Calculating profit loss', 'Checking for escalation', 'Knowing what happened'],
+    correctAnswer: 1,
+    category: 'Scene Assessment',
+    explanation: 'Calculating profit loss is not relevant to scene assessment for security purposes.'
+  },
+  {
+    id: '31',
+    question: 'De-escalation attempts should be documented.',
+    options: ['True', 'False'],
+    correctAnswer: 0,
+    category: 'Documentation',
+    explanation: 'All de-escalation attempts should be documented for legal and training purposes.'
+  },
+  {
+    id: '32',
+    question: 'The four keys to de-escalation include:',
+    options: ['Self-control, communication, scene management, force options', 'Arrest, control, detain, call', 'Body language, voice, movement, orders', 'None of the above'],
+    correctAnswer: 0,
+    category: 'De-escalation',
+    explanation: 'The four keys to de-escalation are self-control, communication, scene management, and force options.'
+  },
+  {
+    id: '33',
+    question: 'Hidden stereotypes we don\'t realize we have are:',
+    options: ['Discrimination', 'Implicit bias', 'Explicit bias', 'Racism'],
+    correctAnswer: 1,
+    category: 'Cultural Awareness',
+    explanation: 'Implicit bias refers to unconscious stereotypes and prejudices we may not be aware of.'
+  },
+  {
+    id: '34',
+    question: 'When speaking to someone with limited English, do:',
+    options: ['Give time to respond', 'Talk louder', 'Use big words', 'Call police'],
+    correctAnswer: 0,
+    category: 'Communication',
+    explanation: 'When communicating with someone with limited English, give them time to respond and process.'
+  },
+  {
+    id: '35',
+    question: 'What body language varies across cultures?',
+    options: ['Gestures', 'Facial expressions', 'Eye contact', 'All of the above'],
+    correctAnswer: 3,
+    category: 'Cultural Awareness',
+    explanation: 'All forms of body language can vary significantly across different cultures.'
+  },
+  {
+    id: '36',
+    question: 'Which is NOT part of active listening?',
+    options: ['Clarifying what you heard', 'Assuming you got it right', 'Being open-minded', 'Paraphrasing responses'],
+    correctAnswer: 1,
+    category: 'Communication',
+    explanation: 'Assuming you got it right is not part of active listening - you should clarify and verify understanding.'
+  },
+  {
+    id: '37',
+    question: 'Security guards can decide if someone qualifies under the ADA.',
+    options: ['True', 'False'],
+    correctAnswer: 1,
+    category: 'ADA Compliance',
+    explanation: 'Security guards cannot make ADA qualification decisions - this is a legal determination.'
+  },
+  {
+    id: '38',
+    question: 'Mobility devices should be treated as:',
+    options: ['Objects', 'Part of the person', 'Tools', 'None of the above'],
+    correctAnswer: 1,
+    category: 'ADA Compliance',
+    explanation: 'Mobility devices should be treated as part of the person, not as separate objects.'
+  },
+  {
+    id: '39',
+    question: 'When speaking with someone deaf or hard of hearing:',
+    options: ['Use pen and paper', 'Talk loudly', 'Assume they read lips', 'Shout'],
+    correctAnswer: 0,
+    category: 'ADA Compliance',
+    explanation: 'When communicating with someone who is deaf or hard of hearing, use pen and paper or other written communication.'
+  },
+  {
+    id: '40',
+    question: 'Hallucinations may be caused by:',
+    options: ['Illness', 'Drugs', 'Either one', 'Neither'],
+    correctAnswer: 2,
+    category: 'Mental Health',
+    explanation: 'Hallucinations can be caused by either mental illness or drug use.'
+  },
+  {
+    id: '41',
+    question: 'Self-control gives guards:',
+    options: ['Weakness', 'Situational awareness', 'Superiority', 'Aggression'],
+    correctAnswer: 1,
+    category: 'Professional Development',
+    explanation: 'Self-control helps security officers maintain situational awareness and make better decisions.'
+  },
+  {
+    id: '42',
+    question: 'Which two emotions must be controlled?',
+    options: ['Fear and anger', 'Joy and sadness', 'Anxiety and guilt', 'None'],
+    correctAnswer: 0,
+    category: 'Emotional Control',
+    explanation: 'Fear and anger are the two emotions that must be controlled to maintain professional judgment.'
+  },
+  {
+    id: '43',
+    question: 'Always try to gain compliance without:',
+    options: ['Speaking', 'Warning', 'Physical force', 'Calling police'],
+    correctAnswer: 2,
+    category: 'Use of Force',
+    explanation: 'Always try to gain compliance without physical force when possible.'
+  },
+  {
+    id: '44',
+    question: 'Public trust is built by ensuring force is:',
+    options: ['Reasonable', 'Hidden', 'Harsh', 'Legal only'],
+    correctAnswer: 0,
+    category: 'Public Relations',
+    explanation: 'Public trust is built by ensuring that any force used is reasonable and justified.'
+  },
+  {
+    id: '45',
+    question: 'A good guard acts with:',
+    options: ['Toughness', 'Supportiveness', 'Silence', 'Control'],
+    correctAnswer: 1,
+    category: 'Professional Conduct',
+    explanation: 'A good security guard acts with supportiveness, helping people while maintaining security.'
+  },
+  {
+    id: '46',
+    question: 'Mental illness may reduce someone\'s coping abilities.',
+    options: ['True', 'False'],
+    correctAnswer: 0,
+    category: 'Mental Health',
+    explanation: 'Mental illness can significantly reduce a person\'s ability to cope with stress and difficult situations.'
+  },
+  {
+    id: '47',
+    question: 'Security officers should try to diagnose mental illness.',
+    options: ['Yes', 'No'],
+    correctAnswer: 1,
+    category: 'Mental Health',
+    explanation: 'Security officers should not attempt to diagnose mental illness - this is a medical professional\'s role.'
+  },
+  {
+    id: '48',
+    question: 'People with mental illness may go from calm to:',
+    options: ['Joyful', 'Quiet', 'Agitated', 'Sleepy'],
+    correctAnswer: 2,
+    category: 'Mental Health',
+    explanation: 'People with mental illness may rapidly transition from calm to agitated states.'
+  },
+  {
+    id: '49',
+    question: 'First step in active shooter event is to disarm shooter.',
+    options: ['True', 'False'],
+    correctAnswer: 1,
+    category: 'Active Shooter',
+    explanation: 'The first step in an active shooter event is NOT to disarm the shooter - it\'s to protect yourself and others.'
+  },
+  {
+    id: '50',
+    question: 'When calling 911, give:',
+    options: ['Directions', 'Description', 'Location', 'Both b and c'],
+    correctAnswer: 3,
+    category: 'Emergency Response',
+    explanation: 'When calling 911, provide both a description of what\'s happening and your location.'
+  },
+  {
+    id: '51',
+    question: 'In an active shooter, a guard\'s first responsibility is:',
+    options: ['Stop the threat', 'Protect yourself', 'Call 911', 'Lead others'],
+    correctAnswer: 1,
+    category: 'Active Shooter',
+    explanation: 'In an active shooter situation, a guard\'s first responsibility is to protect themselves.'
+  },
+  {
+    id: '52',
+    question: 'Correct order of action in active shooter event:',
+    options: ['Confront, detain, fight', 'Run, Hide, Fight', 'Hide, call, fight', 'None of the above'],
+    correctAnswer: 1,
+    category: 'Active Shooter',
+    explanation: 'The correct order of action in an active shooter event is Run, Hide, Fight.'
   }
 ];
 
