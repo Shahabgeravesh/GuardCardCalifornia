@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, ScrollView, TouchableOpacity, View, Image } from 'react-native';
+import { StyleSheet, ScrollView, TouchableOpacity, View, Image, Linking, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Text } from 'react-native';
@@ -11,10 +11,7 @@ export default function HomeScreen() {
   const navigation = useNavigation();
   const [expandedStep, setExpandedStep] = useState(null);
   
-  // Interactive progress tracking
-  const [completedSteps, setCompletedSteps] = useState([]); // All steps start incomplete
-  const totalSteps = 3;
-  const registrationProgress = Math.round((completedSteps.length / totalSteps) * 100);
+
 
   const quickActions = [
     {
@@ -51,16 +48,7 @@ export default function HomeScreen() {
     },
   ];
 
-  // Function to toggle step completion
-  const toggleStepCompletion = (stepId) => {
-    setCompletedSteps(prev => {
-      if (prev.includes(stepId - 1)) {
-        return prev.filter(id => id !== stepId - 1);
-      } else {
-        return [...prev, stepId - 1].sort();
-      }
-    });
-  };
+
 
   // Real California Guard Card 3-Step Process
   const guardCardSteps = [
@@ -68,9 +56,7 @@ export default function HomeScreen() {
       id: 1,
       title: 'Complete 8-Hour BSIS Training',
       description: 'Complete Power to Arrest (PTA) & Appropriate Use of Force (AUOF)',
-      status: 'completed',
-      timeEstimate: '1-2 days',
-      costEstimate: '$50-150',
+
       image: require('../../assets/images/Verified.png'),
       details: [
         '3-Hour Power to Arrest (PTA) - Online Part A',
@@ -80,7 +66,6 @@ export default function HomeScreen() {
       ],
       requirements: [
         'Valid government-issued photo ID',
-        'Payment for training courses',
         'Attend in-person AUOF training'
       ]
     },
@@ -88,29 +73,24 @@ export default function HomeScreen() {
       id: 2,
       title: 'Submit Online Guard Card Application',
       description: 'Apply through CA State BSIS Breeze system',
-      status: 'in-progress',
-      timeEstimate: '30 minutes',
-      costEstimate: '$50',
+
       image: require('../../assets/images/BSIS Application.png'),
       details: [
         'Create account on CA Breeze system',
         'Complete Security Guard Registration application',
         'Upload 8-hour training certificate',
-        'Pay $50 application fee online'
+        'Submit application online'
       ],
       requirements: [
         '8-hour training certificate',
-        'Valid email address for account',
-        'Payment method for $50 fee'
+        'Valid email address for account'
       ]
     },
     {
       id: 3,
       title: 'Get Live Scan Fingerprints',
       description: 'Complete background check via Live Scan',
-      status: 'pending',
-      timeEstimate: '30 minutes',
-      costEstimate: '$32-75',
+
       image: require('../../assets/images/Livescan.png'),
       details: [
         'Download Live Scan form from BSIS website',
@@ -120,8 +100,7 @@ export default function HomeScreen() {
       ],
       requirements: [
         'Completed Live Scan form',
-        'Valid government-issued photo ID',
-        'Payment for Live Scan services'
+        'Valid government-issued photo ID'
       ]
     }
   ];
@@ -156,15 +135,18 @@ export default function HomeScreen() {
     setExpandedStep(expandedStep === stepId ? null : stepId);
   };
 
-  // Function to get step status based on completion
-  const getStepStatus = (stepId) => {
-    return completedSteps.includes(stepId - 1) ? 'completed' : 'pending';
+  const openBSISWebsite = () => {
+    const url = 'https://www.bsis.ca.gov/';
+    Linking.canOpenURL(url).then(supported => {
+      if (supported) {
+        Linking.openURL(url);
+      } else {
+        Alert.alert('Error', 'Unable to open BSIS website');
+      }
+    });
   };
 
-  // Function to get status icon based on completion
-  const getStatusIconByStep = (stepId) => {
-    return completedSteps.includes(stepId - 1) ? 'checkmark-circle' : 'ellipse-outline';
-  };
+
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.systemBackground }]}>
@@ -173,36 +155,9 @@ export default function HomeScreen() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
-        {/* Header Section */}
-        <View style={styles.header}>
-          <Text style={[styles.headerTitle, { color: theme.colors.label }, theme.typography.largeTitle]}>
-            Guard Card California
-          </Text>
-          <Text style={[styles.headerSubtitle, { color: theme.colors.secondaryLabel }, theme.typography.body]}>
-            Complete your security guard registration
-          </Text>
-        </View>
 
-        {/* Progress Overview */}
-        <View style={[styles.progressCard, { backgroundColor: theme.colors.secondarySystemBackground }, theme.shadows.md]}>
-          <View style={styles.progressHeader}>
-            <Text style={[styles.progressTitle, { color: theme.colors.label }, theme.typography.headline]}>
-              Progress
-            </Text>
-            <Text style={[styles.progressPercentage, { color: theme.colors.systemBlue }, theme.typography.title2]}>
-              {registrationProgress}%
-            </Text>
-          </View>
-          
-          <View style={[styles.progressBar, { backgroundColor: theme.colors.separator }]}>
-            <View 
-              style={[styles.progressFill, { 
-                width: `${registrationProgress}%`,
-                backgroundColor: theme.colors.systemBlue
-              }]} 
-            />
-          </View>
-        </View>
+
+
 
         {/* 3-Step Guard Card Process */}
         <View style={styles.section}>
@@ -219,8 +174,8 @@ export default function HomeScreen() {
                 <View style={styles.stepHeader}>
                   <View style={styles.stepNumberContainer}>
                     <View style={[styles.stepNumber, { 
-                      backgroundColor: getStatusColor(getStepStatus(step.id)),
-                      borderColor: getStatusColor(getStepStatus(step.id))
+                      backgroundColor: theme.colors.systemBlue,
+                      borderColor: theme.colors.systemBlue
                     }]}>
                       <Text style={[styles.stepNumberText, { color: '#FFFFFF' }, theme.typography.headline]}>
                         {step.id}
@@ -228,7 +183,7 @@ export default function HomeScreen() {
                     </View>
                     {index < guardCardSteps.length - 1 && (
                       <View style={[styles.stepConnector, { 
-                        backgroundColor: completedSteps.includes(step.id - 1) ? getStatusColor('completed') : theme.colors.separator
+                        backgroundColor: theme.colors.separator
                       }]} />
                     )}
                   </View>
@@ -251,19 +206,6 @@ export default function HomeScreen() {
                         </Text>
                       </View>
                       <View style={styles.stepStatusContainer}>
-                        <TouchableOpacity
-                          onPress={() => toggleStepCompletion(step.id)}
-                          style={styles.completionToggle}
-                          activeOpacity={0.7}
-                          accessibilityRole="button"
-                          accessibilityLabel={`Mark step ${step.id} as ${completedSteps.includes(step.id - 1) ? 'incomplete' : 'complete'}`}
-                        >
-                          <Ionicons 
-                            name={getStatusIconByStep(step.id)} 
-                            size={24} 
-                            color={getStatusColor(getStepStatus(step.id))} 
-                          />
-                        </TouchableOpacity>
                         <Ionicons 
                           name={expandedStep === step.id ? "chevron-up" : "chevron-down"} 
                           size={16} 
@@ -285,20 +227,7 @@ export default function HomeScreen() {
                           />
                         </View>
 
-                        <View style={styles.stepMetrics}>
-                          <View style={styles.metricItem}>
-                            <Ionicons name="time" size={16} color={theme.colors.secondaryLabel} />
-                            <Text style={[styles.metricText, { color: theme.colors.secondaryLabel }, theme.typography.footnote]}>
-                              {step.timeEstimate}
-                            </Text>
-                          </View>
-                          <View style={styles.metricItem}>
-                            <Ionicons name="card" size={16} color={theme.colors.secondaryLabel} />
-                            <Text style={[styles.metricText, { color: theme.colors.secondaryLabel }, theme.typography.footnote]}>
-                              {step.costEstimate}
-                            </Text>
-                          </View>
-                        </View>
+
 
                         <View style={styles.detailsSection}>
                           <Text style={[styles.detailsTitle, { color: theme.colors.label }, theme.typography.subheadline]}>
@@ -327,6 +256,107 @@ export default function HomeScreen() {
                             </View>
                           ))}
                         </View>
+
+                        {/* Quick Actions for each step */}
+                        <View style={styles.stepQuickActions}>
+                          <Text style={[styles.quickActionsTitle, { color: theme.colors.label }, theme.typography.subheadline]}>
+                            Quick Actions
+                          </Text>
+                          <View style={styles.quickActionsRow}>
+                            {step.id === 1 && (
+                              <>
+                                <TouchableOpacity
+                                  style={[styles.stepActionCard, { backgroundColor: theme.colors.systemBackground }, theme.shadows.sm]}
+                                  onPress={() => navigation.navigate('Training')}
+                                  activeOpacity={0.7}
+                                >
+                                  <Ionicons name="location" size={20} color={theme.colors.systemGreen} />
+                                  <Text style={[styles.stepActionText, { color: theme.colors.label }, theme.typography.footnote]}>
+                                    Find Training Centers
+                                  </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                  style={[styles.stepActionCard, { backgroundColor: theme.colors.systemBackground }, theme.shadows.sm]}
+                                  onPress={() => navigation.navigate('Study')}
+                                  activeOpacity={0.7}
+                                >
+                                  <Ionicons name="book" size={20} color={theme.colors.systemBlue} />
+                                  <Text style={[styles.stepActionText, { color: theme.colors.label }, theme.typography.footnote]}>
+                                    Study Materials
+                                  </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                  style={[styles.stepActionCard, { backgroundColor: theme.colors.systemBackground }, theme.shadows.sm]}
+                                  onPress={() => navigation.navigate('Quiz')}
+                                  activeOpacity={0.7}
+                                >
+                                  <Ionicons name="help-circle" size={20} color={theme.colors.systemPurple} />
+                                  <Text style={[styles.stepActionText, { color: theme.colors.label }, theme.typography.footnote]}>
+                                    Practice Quiz
+                                  </Text>
+                                </TouchableOpacity>
+                              </>
+                            )}
+                            {step.id === 2 && (
+                              <>
+                                <TouchableOpacity
+                                  style={[styles.stepActionCard, { backgroundColor: theme.colors.systemBackground }, theme.shadows.sm]}
+                                  onPress={() => navigation.navigate('Quiz')}
+                                  activeOpacity={0.7}
+                                >
+                                  <Ionicons name="help-circle" size={20} color={theme.colors.systemPurple} />
+                                  <Text style={[styles.stepActionText, { color: theme.colors.label }, theme.typography.footnote]}>
+                                    Practice Quiz
+                                  </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                  style={[styles.stepActionCard, { backgroundColor: theme.colors.systemBackground }, theme.shadows.sm]}
+                                  onPress={() => navigation.navigate('Resources')}
+                                  activeOpacity={0.7}
+                                >
+                                  <Ionicons name="document-text" size={20} color={theme.colors.systemTeal} />
+                                  <Text style={[styles.stepActionText, { color: theme.colors.label }, theme.typography.footnote]}>
+                                    Download Forms
+                                  </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                  style={[styles.stepActionCard, { backgroundColor: theme.colors.systemBackground }, theme.shadows.sm]}
+                                  onPress={openBSISWebsite}
+                                  activeOpacity={0.7}
+                                >
+                                  <Ionicons name="globe" size={20} color={theme.colors.systemOrange} />
+                                  <Text style={[styles.stepActionText, { color: theme.colors.label }, theme.typography.footnote]}>
+                                    Submit Application
+                                  </Text>
+                                </TouchableOpacity>
+                              </>
+                            )}
+                            {step.id === 3 && (
+                              <>
+                                <TouchableOpacity
+                                  style={[styles.stepActionCard, { backgroundColor: theme.colors.systemBackground }, theme.shadows.sm]}
+                                  onPress={() => navigation.navigate('Training')}
+                                  activeOpacity={0.7}
+                                >
+                                  <Ionicons name="location" size={20} color={theme.colors.systemGreen} />
+                                  <Text style={[styles.stepActionText, { color: theme.colors.label }, theme.typography.footnote]}>
+                                    Find LiveScan Locations
+                                  </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                  style={[styles.stepActionCard, { backgroundColor: theme.colors.systemBackground }, theme.shadows.sm]}
+                                  onPress={() => navigation.navigate('Resources')}
+                                  activeOpacity={0.7}
+                                >
+                                  <Ionicons name="document-text" size={20} color={theme.colors.systemTeal} />
+                                  <Text style={[styles.stepActionText, { color: theme.colors.label }, theme.typography.footnote]}>
+                                    Get LiveScan Form
+                                  </Text>
+                                </TouchableOpacity>
+                              </>
+                            )}
+                          </View>
+                        </View>
                       </View>
                     )}
                   </View>
@@ -340,42 +370,7 @@ export default function HomeScreen() {
 
 
 
-        {/* Quick Actions - Moved to bottom */}
-        <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: theme.colors.label }, theme.typography.title2]}>
-            Quick Actions
-          </Text>
-          <View style={styles.quickActionsGrid}>
-            {quickActions.map((action) => (
-              <TouchableOpacity
-                key={action.id}
-                style={[styles.actionCard, { backgroundColor: theme.colors.systemBackground }, theme.shadows.sm]}
-                onPress={() => {
-                  if (action.id === 1) navigation.navigate('Training');
-                  else if (action.id === 2) navigation.navigate('Study');
-                  else if (action.id === 3) navigation.navigate('Quiz');
-                  else if (action.id === 4) navigation.navigate('Training');
-                }}
-                activeOpacity={0.7}
-                accessibilityRole="button"
-                accessibilityLabel={`${action.title}: ${action.subtitle}`}
-                accessibilityHint={`Double tap to access ${action.title.toLowerCase()}`}
-              >
-                <View style={[styles.actionIcon, { backgroundColor: action.color }]}>
-                  <Ionicons name={action.icon} size={24} color="#FFFFFF" />
-                </View>
-                <View style={styles.actionContent}>
-                  <Text style={[styles.actionTitle, { color: theme.colors.label }, theme.typography.headline]}>
-                    {action.title}
-                  </Text>
-                  <Text style={[styles.actionSubtitle, { color: theme.colors.secondaryLabel }, theme.typography.footnote]}>
-                    {action.subtitle}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </View>
+
       </ScrollView>
     </SafeAreaView>
   );
@@ -604,6 +599,41 @@ const styles = StyleSheet.create({
   detailText: {
     flex: 1,
     lineHeight: 18,
+  },
+  stepQuickActions: {
+    marginTop: 20,
+    paddingTop: 20,
+    borderTopWidth: 1,
+    borderTopColor: '#E5E5EA',
+  },
+  quickActionsTitle: {
+    marginBottom: 12,
+    fontWeight: '600',
+  },
+  quickActionsRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  stepActionCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 8,
+    minHeight: 36,
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  stepActionText: {
+    marginLeft: 6,
+    fontWeight: '500',
   },
   linksContainer: {
     gap: 12,
