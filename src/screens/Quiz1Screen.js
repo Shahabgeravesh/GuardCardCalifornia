@@ -527,7 +527,7 @@ const Quiz1Screen = () => {
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.systemBackground }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.systemBackground }]} edges={['left', 'right', 'bottom']}>
       <ScrollView 
         style={styles.content}
         contentContainerStyle={styles.scrollContent}
@@ -538,12 +538,6 @@ const Quiz1Screen = () => {
           <>
             {/* Header */}
             <View style={styles.header}>
-              <Text style={[styles.headerTitle, { color: theme.colors.label }, theme.typography.largeTitle]}>
-                Quiz
-              </Text>
-              <Text style={[styles.headerSubtitle, { color: theme.colors.secondaryLabel }, theme.typography.body]}>
-                Power to Arrest (PTA) Training
-              </Text>
             </View>
 
             {/* Content */}
@@ -551,14 +545,14 @@ const Quiz1Screen = () => {
               {/* Consolidated Information Card */}
               <View style={[styles.consolidatedCard, { backgroundColor: theme.colors.secondarySystemBackground }, theme.shadows.lg]}>
                 {/* Header with gradient background */}
-                <View style={[styles.cardHeader, { backgroundColor: theme.colors.systemBlue }]}>
+                <View style={[styles.cardHeader, { backgroundColor: '#8B5CF6' }]}>
                   <View style={styles.headerIconContainer}>
-                    <Ionicons name="shield-checkmark" size={32} color="#FFFFFF" />
+                    <Ionicons name="shield-checkmark" size={28} color="#FFFFFF" />
                   </View>
-                  <Text style={[styles.cardTitle, { color: '#FFFFFF' }, theme.typography.largeTitle]}>
+                  <Text style={[styles.cardTitle, { color: '#FFFFFF' }, theme.typography.cardTitle]}>
                     Power to Arrest (PTA) Training
                   </Text>
-                  <Text style={[styles.cardSubtitle, { color: 'rgba(255, 255, 255, 0.9)' }, theme.typography.subheadline]}>
+                  <Text style={[styles.cardSubtitle, { color: 'rgba(255, 255, 255, 0.9)' }, theme.typography.body]}>
                     Practice Quiz
                   </Text>
                 </View>
@@ -571,7 +565,7 @@ const Quiz1Screen = () => {
 
                   {/* Key Topics */}
                   <View style={styles.topicsSection}>
-                    <Text style={[styles.sectionTitle, { color: theme.colors.label }, theme.typography.headline]}>
+                    <Text style={[styles.sectionTitle, { color: theme.colors.label }, theme.typography.bodyLarge]}>
                       Key Topics Covered:
                     </Text>
                     <View style={styles.topicsGrid}>
@@ -608,7 +602,7 @@ const Quiz1Screen = () => {
                          <View style={[styles.statIcon, { backgroundColor: theme.colors.systemPurple }]}>
                            <Ionicons name="document" size={20} color="#FFFFFF" />
                          </View>
-                         <Text style={[styles.statText, { color: theme.colors.label }, theme.typography.subheadline]}>
+                         <Text style={[styles.statText, { color: theme.colors.label }, theme.typography.body]}>
                            52 Questions
                          </Text>
                        </View>
@@ -616,7 +610,7 @@ const Quiz1Screen = () => {
                       <View style={[styles.statIcon, { backgroundColor: theme.colors.systemOrange }]}>
                         <Ionicons name="time" size={20} color="#FFFFFF" />
                       </View>
-                      <Text style={[styles.statText, { color: theme.colors.label }, theme.typography.subheadline]}>
+                      <Text style={[styles.statText, { color: theme.colors.label }, theme.typography.body]}>
                         No Time Limit
                       </Text>
                     </View>
@@ -624,7 +618,7 @@ const Quiz1Screen = () => {
                       <View style={[styles.statIcon, { backgroundColor: theme.colors.systemGreen }]}>
                         <Ionicons name="trophy" size={20} color="#FFFFFF" />
                       </View>
-                      <Text style={[styles.statText, { color: theme.colors.label }, theme.typography.subheadline]}>
+                      <Text style={[styles.statText, { color: theme.colors.label }, theme.typography.body]}>
                         70% to Pass
                       </Text>
                     </View>
@@ -634,7 +628,7 @@ const Quiz1Screen = () => {
                   <View style={[styles.disclaimerSection, { backgroundColor: 'rgba(255, 193, 7, 0.1)', borderColor: 'rgba(255, 193, 7, 0.3)' }]}>
                     <View style={styles.disclaimerHeader}>
                       <Ionicons name="warning" size={20} color="#FFC107" />
-                      <Text style={[styles.disclaimerTitle, { color: '#FF6B35' }, theme.typography.headline]}>
+                      <Text style={[styles.disclaimerTitle, { color: '#FF6B35' }, theme.typography.bodyLarge]}>
                         Important Notice
                       </Text>
                     </View>
@@ -649,6 +643,9 @@ const Quiz1Screen = () => {
                 style={[styles.startButton, { backgroundColor: theme.colors.systemBlue }, theme.shadows.md]}
                 onPress={startQuiz}
                 activeOpacity={0.8}
+                accessibilityRole="button"
+                accessibilityLabel="Start the Power to Arrest training quiz"
+                accessibilityHint="Double tap to begin the quiz with 52 questions"
               >
                 <Ionicons name="play" size={24} color="#FFFFFF" />
                 <Text style={[styles.startButtonText, { color: '#FFFFFF' }, theme.typography.headline]}>
@@ -662,9 +659,6 @@ const Quiz1Screen = () => {
           <>
             {/* Header */}
             <View style={styles.header}>
-              <Text style={[styles.headerTitle, { color: theme.colors.label }, theme.typography.title1]}>
-                Quiz
-              </Text>
               <Text style={[styles.headerSubtitle, { color: theme.colors.secondaryLabel }, theme.typography.body]}>
                 Question {currentQuestion + 1} of {studyQuestions.length}
               </Text>
@@ -722,6 +716,7 @@ const Quiz1Screen = () => {
                   accessibilityRole="button"
                   accessibilityLabel={`Option ${String.fromCharCode(65 + index)}: ${option}`}
                   accessibilityHint="Double tap to select this answer"
+                  accessibilityState={{ selected: isAnswerSelected(index) }}
                 >
                   <View style={[styles.optionLetter, { backgroundColor: theme.colors.systemBlue }]}>
                     <Text style={[styles.optionLetterText, { color: '#FFFFFF' }, theme.typography.headline]}>
@@ -829,18 +824,19 @@ const Quiz1Screen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#F8F9FA',
   },
   content: {
     flex: 1,
   },
   scrollContent: {
     paddingHorizontal: 20,
-    paddingTop: 20,
+    paddingTop: 16,
     paddingBottom: 40,
   },
   header: {
     alignItems: 'center',
-    marginBottom: 32,
+    marginBottom: 4,
   },
   headerTitle: {
     marginBottom: 8,
@@ -855,40 +851,44 @@ const styles = StyleSheet.create({
   },
   // Consolidated Card Styles
   consolidatedCard: {
-    borderRadius: 24,
-    marginBottom: 32,
+    borderRadius: 8,
+    marginBottom: 24,
     shadowColor: '#000000',
     shadowOffset: {
       width: 0,
-      height: 8,
+      height: 1,
     },
-    shadowOpacity: 0.15,
-    shadowRadius: 20,
-    elevation: 12,
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
     overflow: 'hidden',
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
   },
   cardHeader: {
-    padding: 24,
+    padding: 16,
     alignItems: 'center',
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
+    borderTopLeftRadius: 18,
+    borderTopRightRadius: 18,
+    backgroundColor: '#4257B2',
   },
   headerIconContainer: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: 'rgba(255, 255, 255, 0.25)',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: 8,
     shadowColor: '#000000',
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 3,
     },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 6,
+    shadowOpacity: 0.25,
+    shadowRadius: 6,
+    elevation: 4,
   },
   cardTitle: {
     textAlign: 'center',
@@ -899,7 +899,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   cardContent: {
-    padding: 24,
+    padding: 16,
   },
   mainDescription: {
     lineHeight: 24,
@@ -1027,14 +1027,16 @@ const styles = StyleSheet.create({
     padding: 28,
     borderRadius: 20,
     marginBottom: 24,
-    shadowColor: '#000000',
+    shadowColor: '#8B5CF6',
     shadowOffset: {
       width: 0,
       height: 4,
     },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.15,
     shadowRadius: 12,
     elevation: 8,
+    borderWidth: 2,
+    borderColor: '#8B5CF6',
   },
   questionText: {
     lineHeight: 24,
@@ -1048,15 +1050,17 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 16,
     marginBottom: 16,
-    minHeight: 64,
-    shadowColor: '#000000',
+    minHeight: 64, // Ensure minimum touch target
+    shadowColor: '#8B5CF6',
     shadowOffset: {
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.06,
+    shadowOpacity: 0.1,
     shadowRadius: 6,
     elevation: 3,
+    borderWidth: 1,
+    borderColor: '#8B5CF6',
   },
   optionLetter: {
     width: 36,
@@ -1102,12 +1106,12 @@ const styles = StyleSheet.create({
   },
   navButton: {
     flex: 1,
-    paddingVertical: 6,
-    paddingHorizontal: 12,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: 44,
+    minHeight: 44, // iOS minimum touch target
     marginHorizontal: 4,
   },
   navButtonText: {
@@ -1115,12 +1119,12 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
   exitButton: {
-    paddingVertical: 16,
-    paddingHorizontal: 24,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: 44,
+    minHeight: 44, // iOS minimum touch target
     marginHorizontal: 4,
   },
   exitButtonText: {
@@ -1128,12 +1132,12 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
   resetButton: {
-    paddingVertical: 16,
-    paddingHorizontal: 24,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: 44,
+    minHeight: 44, // iOS minimum touch target
     marginHorizontal: 4,
   },
   resetButtonText: {

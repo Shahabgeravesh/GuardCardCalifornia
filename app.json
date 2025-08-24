@@ -19,9 +19,12 @@
         "NSCameraUsageDescription": "This app uses camera for document scanning and photo identification.",
         "NSPhotoLibraryUsageDescription": "This app accesses your photo library for document uploads.",
         "UIRequiresFullScreen": false,
-        "UIStatusBarStyle": "default",
+        "UIStatusBarStyle": "light-content",
         "UIBackgroundModes": [],
-        "NSLocationAlwaysAndWhenInUseUsageDescription": "This app uses location to find training centers near you and show them on the map."
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "This app uses location to find training centers near you and show them on the map.",
+        "UIViewControllerBasedStatusBarAppearance": false,
+        "UISupportedInterfaceOrientations": ["portrait"],
+        "UISupportedInterfaceOrientations~ipad": ["portrait", "landscape-left", "landscape-right"]
       }
     },
     "android": {

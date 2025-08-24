@@ -59,31 +59,37 @@ function TabNavigator() {
           );
         },
         // Enhanced Tab Bar Colors with vibrant gradients
-        tabBarActiveTintColor: '#667eea', // Vibrant gradient blue
-        tabBarInactiveTintColor: '#A0A0A0', // Softer inactive color
+        tabBarActiveTintColor: '#4257B2', // Quizlet blue
+        tabBarInactiveTintColor: '#6B7280', // Quizlet gray
         tabBarStyle: {
-          backgroundColor: '#FAFBFF', // Slightly tinted white for subtle color
-          borderTopWidth: 0,
+          backgroundColor: '#FFFFFF', // Clean white background
+          borderTopWidth: 1,
+          borderTopColor: '#E5E7EB',
           paddingBottom: Platform.OS === 'ios' ? 12 : 12,
           paddingTop: Platform.OS === 'ios' ? 12 : 12,
           paddingHorizontal: 16,
           height: Platform.OS === 'ios' ? 95 : 72, // Increased height for better spacing
-          shadowColor: '#667eea',
+          shadowColor: '#000000',
           shadowOffset: {
             width: 0,
-            height: -3,
+            height: -1,
           },
-          shadowOpacity: 0.15,
-          shadowRadius: 12,
-          elevation: Platform.OS === 'android' ? 16 : 0,
-          borderTopLeftRadius: 20,
-          borderTopRightRadius: 20,
+          shadowOpacity: 0.05,
+          shadowRadius: 2,
+          elevation: Platform.OS === 'android' ? 2 : 0,
+          borderTopLeftRadius: 12,
+          borderTopRightRadius: 12,
+          // iOS-specific improvements
+          ...(Platform.OS === 'ios' && {
+            shadowOpacity: 0.03,
+            shadowRadius: 2,
+          }),
         },
         tabBarLabelStyle: {
-          fontSize: 11, // Slightly larger for better readability
-          fontWeight: '600', // iOS Semibold Weight
+          fontSize: 12, // Quizlet-style tab label size
+          fontWeight: '500', // Quizlet-style medium weight
           marginTop: 4,
-          letterSpacing: 0.15, // Slightly more letter spacing
+          letterSpacing: -0.1, // Quizlet-style letter spacing
           textTransform: 'capitalize', // Capitalize labels for better appearance
         },
         tabBarIconStyle: {
@@ -92,8 +98,8 @@ function TabNavigator() {
         },
         // Enhanced Navigation Bar Styling with vibrant gradients
         headerStyle: {
-          backgroundColor: '#667eea', // Vibrant gradient blue
-          shadowColor: '#667eea',
+          backgroundColor: '#4257B2', // Quizlet blue
+          shadowColor: '#4257B2',
           shadowOffset: {
             width: 0,
             height: 3,
@@ -114,6 +120,8 @@ function TabNavigator() {
         tabBarSafeAreaInsets: { bottom: 0 },
         tabBarItemStyle: {
           paddingVertical: 4,
+          // Ensure minimum touch target size for iOS
+          minHeight: Platform.OS === 'ios' ? 44 : 48,
         },
       })}
     >
@@ -182,11 +190,12 @@ export default function App() {
         <ThemeProvider>
           <NavigationContainer>
             <TabNavigator />
-            <StatusBar 
-              style="light" 
-              backgroundColor="#667eea"
+                          <StatusBar 
+                style="light" 
+                backgroundColor="#4257B2"
               translucent={false}
               animated={true}
+              barStyle="light-content"
             />
           </NavigationContainer>
         </ThemeProvider>

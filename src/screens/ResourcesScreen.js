@@ -376,16 +376,8 @@ export default function ResourcesScreen() {
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.systemGroupedBackground }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.systemGroupedBackground }]} edges={['left', 'right', 'bottom']}>
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
-        <View style={styles.header}>
-          <Text style={[styles.headerTitle, { color: theme.colors.label }, theme.typography.largeTitle]}>
-            Resources
-          </Text>
-          <Text style={[styles.headerSubtitle, { color: theme.colors.secondaryLabel }, theme.typography.body]}>
-            Essential information for your BSIS security guard journey
-          </Text>
-        </View>
 
         <View style={styles.sectionsContainer}>
           {resources.map(renderResourceSection)}
@@ -438,13 +430,14 @@ export default function ResourcesScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#F8F9FA',
   },
   scrollView: {
     flex: 1,
   },
   scrollContent: {
     paddingBottom: 96,
-    paddingTop: 16,
+    paddingTop: 4,
   },
   header: {
     paddingHorizontal: 20,
@@ -458,22 +451,26 @@ const styles = StyleSheet.create({
   },
   sectionsContainer: {
     paddingHorizontal: 20,
-    gap: 16,
+    gap: 20,
   },
   sectionWrapper: {
-    marginBottom: 16,
+    marginBottom: 20,
   },
   resourceCard: {
     padding: 20,
-    borderRadius: 16,
+    borderRadius: 8,
     shadowColor: '#000000',
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 1,
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 12,
-    elevation: 6,
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
+    backgroundColor: '#FFFFFF',
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
   },
   resourceHeader: {
     flexDirection: 'row',

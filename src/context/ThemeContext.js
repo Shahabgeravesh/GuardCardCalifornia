@@ -24,84 +24,70 @@ export const ThemeProvider = ({ children }) => {
     isDarkMode,
     toggleTheme,
     
-    // Typography System - iOS Standard Font Sizes and Weights
+    // Typography System - Quizlet Style Font Sizes and Weights
     typography: {
-      // Large Title - 34pt, Bold
-      largeTitle: {
-        fontSize: 34,
+      // Page Title - 24pt, Bold
+      pageTitle: {
+        fontSize: 24,
         fontWeight: '700',
-        lineHeight: 41,
-        letterSpacing: 0.37,
+        lineHeight: 32,
+        letterSpacing: -0.2,
       },
-      // Title 1 - 28pt, Bold
-      title1: {
-        fontSize: 28,
-        fontWeight: '700',
-        lineHeight: 34,
-        letterSpacing: 0.36,
-      },
-      // Title 2 - 22pt, Bold
-      title2: {
-        fontSize: 22,
-        fontWeight: '700',
-        lineHeight: 28,
-        letterSpacing: 0.35,
-      },
-      // Title 3 - 20pt, Semibold
-      title3: {
+      // Section Title - 20pt, Semibold
+      sectionTitle: {
         fontSize: 20,
         fontWeight: '600',
-        lineHeight: 24,
-        letterSpacing: 0.38,
+        lineHeight: 28,
+        letterSpacing: -0.1,
       },
-      // Headline - 17pt, Semibold
-      headline: {
-        fontSize: 17,
+      // Card Title - 18pt, Semibold
+      cardTitle: {
+        fontSize: 18,
         fontWeight: '600',
-        lineHeight: 22,
-        letterSpacing: -0.41,
+        lineHeight: 24,
+        letterSpacing: -0.1,
       },
-      // Body - 17pt, Regular
-      body: {
-        fontSize: 17,
-        fontWeight: '400',
-        lineHeight: 22,
-        letterSpacing: -0.41,
-      },
-      // Callout - 16pt, Regular
-      callout: {
+      // Body Large - 16pt, Regular
+      bodyLarge: {
         fontSize: 16,
         fontWeight: '400',
-        lineHeight: 21,
-        letterSpacing: -0.32,
+        lineHeight: 24,
+        letterSpacing: -0.1,
       },
-      // Subheadline - 15pt, Regular
-      subheadline: {
-        fontSize: 15,
+      // Body - 14pt, Regular
+      body: {
+        fontSize: 14,
         fontWeight: '400',
         lineHeight: 20,
-        letterSpacing: -0.24,
+        letterSpacing: -0.1,
       },
-      // Footnote - 13pt, Regular
-      footnote: {
+      // Body Small - 13pt, Regular
+      bodySmall: {
         fontSize: 13,
         fontWeight: '400',
         lineHeight: 18,
-        letterSpacing: -0.08,
+        letterSpacing: -0.1,
       },
-      // Caption 1 - 12pt, Regular
-      caption1: {
+      // Caption - 12pt, Regular
+      caption: {
         fontSize: 12,
         fontWeight: '400',
         lineHeight: 16,
-        letterSpacing: 0,
+        letterSpacing: -0.1,
       },
-      // Caption 2 - 11pt, Regular
-      caption2: {
-        fontSize: 11,
-        fontWeight: '400',
-        lineHeight: 13,
-        letterSpacing: 0.07,
+      // Button Text - 14pt, Semibold
+      buttonText: {
+        fontSize: 14,
+        fontWeight: '600',
+        lineHeight: 20,
+        letterSpacing: -0.1,
+      },
+      // Tab Label - 12pt, Medium
+      tabLabel: {
+        fontSize: 12,
+        fontWeight: '500',
+        lineHeight: 16,
+        letterSpacing: -0.1,
       },
     },
 
@@ -132,7 +118,7 @@ export const ThemeProvider = ({ children }) => {
       systemIndigo: '#5856D6',
       systemOrange: '#FF9500',
       systemPink: '#FF2D92',
-      systemPurple: '#AF52DE',
+      systemPurple: '#8B5CF6',
       systemRed: '#FF3B30',
       systemTeal: '#5AC8FA',
       systemYellow: '#FFCC02',
@@ -181,10 +167,10 @@ export const ThemeProvider = ({ children }) => {
       info: '#5AC8FA',
       
       // Gradient colors
-      gradientStart: '#667eea',
-      gradientEnd: '#764ba2',
-      gradientSecondary: '#f093fb',
-      gradientSecondaryEnd: '#f5576c',
+      gradientStart: '#8B5CF6',
+      gradientEnd: '#A855F7',
+      gradientSecondary: '#C084FC',
+      gradientSecondaryEnd: '#D946EF',
     },
     
     // Enhanced Dark Mode Colors

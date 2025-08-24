@@ -186,12 +186,12 @@ const StudyScreen = () => {
           <Ionicons name={topic.icon} size={24} color="white" />
         </View>
         <View style={styles.topicInfo}>
-          <Text style={[styles.topicTitle, { color: theme.colors.text }]}>
-            {topic.title}
-          </Text>
-          <Text style={[styles.topicDuration, { color: theme.colors.secondaryText }]}>
-            {topic.duration}
-          </Text>
+                          <Text style={[styles.topicTitle, { color: theme.colors.text }, theme.typography.cardTitle]}>
+                  {topic.title}
+                </Text>
+                      <Text style={[styles.topicDuration, { color: theme.colors.secondaryText }, theme.typography.bodySmall]}>
+              {topic.duration}
+            </Text>
         </View>
         <Ionicons name="chevron-forward" size={20} color={theme.colors.secondaryText} />
       </View>
@@ -241,19 +241,25 @@ const StudyScreen = () => {
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]} edges={['left', 'right', 'bottom']}>
       {selectedTopic ? (
         renderTopicDetail()
       ) : (
         <>
           <View style={styles.header}>
-            <Text style={[styles.headerSubtitle, { color: theme.colors.secondaryText }]}>
+            <View style={styles.headerIconContainer}>
+              <Ionicons name="book" size={20} color="#4257B2" />
+            </View>
+            <Text style={[styles.headerTitle, { color: theme.colors.label }, theme.typography.sectionTitle]}>
+              Study Materials
+            </Text>
+            <Text style={[styles.headerSubtitle, { color: theme.colors.secondaryLabel }, theme.typography.body]}>
               Learn the essential content for your security guard training
             </Text>
           </View>
 
           <View style={styles.categoryFilter}>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterScroll}>
               {categories.map((category) => (
                 <TouchableOpacity
                   key={category}
@@ -261,8 +267,11 @@ const StudyScreen = () => {
                     styles.categoryButton,
                     { 
                       backgroundColor: selectedCategory === category 
-                        ? theme.colors.primary 
-                        : theme.colors.card 
+                        ? '#4257B2' 
+                        : '#FFFFFF',
+                      borderColor: selectedCategory === category 
+                        ? '#4257B2' 
+                        : 'rgba(66, 87, 178, 0.3)'
                     }
                   ]}
                   onPress={() => setSelectedCategory(category)}
@@ -273,9 +282,10 @@ const StudyScreen = () => {
                     styles.categoryButtonText,
                     { 
                       color: selectedCategory === category 
-                        ? 'white' 
-                        : theme.colors.text 
-                    }
+                        ? '#FFFFFF' 
+                        : '#4257B2'
+                    },
+                    theme.typography.body
                   ]}>
                     {category}
                   </Text>
@@ -299,95 +309,136 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F8F9FA',
+    paddingTop: 0,
   },
   header: {
-    padding: 24,
-    paddingBottom: 20,
+    padding: 20,
+    paddingBottom: 16,
     backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
     shadowColor: '#000000',
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 1,
     },
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    elevation: 4,
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
+    marginBottom: 20,
+    alignItems: 'center',
+    borderRadius: 8,
+  },
+  headerIconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(66, 87, 178, 0.1)',
+    alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 8,
+    shadowColor: '#4257B2',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 2,
   },
   headerTitle: {
-    fontSize: 28,
-    fontWeight: '700',
-    marginBottom: 8,
-    letterSpacing: 0.35,
-  },
-  headerSubtitle: {
-    fontSize: 17,
-    fontWeight: '400',
-    lineHeight: 22,
+    fontSize: 20,
+    fontWeight: '600',
+    marginBottom: 4,
+    letterSpacing: 0.2,
     textAlign: 'center',
   },
+  headerSubtitle: {
+    fontSize: 14,
+    fontWeight: '400',
+    lineHeight: 18,
+    textAlign: 'center',
+    opacity: 0.8,
+  },
   categoryFilter: {
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    backgroundColor: '#FAFBFF',
     marginHorizontal: 16,
-    marginBottom: 16,
-    borderRadius: 16,
-    shadowColor: '#000000',
+    marginBottom: 12,
+    borderRadius: 8,
+    shadowColor: '#8B5CF6',
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 1,
     },
     shadowOpacity: 0.08,
-    shadowRadius: 12,
-    elevation: 6,
+    shadowRadius: 4,
+    elevation: 2,
+    borderWidth: 1,
+    borderColor: '#4257B2',
   },
   categoryButton: {
-    paddingHorizontal: 18,
-    paddingVertical: 10,
-    borderRadius: 24,
-    marginRight: 12,
-    minHeight: 40,
-    shadowColor: '#000000',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 12,
+    marginRight: 6,
+    minHeight: 32, // Smaller but still accessible
+    shadowColor: '#8B5CF6',
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 1,
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowOpacity: 0.08,
+    shadowRadius: 2,
+    elevation: 1,
+    borderWidth: 1,
+    borderColor: 'rgba(66, 87, 178, 0.2)',
   },
   categoryButtonText: {
+    fontSize: 12,
+    fontWeight: '500',
+    letterSpacing: 0.2,
+  },
+  filterTitle: {
     fontSize: 14,
     fontWeight: '600',
-    letterSpacing: 0.3,
+    marginBottom: 8,
+    textAlign: 'center',
+    letterSpacing: 0.2,
+  },
+  filterScroll: {
+    paddingHorizontal: 4,
   },
   content: {
     flex: 1,
     paddingHorizontal: 16,
+    paddingTop: 4,
   },
   topicsContainer: {
     gap: 16,
-    paddingBottom: 24,
+    paddingBottom: 32,
   },
   topicCard: {
-    borderRadius: 20,
-    padding: 24,
+    borderRadius: 8,
+    padding: 20,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
     shadowColor: '#000000',
     shadowOffset: {
       width: 0,
-      height: 6,
+      height: 1,
     },
-    shadowOpacity: 0.12,
-    shadowRadius: 16,
-    elevation: 8,
-    borderWidth: 1,
-    borderColor: 'rgba(0, 0, 0, 0.05)',
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
+    marginBottom: 16,
   },
   topicHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: 12,
   },
   topicIcon: {
     width: 56,

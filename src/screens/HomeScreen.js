@@ -149,7 +149,7 @@ export default function HomeScreen() {
 
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.systemBackground }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.systemBackground }]} edges={['left', 'right', 'bottom']}>
       <ScrollView 
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}
@@ -161,12 +161,12 @@ export default function HomeScreen() {
 
         {/* 3-Step Guard Card Process */}
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: theme.colors.label }, theme.typography.title2]}>
-            How to Get Your California Guard Card
-          </Text>
-          <Text style={[styles.sectionSubtitle, { color: theme.colors.secondaryLabel }, theme.typography.body]}>
-            Follow these 3 required steps to obtain your BSIS Guard Card
-          </Text>
+          <View style={[styles.headerCard, { backgroundColor: '#4257B2' }]}>
+            <Ionicons name="shield-checkmark" size={20} color="#FFFFFF" style={styles.headerIcon} />
+            <Text style={[styles.sectionTitle, { color: '#FFFFFF' }, theme.typography.cardTitle]}>
+              How to Get Your Guard Card
+            </Text>
+          </View>
           
           <View style={styles.stepsContainer}>
             {guardCardSteps.map((step, index) => (
@@ -174,12 +174,12 @@ export default function HomeScreen() {
                 <View style={styles.stepHeader}>
                   <View style={styles.stepNumberContainer}>
                     <View style={[styles.stepNumber, { 
-                      backgroundColor: theme.colors.systemBlue,
-                      borderColor: theme.colors.systemBlue
+                      backgroundColor: '#4257B2',
+                      borderColor: '#4257B2'
                     }]}>
-                      <Text style={[styles.stepNumberText, { color: '#FFFFFF' }, theme.typography.headline]}>
-                        {step.id}
-                      </Text>
+                                              <Text style={[styles.stepNumberText, { color: '#FFFFFF' }, theme.typography.buttonText]}>
+                          {step.id}
+                        </Text>
                     </View>
                     {index < guardCardSteps.length - 1 && (
                       <View style={[styles.stepConnector, { 
@@ -198,10 +198,10 @@ export default function HomeScreen() {
                       accessibilityHint="Double tap to expand or collapse step details"
                     >
                       <View style={styles.stepTitleContainer}>
-                        <Text style={[styles.stepTitle, { color: theme.colors.label }, theme.typography.headline]}>
+                        <Text style={[styles.stepTitle, { color: theme.colors.label }, theme.typography.cardTitle]}>
                           {step.title}
                         </Text>
-                        <Text style={[styles.stepDescription, { color: theme.colors.secondaryLabel }, theme.typography.footnote]}>
+                        <Text style={[styles.stepDescription, { color: theme.colors.secondaryLabel }, theme.typography.body]}>
                           {step.description}
                         </Text>
                       </View>
@@ -230,13 +230,13 @@ export default function HomeScreen() {
 
 
                         <View style={styles.detailsSection}>
-                          <Text style={[styles.detailsTitle, { color: theme.colors.label }, theme.typography.subheadline]}>
+                          <Text style={[styles.detailsTitle, { color: theme.colors.label }, theme.typography.bodyLarge]}>
                             What You'll Do:
                           </Text>
                           {step.details.map((detail, detailIndex) => (
                             <View key={detailIndex} style={styles.detailRow}>
                               <View style={[styles.detailDot, { backgroundColor: theme.colors.systemBlue }]} />
-                              <Text style={[styles.detailText, { color: theme.colors.secondaryLabel }, theme.typography.footnote]}>
+                              <Text style={[styles.detailText, { color: theme.colors.secondaryLabel }, theme.typography.body]}>
                                 {detail}
                               </Text>
                             </View>
@@ -244,13 +244,13 @@ export default function HomeScreen() {
                         </View>
 
                         <View style={styles.detailsSection}>
-                          <Text style={[styles.detailsTitle, { color: theme.colors.label }, theme.typography.subheadline]}>
+                          <Text style={[styles.detailsTitle, { color: theme.colors.label }, theme.typography.bodyLarge]}>
                             What You'll Need:
                           </Text>
                           {step.requirements.map((requirement, reqIndex) => (
                             <View key={reqIndex} style={styles.detailRow}>
                               <View style={[styles.detailDot, { backgroundColor: theme.colors.systemBlue }]} />
-                              <Text style={[styles.detailText, { color: theme.colors.secondaryLabel }, theme.typography.footnote]}>
+                              <Text style={[styles.detailText, { color: theme.colors.secondaryLabel }, theme.typography.body]}>
                                 {requirement}
                               </Text>
                             </View>
@@ -259,7 +259,7 @@ export default function HomeScreen() {
 
                         {/* Quick Actions for each step */}
                         <View style={styles.stepQuickActions}>
-                          <Text style={[styles.quickActionsTitle, { color: theme.colors.label }, theme.typography.subheadline]}>
+                          <Text style={[styles.quickActionsTitle, { color: theme.colors.label }, theme.typography.bodyLarge]}>
                             Quick Actions
                           </Text>
                           <View style={styles.quickActionsRow}>
@@ -271,7 +271,7 @@ export default function HomeScreen() {
                                   activeOpacity={0.7}
                                 >
                                   <Ionicons name="location" size={20} color={theme.colors.systemGreen} />
-                                  <Text style={[styles.stepActionText, { color: theme.colors.label }, theme.typography.footnote]}>
+                                  <Text style={[styles.stepActionText, { color: theme.colors.label }, theme.typography.body]}>
                                     Find Training Centers
                                   </Text>
                                 </TouchableOpacity>
@@ -379,17 +379,31 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#F8F9FA',
   },
   scrollView: {
     flex: 1,
   },
   scrollContent: {
     paddingBottom: 96, // 8pt grid: 12 * 8 = 96
-    paddingTop: 16,    // 8pt grid: 2 * 8 = 16
+    paddingTop: 16,    // Quizlet-style top spacing
   },
   header: {
-    paddingHorizontal: 16, // 8pt grid: 2 * 8 = 16
-    paddingBottom: 24,     // 8pt grid: 3 * 8 = 24
+    paddingHorizontal: 20,
+    paddingVertical: 24,
+    paddingBottom: 32,
+    backgroundColor: '#FAFBFF',
+    marginHorizontal: 16,
+    marginBottom: 16,
+    borderRadius: 20,
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    elevation: 6,
   },
   headerTitle: {
     marginBottom: 8,
@@ -448,11 +462,53 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   section: {
+    paddingHorizontal: 16,
+    marginBottom: 32,
+  },
+  headerCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 24,
     paddingHorizontal: 20,
+    borderRadius: 8,
     marginBottom: 24,
+    marginHorizontal: 16,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  headerIconContainer: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 12,
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    elevation: 3,
+  },
+  headerIcon: {
+    marginRight: 12,
   },
   sectionTitle: {
-    marginBottom: 8,
+    fontWeight: '600',
+    textAlign: 'center',
   },
   sectionSubtitle: {
     marginBottom: 16,
@@ -466,24 +522,36 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 20,
-    borderRadius: 16,
+    borderRadius: 8,
     minHeight: 44, // iOS minimum touch target
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
     shadowColor: '#000000',
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 1,
     },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 4,
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
+    marginBottom: 16,
   },
   actionIcon: {
-    width: 56,
-    height: 56,
-    borderRadius: 16,
+    width: 64,
+    height: 64,
+    borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 16,
+    marginRight: 20,
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    elevation: 4,
   },
   actionContent: {
     flex: 1,
@@ -498,7 +566,20 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   stepWrapper: {
-    marginBottom: 16,
+    marginBottom: 20,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 8,
+    padding: 24,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
   },
   stepHeader: {
     flexDirection: 'row',
@@ -508,12 +589,20 @@ const styles = StyleSheet.create({
     marginRight: 16,
   },
   stepNumber: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 8,
+    marginBottom: 12,
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    elevation: 4,
   },
   stepNumberText: {
     fontWeight: '600',
@@ -551,10 +640,10 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   stepDetails: {
-    marginTop: 16,
-    paddingTop: 16,
+    marginTop: 20,
+    paddingTop: 20,
     borderTopWidth: 1,
-    borderTopColor: '#E5E5EA',
+    borderTopColor: 'rgba(0, 0, 0, 0.1)',
   },
   stepImageContainer: {
     alignItems: 'center',
@@ -563,7 +652,15 @@ const styles = StyleSheet.create({
   stepImage: {
     width: 200,
     height: 120,
-    borderRadius: 8,
+    borderRadius: 12,
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
   },
   stepMetrics: {
     flexDirection: 'row',
@@ -618,18 +715,21 @@ const styles = StyleSheet.create({
   stepActionCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 8,
-    minHeight: 36,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: 12,
+    minHeight: 44,
+    backgroundColor: '#FFFFFF',
     shadowColor: '#000000',
     shadowOffset: {
       width: 0,
-      height: 1,
+      height: 3,
     },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 3,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.05)',
   },
   stepActionText: {
     marginLeft: 6,

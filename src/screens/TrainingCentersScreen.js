@@ -651,17 +651,23 @@ const TrainingCentersScreen = () => {
 
         {/* Training Centers Section */}
         <View style={styles.resultsContainer}>
-          <Text style={[styles.resultsTitle, { color: theme.colors.text }]}>
-            Training Centers ({searchResults.length})
-          </Text>
+          <View style={[styles.resultsTitle, { backgroundColor: '#FAFBFF' }]}>
+            <Ionicons name="school" size={28} color="#4257B2" style={styles.headerIcon} />
+            <Text style={[styles.resultsTitleText, { color: theme.colors.text }, theme.typography.cardTitle]}>
+              Training Centers ({searchResults.length})
+            </Text>
+          </View>
           {searchResults.map(renderFacility)}
         </View>
 
         {/* LiveScan Centers Section */}
         <View style={styles.resultsContainer}>
-          <Text style={[styles.resultsTitle, { color: theme.colors.text }]}>
-            LiveScan Centers ({liveScanResults.length})
-          </Text>
+          <View style={[styles.resultsTitle, { backgroundColor: '#FAFBFF' }]}>
+            <Ionicons name="finger-print" size={28} color="#4257B2" style={styles.headerIcon} />
+            <Text style={[styles.resultsTitleText, { color: theme.colors.text }, theme.typography.cardTitle]}>
+              LiveScan Centers ({liveScanResults.length})
+            </Text>
+          </View>
           {liveScanResults.map(renderLiveScanLocation)}
         </View>
 
@@ -766,16 +772,16 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginBottom: 20,
     marginHorizontal: 4,
-    shadowColor: '#000000',
+    shadowColor: '#8B5CF6',
     shadowOffset: {
       width: 0,
       height: 6,
     },
-    shadowOpacity: 0.12,
+    shadowOpacity: 0.15,
     shadowRadius: 16,
     elevation: 8,
-    borderWidth: 1,
-    borderColor: 'rgba(0, 0, 0, 0.05)',
+    borderWidth: 2,
+    borderColor: '#8B5CF6',
   },
   facilityTitleRow: {
     flexDirection: 'row',
@@ -949,16 +955,18 @@ const styles = StyleSheet.create({
   },
 
   mapContainer: {
-    height: 300,
-    marginHorizontal: 20,
-    marginBottom: 16,
-    borderRadius: 20,
+    height: 320,
+    marginHorizontal: 16,
+    marginBottom: 24,
+    borderRadius: 8,
     overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.2,
-    shadowRadius: 16,
-    elevation: 8,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
   },
   map: {
     flex: 1,
@@ -1058,6 +1066,36 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: '600',
     textAlign: 'center',
+  },
+  resultsContainer: {
+    marginBottom: 32,
+  },
+  resultsTitle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 20,
+    marginHorizontal: 16,
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  headerIcon: {
+    marginRight: 12,
+  },
+  resultsTitleText: {
+    fontSize: 22,
+    fontWeight: '700',
+    textAlign: 'center',
+    letterSpacing: 0.5,
   },
 });
 
