@@ -247,9 +247,6 @@ const StudyScreen = () => {
       ) : (
         <>
           <View style={styles.header}>
-            <Text style={[styles.headerTitle, { color: theme.colors.text }]}>
-              Study Materials
-            </Text>
             <Text style={[styles.headerSubtitle, { color: theme.colors.secondaryText }]}>
               Learn the essential content for your security guard training
             </Text>
@@ -304,8 +301,18 @@ const styles = StyleSheet.create({
     backgroundColor: '#F8F9FA',
   },
   header: {
-    padding: 20,
-    paddingBottom: 16,
+    padding: 24,
+    paddingBottom: 20,
+    backgroundColor: '#FFFFFF',
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 4,
+    marginBottom: 8,
   },
   headerTitle: {
     fontSize: 28,
@@ -317,76 +324,124 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: '400',
     lineHeight: 22,
+    textAlign: 'center',
   },
   categoryFilter: {
     paddingHorizontal: 20,
-    paddingBottom: 16,
-  },
-  categoryButton: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
-    marginRight: 12,
-    minHeight: 36,
-  },
-  categoryButtonText: {
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  content: {
-    flex: 1,
-    paddingHorizontal: 20,
-  },
-  topicsContainer: {
-    gap: 12,
-    paddingBottom: 20,
-  },
-  topicCard: {
+    paddingVertical: 16,
+    backgroundColor: '#FFFFFF',
+    marginHorizontal: 16,
+    marginBottom: 16,
     borderRadius: 16,
-    padding: 20,
     shadowColor: '#000000',
     shadowOffset: {
       width: 0,
       height: 4,
     },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.08,
     shadowRadius: 12,
     elevation: 6,
+  },
+  categoryButton: {
+    paddingHorizontal: 18,
+    paddingVertical: 10,
+    borderRadius: 24,
+    marginRight: 12,
+    minHeight: 40,
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  categoryButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    letterSpacing: 0.3,
+  },
+  content: {
+    flex: 1,
+    paddingHorizontal: 16,
+  },
+  topicsContainer: {
+    gap: 16,
+    paddingBottom: 24,
+  },
+  topicCard: {
+    borderRadius: 20,
+    padding: 24,
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.12,
+    shadowRadius: 16,
+    elevation: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.05)',
   },
   topicHeader: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginBottom: 16,
   },
   topicIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 16,
+    marginRight: 18,
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    elevation: 4,
   },
   topicInfo: {
     flex: 1,
   },
   topicTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 4,
+    fontSize: 20,
+    fontWeight: '700',
+    marginBottom: 6,
+    letterSpacing: 0.3,
   },
   topicDuration: {
-    fontSize: 14,
-    fontWeight: '400',
+    fontSize: 15,
+    fontWeight: '500',
+    opacity: 0.8,
   },
   detailContainer: {
     flex: 1,
   },
   detailHeader: {
-    padding: 20,
-    paddingBottom: 16,
+    padding: 24,
+    paddingBottom: 20,
+    backgroundColor: '#FFFFFF',
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 4,
   },
   backButton: {
     flexDirection: 'row',
     alignItems: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 12,
+    backgroundColor: 'rgba(0, 122, 255, 0.1)',
   },
   backButtonText: {
     fontSize: 16,
@@ -399,43 +454,55 @@ const styles = StyleSheet.create({
   },
   detailTitleSection: {
     alignItems: 'center',
-    marginBottom: 24,
+    marginBottom: 32,
+    paddingVertical: 24,
   },
   detailIcon: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
+    width: 96,
+    height: 96,
+    borderRadius: 48,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 16,
-  },
-  detailTitle: {
-    fontSize: 24,
-    fontWeight: '700',
-    textAlign: 'center',
-    marginBottom: 8,
-    letterSpacing: 0.35,
-  },
-  detailDuration: {
-    fontSize: 16,
-    fontWeight: '400',
-  },
-  detailContentCard: {
-    borderRadius: 12,
-    padding: 20,
+    marginBottom: 20,
     shadowColor: '#000000',
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 6,
     },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 4,
+    shadowOpacity: 0.2,
+    shadowRadius: 12,
+    elevation: 8,
+  },
+  detailTitle: {
+    fontSize: 28,
+    fontWeight: '700',
+    textAlign: 'center',
+    marginBottom: 12,
+    letterSpacing: 0.35,
+  },
+  detailDuration: {
+    fontSize: 18,
+    fontWeight: '500',
+    opacity: 0.8,
+  },
+  detailContentCard: {
+    borderRadius: 20,
+    padding: 28,
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.12,
+    shadowRadius: 16,
+    elevation: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.05)',
   },
   detailContentText: {
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: '400',
-    lineHeight: 24,
+    lineHeight: 26,
   },
 });
 

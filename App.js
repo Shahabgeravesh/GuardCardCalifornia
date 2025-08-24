@@ -10,7 +10,7 @@ import { Text, View, Platform } from 'react-native';
 import HomeScreen from './src/screens/HomeScreen';
 import TrainingCentersScreen from './src/screens/TrainingCentersScreen';
 import StudyScreen from './src/screens/StudyScreen';
-import PracticeQuizScreen from './src/screens/PracticeQuizScreen';
+import Quiz1Screen from './src/screens/Quiz1Screen';
 import ResourcesScreen from './src/screens/ResourcesScreen';
 
 // Import components and context
@@ -129,6 +129,17 @@ function TabNavigator() {
       />
 
       <Tab.Screen 
+        name="Training" 
+        component={TrainingCentersScreen} 
+        options={{ 
+          title: 'Training & LiveScan Centers',
+          tabBarLabel: 'Training',
+          tabBarAccessibilityLabel: 'Training tab. Find nearby BSIS-approved training centers and LiveScan locations.',
+          tabBarAccessibilityHint: 'Double tap to find training facilities and LiveScan centers near you.'
+        }}
+      />
+
+      <Tab.Screen 
         name="Study" 
         component={StudyScreen} 
         options={{ 
@@ -140,24 +151,13 @@ function TabNavigator() {
       />
       
       <Tab.Screen 
-        name="Quiz" 
-        component={PracticeQuizScreen} 
+        name="Quiz1" 
+        component={Quiz1Screen} 
         options={{ 
-          title: 'Practice Quiz',
+          title: 'Quiz',
           tabBarLabel: 'Quiz',
-          tabBarAccessibilityLabel: 'Practice test tab. Take sample quizzes to prepare for your security guard exam.',
-          tabBarAccessibilityHint: 'Double tap to take practice quizzes and test your knowledge.'
-        }}
-      />
-      
-      <Tab.Screen 
-        name="Training" 
-        component={TrainingCentersScreen} 
-        options={{ 
-          title: 'Training & LiveScan Centers',
-          tabBarLabel: 'Training',
-          tabBarAccessibilityLabel: 'Training tab. Find nearby BSIS-approved training centers and LiveScan locations.',
-          tabBarAccessibilityHint: 'Double tap to find training facilities and LiveScan centers near you.'
+          tabBarAccessibilityLabel: 'Quiz tab. Take the Power to Arrest training quiz.',
+          tabBarAccessibilityHint: 'Double tap to take the PTA training quiz.'
         }}
       />
       
