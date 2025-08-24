@@ -20,7 +20,8 @@
         "NSPhotoLibraryUsageDescription": "This app accesses your photo library for document uploads.",
         "UIRequiresFullScreen": false,
         "UIStatusBarStyle": "default",
-        "UIBackgroundModes": []
+        "UIBackgroundModes": [],
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "This app uses location to find training centers near you and show them on the map."
       }
     },
     "android": {
@@ -28,7 +29,11 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION"
+      ]
     },
     "web": {
       "bundler": "metro",

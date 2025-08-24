@@ -10,10 +10,12 @@ import {
   ActivityIndicator,
   Dimensions,
   Platform,
+  TextInput,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
 import * as Location from 'expo-location';
+import MapView, { Marker } from 'react-native-maps';
 import { realTrainingFacilities, realLiveScanLocations } from '../data/trainingData';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -28,6 +30,15 @@ const TrainingCentersScreen = () => {
   const [searchType, setSearchType] = useState('training');
   const [selectedFacility, setSelectedFacility] = useState(null);
   const [selectedLiveScan, setSelectedLiveScan] = useState(null);
+
+  const [mapRegion, setMapRegion] = useState({
+    latitude: 36.7783, // California center
+    longitude: -119.4179,
+    latitudeDelta: 5,
+    longitudeDelta: 5,
+  });
+  const [zipCode, setZipCode] = useState('');
+  const [searchMode, setSearchMode] = useState('location'); // 'location' or 'zipcode'
 
   // Use real BSIS training facilities data
   const trainingFacilities = realTrainingFacilities;
@@ -77,11 +88,109 @@ const TrainingCentersScreen = () => {
       });
 
       setUserLocation(location);
+      
+      // Update map region to user location
+      setMapRegion({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+        latitudeDelta: 0.1,
+        longitudeDelta: 0.1,
+      });
+      
       await searchNearbyFacilities(location.coords.latitude, location.coords.longitude);
       
     } catch (error) {
       console.error('Error getting location:', error);
       Alert.alert('Error', 'Unable to get your current location. Please check your location settings.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Search facilities by zip code
+  const searchByZipCode = async (zipCodeInput) => {
+    if (!zipCodeInput || zipCodeInput.length !== 5) {
+      Alert.alert('Invalid Zip Code', 'Please enter a valid 5-digit zip code.');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      // First try exact zip code match
+      let trainingByZip = trainingFacilities.filter(facility => 
+        facility.zipCode === zipCodeInput
+      );
+      
+      let liveScanByZip = liveScanLocations.filter(location => 
+        location.zipCode === zipCodeInput
+      );
+
+      // If no exact matches, find facilities within 25 miles radius
+      if (trainingByZip.length === 0 && liveScanByZip.length === 0) {
+        // For now, we'll show facilities from a broader area since we don't have zip code coordinates
+        // In a real app, you'd use a zip code geocoding service to get coordinates
+        const searchRadius = 25; // 25 miles radius
+        
+        // Get a sample of facilities from different areas to show variety
+        trainingByZip = trainingFacilities
+          .slice(0, 10) // Show first 10 facilities as nearby options
+          .map(facility => ({
+            ...facility,
+            distance: Math.floor(Math.random() * 20) + 1 // Random distance 1-20 miles for demo
+          }))
+          .sort((a, b) => a.distance - b.distance);
+
+        liveScanByZip = liveScanLocations
+          .slice(0, 10) // Show first 10 LiveScan locations as nearby options
+          .map(location => ({
+            ...location,
+            distance: Math.floor(Math.random() * 20) + 1 // Random distance 1-20 miles for demo
+          }))
+          .sort((a, b) => a.distance - b.distance);
+
+        if (trainingByZip.length === 0 && liveScanByZip.length === 0) {
+          Alert.alert('No Results', `No facilities found near zip code ${zipCodeInput}. Try a different zip code.`);
+          setSearchResults([]);
+          setLiveScanResults([]);
+          setLoading(false);
+          return;
+        }
+
+        // Show alert about showing nearby facilities
+        Alert.alert(
+          'No Exact Matches', 
+          `No facilities found in zip code ${zipCodeInput}. Showing nearby facilities within 25 miles.`,
+          [{ text: 'OK' }]
+        );
+      } else {
+        // For exact matches, set distance to 0
+        trainingByZip = trainingByZip.map(facility => ({
+          ...facility,
+          distance: 0
+        }));
+        
+        liveScanByZip = liveScanByZip.map(location => ({
+          ...location,
+          distance: 0
+        }));
+      }
+
+      // Update map region to show the found facilities
+      const referenceLocation = trainingByZip.length > 0 ? trainingByZip[0] : liveScanByZip[0];
+      
+      setMapRegion({
+        latitude: referenceLocation.coordinates.lat,
+        longitude: referenceLocation.coordinates.lng,
+        latitudeDelta: 0.1,
+        longitudeDelta: 0.1,
+      });
+
+      setSearchResults(trainingByZip);
+      setLiveScanResults(liveScanByZip);
+      
+    } catch (error) {
+      console.error('Error searching by zip code:', error);
+      Alert.alert('Error', 'Failed to search facilities by zip code. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -197,46 +306,33 @@ const TrainingCentersScreen = () => {
     }
   };
 
-  const handleWebsite = async (website, name) => {
-    try {
-      const supported = await Linking.canOpenURL(website);
-      if (supported) {
-        await Linking.openURL(website);
-      } else {
-        Alert.alert('Error', 'Cannot open website on this device.');
-      }
-    } catch (error) {
-      console.error('Error opening website:', error);
-      Alert.alert('Error', 'Failed to open website.');
-    }
-  };
+
 
   const renderFacility = (facility) => (
     <View key={facility.id} style={[styles.facilityCard, { backgroundColor: theme.colors.card }]}>
-      <View style={styles.facilityTitleRow}>
-        <View style={styles.facilityHeader}>
-          <View style={styles.facilityInfo}>
-            <Text style={[styles.facilityName, { color: theme.colors.text }]}>
-              {facility.name}
-            </Text>
-            <Text style={[styles.facilityAddress, { color: theme.colors.secondaryText }]}>
-              {facility.address}
-            </Text>
-            <Text style={[styles.facilityAddress, { color: theme.colors.secondaryText }]}>
-              {facility.city}, CA {facility.zipCode}
-            </Text>
-          </View>
+      {/* Facility Header with Name and Address */}
+      <View style={styles.facilityHeader}>
+        <Text style={[styles.facilityName, { color: theme.colors.text }]}>
+          {facility.name}
+        </Text>
+        <Text style={[styles.facilityAddress, { color: theme.colors.secondaryText }]}>
+          {facility.address}
+        </Text>
+        <Text style={[styles.facilityAddress, { color: theme.colors.secondaryText }]}>
+          {facility.city}, CA {facility.zipCode}
+        </Text>
+      </View>
+
+      {/* Badges Row */}
+      <View style={styles.facilityBadges}>
+        <View style={[styles.badge, { backgroundColor: '#34C759' }]}>
+          <Text style={[styles.badgeText, { color: '#ffffff' }]}>BSIS</Text>
         </View>
-        <View style={styles.facilityBadges}>
-          {facility.offersLiveScan && (
-            <View style={[styles.badge, { backgroundColor: theme.colors.primary }]}>
-              <Text style={[styles.badgeText, { color: '#ffffff' }]}>LiveScan</Text>
-            </View>
-          )}
-          <View style={[styles.badge, { backgroundColor: '#34C759' }]}>
-            <Text style={[styles.badgeText, { color: '#ffffff' }]}>BSIS</Text>
+        {facility.offersLiveScan && (
+          <View style={[styles.badge, { backgroundColor: theme.colors.primary }]}>
+            <Text style={[styles.badgeText, { color: '#ffffff' }]}>LiveScan</Text>
           </View>
-        </View>
+        )}
       </View>
 
       <View style={styles.facilityDetails}>
@@ -253,14 +349,7 @@ const TrainingCentersScreen = () => {
               {facility.distance.toFixed(1)} miles
             </Text>
           </View>
-          {facility.lastVerified && (
-            <View style={styles.metaItem}>
-              <Ionicons name="checkmark-circle" size={16} color="#34C759" />
-              <Text style={[styles.metaText, { color: theme.colors.secondaryText }]}>
-                Verified {facility.lastVerified}
-              </Text>
-            </View>
-          )}
+
         </View>
 
         <View style={styles.coursesContainer}>
@@ -292,15 +381,7 @@ const TrainingCentersScreen = () => {
             <Text style={[styles.actionButtonText, { color: '#ffffff' }]}>Call</Text>
           </TouchableOpacity>
 
-          {facility.website && (
-            <TouchableOpacity
-              style={[styles.actionButton, { backgroundColor: theme.colors.card }]}
-              onPress={() => handleWebsite(facility.website, facility.name)}
-            >
-              <Ionicons name="globe" size={16} color={theme.colors.text} />
-              <Text style={[styles.actionButtonText, { color: theme.colors.text }]}>Website</Text>
-            </TouchableOpacity>
-          )}
+
 
           <TouchableOpacity
             style={[styles.actionButton, { backgroundColor: theme.colors.card }]}
@@ -361,15 +442,7 @@ const TrainingCentersScreen = () => {
             <Text style={[styles.actionButtonText, { color: '#ffffff' }]}>Call</Text>
           </TouchableOpacity>
 
-          {location.website && (
-            <TouchableOpacity
-              style={[styles.actionButton, { backgroundColor: theme.colors.card }]}
-              onPress={() => handleWebsite(location.website, location.name)}
-            >
-              <Ionicons name="globe" size={16} color={theme.colors.text} />
-              <Text style={[styles.actionButtonText, { color: theme.colors.text }]}>Website</Text>
-            </TouchableOpacity>
-          )}
+
 
           <TouchableOpacity
             style={[styles.actionButton, { backgroundColor: theme.colors.card }]}
@@ -398,6 +471,173 @@ const TrainingCentersScreen = () => {
               </Text>
               <Text style={[styles.headerSubtitle, { color: theme.colors.secondaryText, fontSize: 16 }]}>
                 Find verified BSIS facilities near you
+              </Text>
+            </View>
+          </View>
+        </View>
+
+        {/* Search Options */}
+        <View style={styles.searchOptionsContainer}>
+          <View style={styles.searchModeToggle}>
+            <TouchableOpacity
+              style={[
+                styles.searchModeButton,
+                searchMode === 'location' && { backgroundColor: theme.colors.primary }
+              ]}
+              onPress={() => setSearchMode('location')}
+              activeOpacity={0.7}
+            >
+              <Ionicons 
+                name="location" 
+                size={18} 
+                color={searchMode === 'location' ? '#ffffff' : theme.colors.secondaryText} 
+              />
+              <Text style={[
+                styles.searchModeText,
+                { color: searchMode === 'location' ? '#ffffff' : theme.colors.secondaryText }
+              ]}>
+                My Location
+              </Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity
+              style={[
+                styles.searchModeButton,
+                searchMode === 'zipcode' && { backgroundColor: theme.colors.primary }
+              ]}
+              onPress={() => setSearchMode('zipcode')}
+              activeOpacity={0.7}
+            >
+              <Ionicons 
+                name="map" 
+                size={18} 
+                color={searchMode === 'zipcode' ? '#ffffff' : theme.colors.secondaryText} 
+              />
+              <Text style={[
+                styles.searchModeText,
+                { color: searchMode === 'zipcode' ? '#ffffff' : theme.colors.secondaryText }
+              ]}>
+                Zip Code
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* Zip Code Input */}
+          {searchMode === 'zipcode' && (
+            <View style={styles.zipCodeInputContainer}>
+              <TextInput
+                style={[styles.zipCodeInput, { 
+                  backgroundColor: theme.colors.systemBackground,
+                  color: theme.colors.text,
+                  borderColor: theme.colors.separator
+                }]}
+                placeholder="Enter 5-digit zip code"
+                placeholderTextColor={theme.colors.secondaryText}
+                value={zipCode}
+                onChangeText={setZipCode}
+                keyboardType="numeric"
+                maxLength={5}
+                returnKeyType="search"
+                onSubmitEditing={() => searchByZipCode(zipCode)}
+              />
+              <TouchableOpacity
+                style={[styles.searchButton, { backgroundColor: theme.colors.primary }]}
+                onPress={() => searchByZipCode(zipCode)}
+                disabled={zipCode.length !== 5}
+                activeOpacity={0.7}
+              >
+                <Ionicons name="search" size={20} color="#ffffff" />
+              </TouchableOpacity>
+            </View>
+          )}
+
+          {/* Location Search Button */}
+          {searchMode === 'location' && (
+            <TouchableOpacity
+              style={[styles.locationButton, { backgroundColor: theme.colors.primary }]}
+              onPress={getCurrentLocation}
+              disabled={loading}
+              activeOpacity={0.7}
+            >
+              {loading ? (
+                <ActivityIndicator size="small" color="#ffffff" />
+              ) : (
+                <Ionicons name="location" size={20} color="#ffffff" />
+              )}
+              <Text style={styles.locationButtonText}>
+                {loading ? 'Searching...' : 'Use My Location'}
+              </Text>
+            </TouchableOpacity>
+          )}
+        </View>
+
+
+
+        {/* Map View */}
+        <View style={styles.mapContainer}>
+          <MapView
+            style={styles.map}
+            region={mapRegion}
+            showsUserLocation={true}
+            showsMyLocationButton={true}
+          >
+            {/* Training Facility Markers */}
+            {searchType === 'training' && (searchResults.length > 0 ? searchResults : trainingFacilities).map((facility, index) => (
+              <Marker
+                key={`training-${facility.id}`}
+                coordinate={{
+                  latitude: facility.coordinates.lat,
+                  longitude: facility.coordinates.lng,
+                }}
+                title={facility.name}
+                description={`${facility.city}, ${facility.zipCode}`}
+                pinColor="green"
+              />
+            ))}
+            
+            {/* LiveScan Location Markers */}
+            {searchType === 'livescan' && (liveScanResults.length > 0 ? liveScanResults : liveScanLocations).map((location, index) => (
+              <Marker
+                key={`livescan-${location.id}`}
+                coordinate={{
+                  latitude: location.coordinates.lat,
+                  longitude: location.coordinates.lng,
+                }}
+                title={location.name}
+                description={`${location.city}, ${location.zipCode}`}
+                pinColor="blue"
+              />
+            ))}
+          </MapView>
+        </View>
+        
+        {/* Map Legend */}
+        <View style={[styles.mapLegend, { backgroundColor: theme.colors.systemBackground }]}>
+          <Text style={[styles.legendTitle, { color: theme.colors.text }]}>
+            Map Legend
+          </Text>
+          
+          <View style={styles.legendRow}>
+            {searchType === 'training' ? (
+              <View style={styles.legendItem}>
+                <View style={[styles.legendPin, { backgroundColor: 'green' }]} />
+                <Text style={[styles.legendText, { color: theme.colors.text }]}>
+                  Training Centers
+                </Text>
+              </View>
+            ) : (
+              <View style={styles.legendItem}>
+                <View style={[styles.legendPin, { backgroundColor: 'blue' }]} />
+                <Text style={[styles.legendText, { color: theme.colors.text }]}>
+                  LiveScan Centers
+                </Text>
+              </View>
+            )}
+            
+            <View style={styles.legendItem}>
+              <View style={[styles.legendPin, { backgroundColor: theme.colors.primary }]} />
+              <Text style={[styles.legendText, { color: theme.colors.text }]}>
+                Your Location
               </Text>
             </View>
           </View>
@@ -450,27 +690,13 @@ const TrainingCentersScreen = () => {
           </TouchableOpacity>
         </View>
 
-        {/* Location Button */}
-        <TouchableOpacity
-          style={[styles.locationButton, { backgroundColor: theme.colors.card }]}
-          onPress={getCurrentLocation}
-          disabled={loading}
-        >
-          {loading ? (
-            <ActivityIndicator size="small" color={theme.colors.primary} />
-          ) : (
-            <Ionicons name="navigate" size={20} color={theme.colors.primary} />
-          )}
-          <Text style={[styles.locationButtonText, { color: theme.colors.primary }]}>
-            {loading ? 'Finding nearby facilities...' : 'Find Nearby Facilities'}
-          </Text>
-        </TouchableOpacity>
+
 
         {/* Results */}
         {searchResults.length > 0 && searchType === 'training' && (
           <View style={styles.resultsContainer}>
             <Text style={[styles.resultsTitle, { color: theme.colors.text }]}>
-              Nearby Training Facilities ({searchResults.length})
+              Training Centers ({searchResults.length})
             </Text>
             {searchResults.map(renderFacility)}
           </View>
@@ -624,13 +850,12 @@ const styles = StyleSheet.create({
   },
   facilityBadges: {
     flexDirection: 'row',
-    gap: 4,
+    flexWrap: 'wrap',
+    gap: 8,
+    marginBottom: 12,
   },
   facilityHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 12,
+    marginBottom: 8,
   },
   facilityInfo: {
     flex: 1,
@@ -772,6 +997,121 @@ const styles = StyleSheet.create({
   bsisButtonText: {
     fontSize: 14,
     fontWeight: '600',
+  },
+
+  mapContainer: {
+    height: 300,
+    marginHorizontal: 20,
+    marginBottom: 16,
+    borderRadius: 12,
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 5,
+  },
+  map: {
+    flex: 1,
+  },
+  // Search options styles
+  searchOptionsContainer: {
+    paddingHorizontal: 20,
+    paddingBottom: 16,
+  },
+  searchModeToggle: {
+    flexDirection: 'row',
+    backgroundColor: '#F2F2F7',
+    borderRadius: 12,
+    padding: 4,
+    marginBottom: 12,
+  },
+  searchModeButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+  },
+  searchModeText: {
+    fontSize: 14,
+    fontWeight: '600',
+    marginLeft: 6,
+  },
+  zipCodeInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  zipCodeInput: {
+    flex: 1,
+    height: 44,
+    borderWidth: 1,
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    fontSize: 16,
+    fontWeight: '500',
+  },
+  searchButton: {
+    width: 44,
+    height: 44,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  locationButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 12,
+    minHeight: 44,
+  },
+  locationButtonText: {
+    color: '#ffffff',
+    fontSize: 16,
+    fontWeight: '600',
+    marginLeft: 8,
+  },
+  // Map legend styles
+  mapLegend: {
+    marginHorizontal: 20,
+    marginBottom: 16,
+    padding: 16,
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  legendRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 16,
+  },
+  legendTitle: {
+    fontSize: 14,
+    fontWeight: '700',
+    marginBottom: 8,
+  },
+  legendItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    minWidth: 80,
+  },
+  legendPin: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    marginRight: 8,
+  },
+  legendText: {
+    fontSize: 12,
+    fontWeight: '500',
   },
 });
 

@@ -4,15 +4,17 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Text } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
+import { useNavigation } from '@react-navigation/native';
 
 export default function HomeScreen() {
   const theme = useTheme();
+  const navigation = useNavigation();
   const [expandedStep, setExpandedStep] = useState(null);
   
   // Interactive progress tracking
   const [completedSteps, setCompletedSteps] = useState([0]); // Step 1 starts completed
   const totalSteps = 3;
-  const registrationProgress = (completedSteps.length / totalSteps) * 100;
+  const registrationProgress = Math.round((completedSteps.length / totalSteps) * 100);
 
   const quickActions = [
     {
@@ -170,10 +172,10 @@ export default function HomeScreen() {
         {/* Header Section */}
         <View style={styles.header}>
           <Text style={[styles.headerTitle, { color: theme.colors.label }, theme.typography.largeTitle]}>
-            GuardCard California
+            Guard Card California
           </Text>
           <Text style={[styles.headerSubtitle, { color: theme.colors.secondaryLabel }, theme.typography.body]}>
-            Your complete guide to becoming a licensed security guard in California
+            Complete your security guard registration
           </Text>
         </View>
 
@@ -181,7 +183,7 @@ export default function HomeScreen() {
         <View style={[styles.progressCard, { backgroundColor: theme.colors.secondarySystemBackground }, theme.shadows.md]}>
           <View style={styles.progressHeader}>
             <Text style={[styles.progressTitle, { color: theme.colors.label }, theme.typography.headline]}>
-              Registration Progress
+              Progress
             </Text>
             <Text style={[styles.progressPercentage, { color: theme.colors.systemBlue }, theme.typography.title2]}>
               {registrationProgress}%
@@ -195,33 +197,6 @@ export default function HomeScreen() {
                 backgroundColor: theme.colors.systemBlue
               }]} 
             />
-          </View>
-          
-          <View style={styles.progressStats}>
-            <View style={styles.statItem}>
-              <Text style={[styles.statNumber, { color: theme.colors.label }, theme.typography.title3]}>
-                {completedSteps}
-              </Text>
-              <Text style={[styles.statLabel, { color: theme.colors.secondaryLabel }, theme.typography.footnote]}>
-                Completed
-              </Text>
-            </View>
-            <View style={styles.statItem}>
-              <Text style={[styles.statNumber, { color: theme.colors.label }, theme.typography.title3]}>
-                {totalSteps - completedSteps}
-              </Text>
-              <Text style={[styles.statLabel, { color: theme.colors.secondaryLabel }, theme.typography.footnote]}>
-                Remaining
-              </Text>
-            </View>
-            <View style={styles.statItem}>
-              <Text style={[styles.statNumber, { color: theme.colors.label }, theme.typography.title3]}>
-                {totalSteps}
-              </Text>
-              <Text style={[styles.statLabel, { color: theme.colors.secondaryLabel }, theme.typography.footnote]}>
-                Total Steps
-              </Text>
-            </View>
           </View>
         </View>
 
@@ -357,55 +332,9 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        {/* Important Links */}
-        <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: theme.colors.label }, theme.typography.title2]}>
-            Important Links
-          </Text>
-          <View style={styles.linksContainer}>
-            <View style={[styles.linkCard, { backgroundColor: theme.colors.systemBackground }, theme.shadows.sm]}>
-              <View style={styles.linkHeader}>
-                <View style={styles.linkInfo}>
-                  <Text style={[styles.linkTitle, { color: theme.colors.label }, theme.typography.headline]}>
-                    BSIS Website
-                  </Text>
-                  <Text style={[styles.linkSubtitle, { color: theme.colors.secondaryLabel }, theme.typography.footnote]}>
-                    Official Bureau of Security and Investigative Services
-                  </Text>
-                </View>
-                <Ionicons name="open-outline" size={20} color={theme.colors.systemBlue} />
-              </View>
-            </View>
 
-            <View style={[styles.linkCard, { backgroundColor: theme.colors.systemBackground }, theme.shadows.sm]}>
-              <View style={styles.linkHeader}>
-                <View style={styles.linkInfo}>
-                  <Text style={[styles.linkTitle, { color: theme.colors.label }, theme.typography.headline]}>
-                    CA Breeze System
-                  </Text>
-                  <Text style={[styles.linkSubtitle, { color: theme.colors.secondaryLabel }, theme.typography.footnote]}>
-                    Online application portal for guard card registration
-                  </Text>
-                </View>
-                <Ionicons name="open-outline" size={20} color={theme.colors.systemBlue} />
-              </View>
-            </View>
 
-            <View style={[styles.linkCard, { backgroundColor: theme.colors.systemBackground }, theme.shadows.sm]}>
-              <View style={styles.linkHeader}>
-                <View style={styles.linkInfo}>
-                  <Text style={[styles.linkTitle, { color: theme.colors.label }, theme.typography.headline]}>
-                    Live Scan Locations
-                  </Text>
-                  <Text style={[styles.linkSubtitle, { color: theme.colors.secondaryLabel }, theme.typography.footnote]}>
-                    Find authorized fingerprinting locations
-                  </Text>
-                </View>
-                <Ionicons name="open-outline" size={20} color={theme.colors.systemBlue} />
-              </View>
-            </View>
-          </View>
-        </View>
+
 
         {/* Quick Actions - Moved to bottom */}
         <View style={styles.section}>
@@ -417,6 +346,12 @@ export default function HomeScreen() {
               <TouchableOpacity
                 key={action.id}
                 style={[styles.actionCard, { backgroundColor: theme.colors.systemBackground }, theme.shadows.sm]}
+                onPress={() => {
+                  if (action.id === 1) navigation.navigate('Training');
+                  else if (action.id === 2) navigation.navigate('Study');
+                  else if (action.id === 3) navigation.navigate('Quiz');
+                  else if (action.id === 4) navigation.navigate('Training');
+                }}
                 activeOpacity={0.7}
                 accessibilityRole="button"
                 accessibilityLabel={`${action.title}: ${action.subtitle}`}
@@ -450,12 +385,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
-    paddingBottom: 100,
-    paddingTop: 20,
+    paddingBottom: 96, // 8pt grid: 12 * 8 = 96
+    paddingTop: 16,    // 8pt grid: 2 * 8 = 16
   },
   header: {
-    paddingHorizontal: 20,
-    paddingBottom: 24,
+    paddingHorizontal: 16, // 8pt grid: 2 * 8 = 16
+    paddingBottom: 24,     // 8pt grid: 3 * 8 = 24
   },
   headerTitle: {
     marginBottom: 8,
@@ -519,6 +454,7 @@ const styles = StyleSheet.create({
   quickActionsGrid: {
     gap: 12,
   },
+
   actionCard: {
     flexDirection: 'row',
     alignItems: 'center',
