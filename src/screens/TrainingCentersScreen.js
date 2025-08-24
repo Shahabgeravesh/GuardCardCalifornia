@@ -27,7 +27,7 @@ const TrainingCentersScreen = () => {
   const [liveScanResults, setLiveScanResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [locationPermission, setLocationPermission] = useState(false);
-  const [searchType, setSearchType] = useState('training');
+  // Removed searchType state since we show both sections
   const [selectedFacility, setSelectedFacility] = useState(null);
   const [selectedLiveScan, setSelectedLiveScan] = useState(null);
 
@@ -39,6 +39,28 @@ const TrainingCentersScreen = () => {
   });
   const [zipCode, setZipCode] = useState('');
   const [searchMode, setSearchMode] = useState('location'); // 'location' or 'zipcode'
+
+  // Load facilities on component mount
+  useEffect(() => {
+    loadDefaultFacilities();
+  }, []);
+
+  // Load default facilities without requiring location
+  const loadDefaultFacilities = () => {
+    // Show first 10 training facilities and 10 LiveScan locations by default
+    const defaultTraining = trainingFacilities.slice(0, 10).map(facility => ({
+      ...facility,
+      distance: Math.floor(Math.random() * 25) + 1 // Random distance 1-25 miles for demo
+    }));
+
+    const defaultLiveScan = liveScanLocations.slice(0, 10).map(location => ({
+      ...location,
+      distance: Math.floor(Math.random() * 25) + 1 // Random distance 1-25 miles for demo
+    }));
+
+    setSearchResults(defaultTraining);
+    setLiveScanResults(defaultLiveScan);
+  };
 
   // Use real BSIS training facilities data
   const trainingFacilities = realTrainingFacilities;
@@ -467,10 +489,10 @@ const TrainingCentersScreen = () => {
             </View>
             <View style={styles.headerTextContainer}>
               <Text style={[styles.headerTitle, { color: theme.colors.text, fontSize: 24, fontWeight: '700' }]}>
-                Training Locator
+                Training & LiveScan Centers
               </Text>
               <Text style={[styles.headerSubtitle, { color: theme.colors.secondaryText, fontSize: 16 }]}>
-                Find verified BSIS facilities near you
+                Find verified BSIS facilities and LiveScan locations
               </Text>
             </View>
           </View>
@@ -565,7 +587,7 @@ const TrainingCentersScreen = () => {
                 <Ionicons name="location" size={20} color="#ffffff" />
               )}
               <Text style={styles.locationButtonText}>
-                {loading ? 'Searching...' : 'Use My Location'}
+                {loading ? 'Searching...' : 'Find Nearby Facilities'}
               </Text>
             </TouchableOpacity>
           )}
@@ -582,7 +604,7 @@ const TrainingCentersScreen = () => {
             showsMyLocationButton={true}
           >
             {/* Training Facility Markers */}
-            {searchType === 'training' && (searchResults.length > 0 ? searchResults : trainingFacilities).map((facility, index) => (
+            {searchResults.map((facility, index) => (
               <Marker
                 key={`training-${facility.id}`}
                 coordinate={{
@@ -596,7 +618,7 @@ const TrainingCentersScreen = () => {
             ))}
             
             {/* LiveScan Location Markers */}
-            {searchType === 'livescan' && (liveScanResults.length > 0 ? liveScanResults : liveScanLocations).map((location, index) => (
+            {liveScanResults.map((location, index) => (
               <Marker
                 key={`livescan-${location.id}`}
                 coordinate={{
@@ -605,7 +627,7 @@ const TrainingCentersScreen = () => {
                 }}
                 title={location.name}
                 description={`${location.city}, ${location.zipCode}`}
-                pinColor="blue"
+                pinColor="purple"
               />
             ))}
           </MapView>
@@ -618,98 +640,48 @@ const TrainingCentersScreen = () => {
           </Text>
           
           <View style={styles.legendRow}>
-            {searchType === 'training' ? (
-              <View style={styles.legendItem}>
-                <View style={[styles.legendPin, { backgroundColor: 'green' }]} />
-                <Text style={[styles.legendText, { color: theme.colors.text }]}>
-                  Training Centers
-                </Text>
-              </View>
-            ) : (
-              <View style={styles.legendItem}>
-                <View style={[styles.legendPin, { backgroundColor: 'blue' }]} />
-                <Text style={[styles.legendText, { color: theme.colors.text }]}>
-                  LiveScan Centers
-                </Text>
-              </View>
-            )}
+            <View style={styles.legendItem}>
+              <View style={[styles.legendPin, { backgroundColor: 'green' }]} />
+              <Text style={[styles.legendText, { color: theme.colors.text }]}>
+                Training Centers
+              </Text>
+            </View>
+            
+            <View style={styles.legendItem}>
+              <View style={[styles.legendPin, { backgroundColor: 'purple' }]} />
+              <Text style={[styles.legendText, { color: theme.colors.text }]}>
+                LiveScan Centers
+              </Text>
+            </View>
             
             <View style={styles.legendItem}>
               <View style={[styles.legendPin, { backgroundColor: theme.colors.primary }]} />
               <Text style={[styles.legendText, { color: theme.colors.text }]}>
-                Your Location
+                Current Location
               </Text>
             </View>
           </View>
         </View>
 
-        {/* Search Type Selector */}
-        <View style={styles.searchTypeContainer}>
-          <TouchableOpacity
-            style={[
-              styles.searchTypeButton,
-              searchType === 'training' && { backgroundColor: theme.colors.primary, borderColor: theme.colors.primary }
-            ]}
-            onPress={() => setSearchType('training')}
-          >
-            <View style={styles.searchTypeContent}>
-              <Ionicons 
-                name="school" 
-                size={24} 
-                color={searchType === 'training' ? '#ffffff' : theme.colors.secondaryText} 
-              />
-              <Text style={[
-                styles.searchTypeSubtext,
-                { color: searchType === 'training' ? '#ffffff' : theme.colors.secondaryText }
-              ]}>
-                Training Facilities
-              </Text>
-            </View>
-          </TouchableOpacity>
 
-          <TouchableOpacity
-            style={[
-              styles.searchTypeButton,
-              searchType === 'livescan' && { backgroundColor: theme.colors.primary, borderColor: theme.colors.primary }
-            ]}
-            onPress={() => setSearchType('livescan')}
-          >
-            <View style={styles.searchTypeContent}>
-              <Ionicons 
-                name="finger-print" 
-                size={24} 
-                color={searchType === 'livescan' ? '#ffffff' : theme.colors.secondaryText} 
-              />
-              <Text style={[
-                styles.searchTypeSubtext,
-                { color: searchType === 'livescan' ? '#ffffff' : theme.colors.secondaryText }
-              ]}>
-                LiveScan Centers
-              </Text>
-            </View>
-          </TouchableOpacity>
+
+
+
+        {/* Training Centers Section */}
+        <View style={styles.resultsContainer}>
+          <Text style={[styles.resultsTitle, { color: theme.colors.text }]}>
+            Training Centers ({searchResults.length})
+          </Text>
+          {searchResults.map(renderFacility)}
         </View>
 
-
-
-        {/* Results */}
-        {searchResults.length > 0 && searchType === 'training' && (
-          <View style={styles.resultsContainer}>
-            <Text style={[styles.resultsTitle, { color: theme.colors.text }]}>
-              Training Centers ({searchResults.length})
-            </Text>
-            {searchResults.map(renderFacility)}
-          </View>
-        )}
-
-        {liveScanResults.length > 0 && searchType === 'livescan' && (
-          <View style={styles.resultsContainer}>
-            <Text style={[styles.resultsTitle, { color: theme.colors.text }]}>
-              Nearby LiveScan Centers ({liveScanResults.length})
-            </Text>
-            {liveScanResults.map(renderLiveScanLocation)}
-          </View>
-        )}
+        {/* LiveScan Centers Section */}
+        <View style={styles.resultsContainer}>
+          <Text style={[styles.resultsTitle, { color: theme.colors.text }]}>
+            LiveScan Centers ({liveScanResults.length})
+          </Text>
+          {liveScanResults.map(renderLiveScanLocation)}
+        </View>
 
         {/* No Results */}
         {!loading && searchResults.length === 0 && liveScanResults.length === 0 && userLocation && (
