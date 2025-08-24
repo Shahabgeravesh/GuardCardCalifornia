@@ -419,29 +419,26 @@ const TrainingCentersScreen = () => {
 
   const renderLiveScanLocation = (location) => (
     <View key={location.id} style={[styles.facilityCard, { backgroundColor: theme.colors.card }]}>
-      <View style={styles.facilityTitleRow}>
-        <View style={styles.facilityHeader}>
-          <View style={styles.facilityInfo}>
-            <Text style={[styles.facilityName, { color: theme.colors.text }]}>
-              {location.name}
-            </Text>
-            <Text style={[styles.facilityAddress, { color: theme.colors.secondaryText }]}>
-              {location.address}
-            </Text>
-            <Text style={[styles.facilityAddress, { color: theme.colors.secondaryText }]}>
-              {location.city}, CA {location.zipCode}
-            </Text>
-          </View>
+      {/* Facility Header with Name and Address */}
+      <View style={styles.facilityHeader}>
+        <Text style={[styles.facilityName, { color: theme.colors.text }]}>
+          {location.name}
+        </Text>
+        <Text style={[styles.facilityAddress, { color: theme.colors.secondaryText }]}>
+          {location.address}
+        </Text>
+        <Text style={[styles.facilityAddress, { color: theme.colors.secondaryText }]}>
+          {location.city}, CA {location.zipCode}
+        </Text>
+      </View>
+
+      {/* Badges Row */}
+      <View style={styles.facilityBadges}>
+        <View style={[styles.badge, { backgroundColor: '#34C759' }]}>
+          <Text style={[styles.badgeText, { color: '#ffffff' }]}>BSIS</Text>
         </View>
-        <View style={styles.facilityBadges}>
-          <View style={[styles.badge, { backgroundColor: '#34C759' }]}>
-            <Text style={[styles.badgeText, { color: '#ffffff' }]}>LiveScan</Text>
-          </View>
-          {location.bsisApproved && (
-            <View style={[styles.badge, { backgroundColor: theme.colors.primary }]}>
-              <Text style={[styles.badgeText, { color: '#ffffff' }]}>BSIS</Text>
-            </View>
-          )}
+        <View style={[styles.badge, { backgroundColor: '#007AFF' }]}>
+          <Text style={[styles.badgeText, { color: '#ffffff' }]}>LiveScan</Text>
         </View>
       </View>
 
@@ -480,23 +477,12 @@ const TrainingCentersScreen = () => {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {/* Header */}
-        <View style={styles.header}>
-          <View style={styles.headerContent}>
-            <View style={[styles.headerIconContainer, { width: 48, height: 48, marginRight: 12 }]}>
-              <Ionicons name="location" size={24} color={theme.colors.primary} />
-            </View>
-            <View style={styles.headerTextContainer}>
-              <Text style={[styles.headerTitle, { color: theme.colors.text, fontSize: 24, fontWeight: '700' }]}>
-                Training & LiveScan Centers
-              </Text>
-              <Text style={[styles.headerSubtitle, { color: theme.colors.secondaryText, fontSize: 16 }]}>
-                Find verified BSIS facilities and LiveScan locations
-              </Text>
-            </View>
-          </View>
-        </View>
+      <ScrollView 
+        style={styles.content} 
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+
 
         {/* Search Options */}
         <View style={styles.searchOptionsContainer}>
@@ -635,29 +621,25 @@ const TrainingCentersScreen = () => {
         
         {/* Map Legend */}
         <View style={[styles.mapLegend, { backgroundColor: theme.colors.systemBackground }]}>
-          <Text style={[styles.legendTitle, { color: theme.colors.text }]}>
-            Map Legend
-          </Text>
-          
           <View style={styles.legendRow}>
             <View style={styles.legendItem}>
               <View style={[styles.legendPin, { backgroundColor: 'green' }]} />
               <Text style={[styles.legendText, { color: theme.colors.text }]}>
-                Training Centers
+                Training
               </Text>
             </View>
             
             <View style={styles.legendItem}>
               <View style={[styles.legendPin, { backgroundColor: 'purple' }]} />
               <Text style={[styles.legendText, { color: theme.colors.text }]}>
-                LiveScan Centers
+                LiveScan
               </Text>
             </View>
             
             <View style={styles.legendItem}>
               <View style={[styles.legendPin, { backgroundColor: theme.colors.primary }]} />
               <Text style={[styles.legendText, { color: theme.colors.text }]}>
-                Current Location
+                Location
               </Text>
             </View>
           </View>
@@ -705,41 +687,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F8F9FA',
   },
-  header: {
-    paddingVertical: 24,
-    paddingBottom: 16,
-  },
-  headerContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  headerIconContainer: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    elevation: 6,
-  },
-  headerTextContainer: {
-    flex: 1,
-  },
-  headerTitle: {
-    fontSize: 28,
-    fontWeight: '700',
-    marginBottom: 8,
-  },
-  headerSubtitle: {
-    fontSize: 16,
-    lineHeight: 20,
-  },
+
   content: {
     paddingHorizontal: 20,
+    paddingTop: 8,
+  },
+  scrollContent: {
+    paddingBottom: 40,
   },
   searchTypeContainer: {
     flexDirection: 'row',
@@ -795,25 +749,33 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   resultsContainer: {
-    marginBottom: 20,
+    marginBottom: 32,
+    marginTop: 16,
+    paddingHorizontal: 4,
   },
   resultsTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 16,
+    fontSize: 22,
+    fontWeight: '700',
+    marginBottom: 20,
+    marginTop: 8,
+    paddingHorizontal: 4,
+    color: '#2C3E50',
   },
   facilityCard: {
-    padding: 20,
-    borderRadius: 16,
-    marginBottom: 16,
+    padding: 24,
+    borderRadius: 20,
+    marginBottom: 20,
+    marginHorizontal: 4,
     shadowColor: '#000000',
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 6,
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 12,
-    elevation: 6,
+    shadowOpacity: 0.12,
+    shadowRadius: 16,
+    elevation: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.05)',
   },
   facilityTitleRow: {
     flexDirection: 'row',
@@ -828,21 +790,24 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   facilityHeader: {
-    marginBottom: 8,
+    marginBottom: 12,
   },
   facilityInfo: {
     flex: 1,
     marginRight: 12,
   },
   facilityName: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 4,
+    fontSize: 20,
+    fontWeight: '700',
+    marginBottom: 6,
+    lineHeight: 26,
+    color: '#2C3E50',
   },
   facilityAddress: {
-    fontSize: 14,
-    lineHeight: 20,
-    marginBottom: 8,
+    fontSize: 15,
+    lineHeight: 22,
+    marginBottom: 12,
+    color: '#5D6D7E',
   },
   facilityMeta: {
     flexDirection: 'row',
@@ -852,20 +817,31 @@ const styles = StyleSheet.create({
   metaItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 4,
+    marginBottom: 6,
   },
   metaText: {
     fontSize: 14,
-    marginLeft: 4,
+    marginLeft: 6,
+    color: '#7F8C8D',
+    fontWeight: '500',
   },
   badge: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 14,
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+    elevation: 3,
   },
   badgeText: {
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: '700',
+    letterSpacing: 0.5,
   },
   coursesContainer: {
     marginBottom: 16,
@@ -1053,38 +1029,35 @@ const styles = StyleSheet.create({
   mapLegend: {
     marginHorizontal: 20,
     marginBottom: 16,
-    padding: 16,
-    borderRadius: 12,
+    padding: 12,
+    borderRadius: 10,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 4,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.06,
+    shadowRadius: 4,
+    elevation: 2,
   },
   legendRow: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 16,
-  },
-  legendTitle: {
-    fontSize: 14,
-    fontWeight: '700',
-    marginBottom: 8,
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   legendItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    minWidth: 80,
+    flex: 1,
+    justifyContent: 'center',
   },
   legendPin: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-    marginRight: 8,
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    marginRight: 6,
   },
   legendText: {
-    fontSize: 12,
-    fontWeight: '500',
+    fontSize: 11,
+    fontWeight: '600',
+    textAlign: 'center',
   },
 });
 

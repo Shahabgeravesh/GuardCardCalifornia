@@ -154,7 +154,7 @@ function TabNavigator() {
         name="Training" 
         component={TrainingCentersScreen} 
         options={{ 
-          title: 'Training Centers',
+          title: 'Training & LiveScan Centers',
           tabBarLabel: 'Training',
           tabBarAccessibilityLabel: 'Training tab. Find nearby BSIS-approved training centers and LiveScan locations.',
           tabBarAccessibilityHint: 'Double tap to find training facilities and LiveScan centers near you.'
