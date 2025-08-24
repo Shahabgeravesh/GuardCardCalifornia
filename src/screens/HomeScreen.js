@@ -12,7 +12,7 @@ export default function HomeScreen() {
   const [expandedStep, setExpandedStep] = useState(null);
   
   // Interactive progress tracking
-  const [completedSteps, setCompletedSteps] = useState([0]); // Step 1 starts completed
+  const [completedSteps, setCompletedSteps] = useState([]); // All steps start incomplete
   const totalSteps = 3;
   const registrationProgress = Math.round((completedSteps.length / totalSteps) * 100);
 
