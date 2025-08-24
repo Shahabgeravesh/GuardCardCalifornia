@@ -503,7 +503,11 @@ const PracticeQuizScreen = () => {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.systemBackground }]}>
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView 
+        style={styles.content} 
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
         {/* Header */}
         <View style={styles.header}>
           <Text style={[styles.headerTitle, { color: theme.colors.label }, theme.typography.title1]}>
@@ -666,6 +670,9 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 20,
   },
+  scrollContent: {
+    paddingBottom: 20, // Extremely minimal space for navigation bar
+  },
   header: {
     paddingVertical: 24,
     alignItems: 'center',
@@ -770,14 +777,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 24,
-    paddingVertical: 16,
+    paddingHorizontal: 12,
+    paddingVertical: 4,
     borderTopWidth: 0.5,
   },
   navButton: {
     flex: 1,
-    paddingVertical: 16,
-    paddingHorizontal: 24,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
