@@ -1,15 +1,27 @@
 {
   "expo": {
-    "name": "GuardCardCalifornia",
+    "name": "GuardCard California",
     "slug": "GuardCardCalifornia",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "guardcardcalifornia",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
+    "main": "./index.js",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.guardcardcalifornia.app",
+      "buildNumber": "1",
+      "infoPlist": {
+        "CFBundleDisplayName": "GuardCard California",
+        "CFBundleName": "GuardCard California",
+        "NSLocationWhenInUseUsageDescription": "This app uses location to find training centers near you.",
+        "NSCameraUsageDescription": "This app uses camera for document scanning and photo identification.",
+        "NSPhotoLibraryUsageDescription": "This app accesses your photo library for document uploads.",
+        "UIRequiresFullScreen": false,
+        "UIStatusBarStyle": "default",
+        "UIBackgroundModes": []
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -24,7 +36,6 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      "expo-router",
       [
         "expo-splash-screen",
         {
@@ -34,9 +45,6 @@
           "backgroundColor": "#ffffff"
         }
       ]
-    ],
-    "experiments": {
-      "typedRoutes": true
-    }
+    ]
   }
 }
