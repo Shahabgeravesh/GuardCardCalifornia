@@ -11,6 +11,7 @@ import HomeScreen from './src/screens/HomeScreen';
 import TrainingCentersScreen from './src/screens/TrainingCentersScreen';
 import StudyScreen from './src/screens/StudyScreen';
 import PracticeQuizScreen from './src/screens/PracticeQuizScreen';
+import ResourcesScreen from './src/screens/ResourcesScreen';
 
 // Import components and context
 import { ThemeProvider } from './src/context/ThemeContext';
@@ -24,6 +25,7 @@ function TabNavigator() {
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
+          let iconSize = focused ? size + 2 : size; // Slightly larger when focused
           
           switch (route.name) {
             case 'Home':
@@ -38,6 +40,9 @@ function TabNavigator() {
             case 'Quiz':
               iconName = focused ? 'help-circle' : 'help-circle-outline';
               break;
+            case 'Resources':
+              iconName = focused ? 'library' : 'library-outline';
+              break;
             default:
               iconName = 'help-outline';
           }
@@ -45,50 +50,57 @@ function TabNavigator() {
           return (
             <Ionicons
               name={iconName}
-              size={size}
+              size={iconSize}
               color={color}
+              style={{
+                transform: [{ scale: focused ? 1.1 : 1 }], // Subtle scale animation
+              }}
             />
           );
         },
-        // iOS Standard Tab Bar Colors
-        tabBarActiveTintColor: '#007AFF', // iOS System Blue
-        tabBarInactiveTintColor: '#8E8E93', // iOS Tertiary Label
+        // Enhanced Tab Bar Colors with vibrant gradients
+        tabBarActiveTintColor: '#667eea', // Vibrant gradient blue
+        tabBarInactiveTintColor: '#A0A0A0', // Softer inactive color
         tabBarStyle: {
-          backgroundColor: '#FFFFFF',
-          borderTopWidth: 0.5,
-          borderTopColor: '#E5E5EA', // iOS Separator
-          paddingBottom: Platform.OS === 'ios' ? 8 : 8,
-          paddingTop: Platform.OS === 'ios' ? 8 : 8,
-          height: Platform.OS === 'ios' ? 83 : 60, // iOS Standard Tab Bar Height
-          shadowColor: '#000000',
+          backgroundColor: '#FAFBFF', // Slightly tinted white for subtle color
+          borderTopWidth: 0,
+          paddingBottom: Platform.OS === 'ios' ? 12 : 12,
+          paddingTop: Platform.OS === 'ios' ? 12 : 12,
+          paddingHorizontal: 16,
+          height: Platform.OS === 'ios' ? 95 : 72, // Increased height for better spacing
+          shadowColor: '#667eea',
           shadowOffset: {
             width: 0,
-            height: -0.5,
+            height: -3,
           },
-          shadowOpacity: 0.1,
-          shadowRadius: 0.5,
-          elevation: Platform.OS === 'android' ? 8 : 0,
+          shadowOpacity: 0.15,
+          shadowRadius: 12,
+          elevation: Platform.OS === 'android' ? 16 : 0,
+          borderTopLeftRadius: 20,
+          borderTopRightRadius: 20,
         },
         tabBarLabelStyle: {
-          fontSize: 10, // iOS Standard Tab Bar Label Size
-          fontWeight: '500', // iOS Medium Weight
-          marginTop: 2,
-          letterSpacing: 0.12, // iOS Standard Letter Spacing
+          fontSize: 11, // Slightly larger for better readability
+          fontWeight: '600', // iOS Semibold Weight
+          marginTop: 4,
+          letterSpacing: 0.15, // Slightly more letter spacing
+          textTransform: 'capitalize', // Capitalize labels for better appearance
         },
         tabBarIconStyle: {
-          marginTop: 4,
+          marginTop: 6,
+          marginBottom: 2,
         },
-        // iOS Standard Navigation Bar Styling
+        // Enhanced Navigation Bar Styling with vibrant gradients
         headerStyle: {
-          backgroundColor: '#007AFF', // iOS System Blue
-          shadowColor: '#000000',
+          backgroundColor: '#667eea', // Vibrant gradient blue
+          shadowColor: '#667eea',
           shadowOffset: {
             width: 0,
-            height: 0.5,
+            height: 3,
           },
-          shadowOpacity: 0.12,
-          shadowRadius: 4,
-          elevation: Platform.OS === 'android' ? 3 : 0,
+          shadowOpacity: 0.2,
+          shadowRadius: 12,
+          elevation: Platform.OS === 'android' ? 8 : 0,
         },
         headerTintColor: '#FFFFFF',
         headerTitleStyle: {
@@ -100,6 +112,9 @@ function TabNavigator() {
         // iOS Standard Safe Area Handling
         headerSafeAreaInsets: { top: 0 },
         tabBarSafeAreaInsets: { bottom: 0 },
+        tabBarItemStyle: {
+          paddingVertical: 4,
+        },
       })}
     >
       <Tab.Screen 
@@ -113,17 +128,6 @@ function TabNavigator() {
         }}
       />
 
-      <Tab.Screen 
-        name="Training" 
-        component={TrainingCentersScreen} 
-        options={{ 
-          title: 'Training Centers',
-          tabBarLabel: 'Training',
-          tabBarAccessibilityLabel: 'Training tab. Find nearby BSIS-approved training centers and LiveScan locations.',
-          tabBarAccessibilityHint: 'Double tap to find training facilities and LiveScan centers near you.'
-        }}
-      />
-      
       <Tab.Screen 
         name="Study" 
         component={StudyScreen} 
@@ -145,6 +149,28 @@ function TabNavigator() {
           tabBarAccessibilityHint: 'Double tap to take practice quizzes and test your knowledge.'
         }}
       />
+      
+      <Tab.Screen 
+        name="Training" 
+        component={TrainingCentersScreen} 
+        options={{ 
+          title: 'Training Centers',
+          tabBarLabel: 'Training',
+          tabBarAccessibilityLabel: 'Training tab. Find nearby BSIS-approved training centers and LiveScan locations.',
+          tabBarAccessibilityHint: 'Double tap to find training facilities and LiveScan centers near you.'
+        }}
+      />
+      
+      <Tab.Screen 
+        name="Resources" 
+        component={ResourcesScreen} 
+        options={{ 
+          title: 'Resources',
+          tabBarLabel: 'Resources',
+          tabBarAccessibilityLabel: 'Resources tab. Access BSIS exam preparation, training requirements, and contact information.',
+          tabBarAccessibilityHint: 'Double tap to view BSIS resources and contact information.'
+        }}
+      />
     </Tab.Navigator>
   );
 }
@@ -158,7 +184,7 @@ export default function App() {
             <TabNavigator />
             <StatusBar 
               style="light" 
-              backgroundColor="#007AFF"
+              backgroundColor="#667eea"
               translucent={false}
               animated={true}
             />

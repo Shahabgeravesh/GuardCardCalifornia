@@ -608,48 +608,6 @@ const PracticeQuizScreen = () => {
             </Text>
           </View>
         )}
-
-        {/* BSIS Exam Preparation */}
-        <View style={[styles.bsisCard, { backgroundColor: theme.colors.systemBackground }, theme.shadows.md]}>
-          <View style={styles.bsisHeader}>
-            <Ionicons name="school" size={24} color={theme.colors.systemBlue} />
-            <Text style={[styles.bsisTitle, { color: theme.colors.label }, theme.typography.headline]}>
-              BSIS Exam Preparation
-            </Text>
-          </View>
-          <Text style={[styles.bsisText, { color: theme.colors.secondaryLabel }, theme.typography.body]}>
-            This study material covers the essential topics you'll need to know for your California security guard certification exam. Take your time to understand each concept thoroughly.
-          </Text>
-        </View>
-
-        {/* Additional BSIS Training Required */}
-        <View style={[styles.trainingCard, { backgroundColor: theme.colors.systemBackground }, theme.shadows.md]}>
-          <View style={styles.trainingHeader}>
-            <Ionicons name="alert-circle" size={24} color={theme.colors.systemOrange} />
-            <Text style={[styles.trainingTitle, { color: theme.colors.label }, theme.typography.headline]}>
-              Additional BSIS Training Required
-            </Text>
-          </View>
-          <Text style={[styles.trainingText, { color: theme.colors.secondaryLabel }, theme.typography.body]}>
-            Remember: You must also complete the 5-hour "Appropriate Use of Force" training at a licensed facility before applying for your guard card.
-          </Text>
-        </View>
-
-        {/* BSIS Contact Information */}
-        <View style={[styles.contactCard, { backgroundColor: theme.colors.systemBackground }, theme.shadows.md]}>
-          <View style={styles.contactHeader}>
-            <Ionicons name="information-circle" size={24} color={theme.colors.systemBlue} />
-            <Text style={[styles.contactTitle, { color: theme.colors.label }, theme.typography.headline]}>
-              BSIS Contact Information
-            </Text>
-          </View>
-          <Text style={[styles.contactText, { color: theme.colors.secondaryLabel }, theme.typography.body]}>
-            Bureau of Security and Investigative Services{'\n'}
-            Phone: (800) 952-5210{'\n'}
-            Website: www.bsis.ca.gov{'\n'}
-            Email: bsis@dca.ca.gov
-          </Text>
-        </View>
       </ScrollView>
 
       {/* Navigation Bar */}
@@ -702,6 +660,7 @@ const PracticeQuizScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#F8F9FA',
   },
   content: {
     flex: 1,
@@ -738,9 +697,17 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   questionCard: {
-    padding: 24,
-    borderRadius: 16,
+    padding: 28,
+    borderRadius: 20,
     marginBottom: 24,
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
+    elevation: 8,
   },
   questionText: {
     lineHeight: 24,
@@ -751,14 +718,22 @@ const styles = StyleSheet.create({
   optionCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 16,
-    borderRadius: 12,
-    marginBottom: 12,
-    minHeight: 60,
+    padding: 20,
+    borderRadius: 16,
+    marginBottom: 16,
+    minHeight: 64,
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.06,
+    shadowRadius: 6,
+    elevation: 3,
   },
   optionLetter: {
-    width: 32,
-    height: 32,
+    width: 36,
+    height: 36,
     borderRadius: 16,
     justifyContent: 'center',
     alignItems: 'center',
@@ -790,54 +765,7 @@ const styles = StyleSheet.create({
   explanationText: {
     lineHeight: 20,
   },
-  bsisCard: {
-    padding: 24,
-    borderRadius: 16,
-    marginBottom: 24,
-  },
-  bsisHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  bsisTitle: {
-    marginLeft: 12,
-  },
-  bsisText: {
-    lineHeight: 20,
-  },
-  trainingCard: {
-    padding: 24,
-    borderRadius: 16,
-    marginBottom: 24,
-  },
-  trainingHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  trainingTitle: {
-    marginLeft: 12,
-  },
-  trainingText: {
-    lineHeight: 20,
-  },
-  contactCard: {
-    padding: 24,
-    borderRadius: 16,
-    marginBottom: 24,
-  },
-  contactHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  contactTitle: {
-    marginLeft: 12,
-  },
-  contactText: {
-    lineHeight: 20,
-  },
+
   navigationBar: {
     flexDirection: 'row',
     justifyContent: 'space-between',

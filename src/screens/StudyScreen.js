@@ -301,6 +301,7 @@ const StudyScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#F8F9FA',
   },
   header: {
     padding: 20,
@@ -341,16 +342,16 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   topicCard: {
-    borderRadius: 12,
-    padding: 16,
+    borderRadius: 16,
+    padding: 20,
     shadowColor: '#000000',
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 4,
     },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 4,
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
+    elevation: 6,
   },
   topicHeader: {
     flexDirection: 'row',

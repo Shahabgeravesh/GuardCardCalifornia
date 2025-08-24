@@ -22,14 +22,16 @@ export default function HomeScreen() {
       title: 'Training Centers',
       subtitle: 'Find BSIS approved providers',
       icon: 'school',
-      color: theme.colors.systemGreen,
+      color: theme.colors.gradientStart,
+      gradientEnd: theme.colors.gradientEnd,
     },
     {
       id: 2,
       title: 'Study Materials',
       subtitle: 'PTA & AUOF course content',
       icon: 'book',
-      color: theme.colors.systemOrange,
+      color: theme.colors.gradientSecondary,
+      gradientEnd: theme.colors.gradientSecondaryEnd,
     },
     {
       id: 3,
@@ -37,13 +39,15 @@ export default function HomeScreen() {
       subtitle: 'Test your knowledge',
       icon: 'help-circle',
       color: theme.colors.systemPurple,
+      gradientEnd: theme.colors.systemIndigo,
     },
     {
       id: 4,
       title: 'Live Scan Locations',
       subtitle: 'Find fingerprint locations',
       icon: 'location',
-      color: theme.colors.systemBlue,
+      color: theme.colors.systemTeal,
+      gradientEnd: theme.colors.systemCyan,
     },
   ];
 
@@ -401,8 +405,16 @@ const styles = StyleSheet.create({
   progressCard: {
     marginHorizontal: 20,
     marginBottom: 24,
-    padding: 20,
-    borderRadius: 12,
+    padding: 24,
+    borderRadius: 16,
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
+    elevation: 8,
   },
   progressHeader: {
     flexDirection: 'row',
@@ -417,8 +429,8 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   progressBar: {
-    height: 8,
-    borderRadius: 4,
+    height: 12,
+    borderRadius: 6,
     overflow: 'hidden',
     marginBottom: 16,
   },
@@ -458,14 +470,22 @@ const styles = StyleSheet.create({
   actionCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 16,
-    borderRadius: 12,
+    padding: 20,
+    borderRadius: 16,
     minHeight: 44, // iOS minimum touch target
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 4,
   },
   actionIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 12,
+    width: 56,
+    height: 56,
+    borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 16,

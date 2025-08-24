@@ -125,7 +125,7 @@ export const ThemeProvider = ({ children }) => {
       full: 9999,
     },
 
-    // System Colors
+    // Vibrant System Colors
     systemColors: {
       systemBlue: '#007AFF',
       systemGreen: '#34C759',
@@ -136,25 +136,30 @@ export const ThemeProvider = ({ children }) => {
       systemRed: '#FF3B30',
       systemTeal: '#5AC8FA',
       systemYellow: '#FFCC02',
+      // Additional vibrant colors
+      systemCyan: '#32ADE6',
+      systemMint: '#00C7BE',
+      systemBrown: '#A2845E',
+      systemGray: '#8E8E93',
     },
 
-    // Light Mode Colors
+    // Enhanced Light Mode Colors with gradients
     lightColors: {
       // Background Colors
       systemBackground: '#FFFFFF',
-      secondarySystemBackground: '#F2F2F7',
+      secondarySystemBackground: '#F8F9FA',
       tertiarySystemBackground: '#FFFFFF',
       
       // Grouped Background Colors
       systemGroupedBackground: '#F2F2F7',
       secondarySystemGroupedBackground: '#FFFFFF',
-      tertiarySystemGroupedBackground: '#F2F2F7',
+      tertiarySystemGroupedBackground: '#F8F9FA',
       
       // Label Colors
-      label: '#000000',
+      label: '#1C1C1E',
       secondaryLabel: '#3C3C43',
-      tertiaryLabel: '#3C3C43',
-      quaternaryLabel: '#3C3C43',
+      tertiaryLabel: '#48484A',
+      quaternaryLabel: '#6D6D70',
       
       // Separator Colors
       separator: '#C6C6C8',
@@ -165,9 +170,24 @@ export const ThemeProvider = ({ children }) => {
       secondarySystemFill: '#787880',
       tertiarySystemFill: '#787880',
       quaternarySystemFill: '#787880',
+
+      // Enhanced accent colors
+      primary: '#007AFF',
+      primaryLight: '#4DA3FF',
+      primaryDark: '#0056CC',
+      success: '#34C759',
+      warning: '#FF9500',
+      error: '#FF3B30',
+      info: '#5AC8FA',
+      
+      // Gradient colors
+      gradientStart: '#667eea',
+      gradientEnd: '#764ba2',
+      gradientSecondary: '#f093fb',
+      gradientSecondaryEnd: '#f5576c',
     },
     
-    // Dark Mode Colors
+    // Enhanced Dark Mode Colors
     darkColors: {
       // Background Colors
       systemBackground: '#000000',
@@ -194,38 +214,67 @@ export const ThemeProvider = ({ children }) => {
       secondarySystemFill: '#787880',
       tertiarySystemFill: '#787880',
       quaternarySystemFill: '#787880',
+
+      // Enhanced accent colors
+      primary: '#0A84FF',
+      primaryLight: '#4DA3FF',
+      primaryDark: '#0056CC',
+      success: '#30D158',
+      warning: '#FF9F0A',
+      error: '#FF453A',
+      info: '#64D2FF',
+      
+      // Gradient colors
+      gradientStart: '#667eea',
+      gradientEnd: '#764ba2',
+      gradientSecondary: '#f093fb',
+      gradientSecondaryEnd: '#f5576c',
     },
 
-    // Shadows - iOS Standard Shadows
+    // Enhanced Shadows with better depth
     shadows: {
-      sm: {
+      xs: {
         shadowColor: '#000000',
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.05,
         shadowRadius: 2,
         elevation: 1,
       },
-      md: {
+      sm: {
         shadowColor: '#000000',
         shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
+        shadowOpacity: 0.08,
         shadowRadius: 4,
         elevation: 2,
       },
-      lg: {
+      md: {
         shadowColor: '#000000',
         shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.15,
+        shadowOpacity: 0.12,
         shadowRadius: 8,
         elevation: 4,
       },
-      xl: {
+      lg: {
         shadowColor: '#000000',
         shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.2,
+        shadowOpacity: 0.16,
         shadowRadius: 16,
         elevation: 8,
       },
+      xl: {
+        shadowColor: '#000000',
+        shadowOffset: { width: 0, height: 12 },
+        shadowOpacity: 0.2,
+        shadowRadius: 24,
+        elevation: 12,
+      },
+    },
+
+    // Animation durations
+    animations: {
+      fast: 200,
+      normal: 300,
+      slow: 500,
     },
   };
 

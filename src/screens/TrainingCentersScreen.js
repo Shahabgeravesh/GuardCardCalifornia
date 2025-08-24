@@ -703,6 +703,7 @@ const TrainingCentersScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#F8F9FA',
   },
   header: {
     paddingVertical: 24,
@@ -802,17 +803,17 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   facilityCard: {
-    padding: 16,
-    borderRadius: 12,
-    marginBottom: 12,
+    padding: 20,
+    borderRadius: 16,
+    marginBottom: 16,
     shadowColor: '#000000',
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 4,
     },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 4,
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
+    elevation: 6,
   },
   facilityTitleRow: {
     flexDirection: 'row',
@@ -975,13 +976,13 @@ const styles = StyleSheet.create({
     height: 300,
     marginHorizontal: 20,
     marginBottom: 16,
-    borderRadius: 12,
+    borderRadius: 20,
     overflow: 'hidden',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    elevation: 5,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.2,
+    shadowRadius: 16,
+    elevation: 8,
   },
   map: {
     flex: 1,
