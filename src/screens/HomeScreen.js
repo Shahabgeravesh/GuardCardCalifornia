@@ -162,10 +162,23 @@ export default function HomeScreen() {
         {/* 3-Step Guard Card Process */}
         <View style={styles.section}>
           <View style={[styles.headerCard, { backgroundColor: '#4257B2' }]}>
-            <Ionicons name="shield-checkmark" size={20} color="#FFFFFF" style={styles.headerIcon} />
-            <Text style={[styles.sectionTitle, { color: '#FFFFFF' }, theme.typography.cardTitle]}>
-              How to Get Your Guard Card
-            </Text>
+            <View style={styles.headerContent}>
+              <View style={styles.headerLeft}>
+                <Ionicons name="shield-checkmark" size={20} color="#FFFFFF" style={styles.headerIcon} />
+                <Text style={[styles.sectionTitle, { color: '#FFFFFF' }, theme.typography.cardTitle]}>
+                  How to Get Your Guard Card
+                </Text>
+              </View>
+              <TouchableOpacity
+                style={styles.tutorialButton}
+                onPress={() => navigation.navigate('Tutorial')}
+                accessibilityRole="button"
+                accessibilityLabel="View app tutorial"
+              >
+                <Ionicons name="play-circle" size={16} color="#FFFFFF" />
+                <Text style={styles.tutorialButtonText}>Tutorial</Text>
+              </TouchableOpacity>
+            </View>
           </View>
           
           <View style={styles.stepsContainer}>
@@ -485,6 +498,36 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.05,
     shadowRadius: 2,
     elevation: 1,
+  },
+  headerContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+  },
+  headerLeft: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  headerIcon: {
+    marginRight: 12,
+  },
+  tutorialButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.3)',
+  },
+  tutorialButtonText: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '600',
+    marginLeft: 6,
   },
   headerIconContainer: {
     width: 48,

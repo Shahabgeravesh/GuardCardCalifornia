@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar } from 'expo-status-bar';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -12,12 +13,14 @@ import TrainingCentersScreen from './src/screens/TrainingCentersScreen';
 import StudyScreen from './src/screens/StudyScreen';
 import Quiz1Screen from './src/screens/Quiz1Screen';
 import ResourcesScreen from './src/screens/ResourcesScreen';
+import TutorialScreen from './src/screens/TutorialScreen';
 
 // Import components and context
 import { ThemeProvider } from './src/context/ThemeContext';
 import ErrorBoundary from './src/components/ErrorBoundary';
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
 function TabNavigator() {
   return (
@@ -184,15 +187,27 @@ function TabNavigator() {
 }
 
 export default function App() {
+  const [showTutorial, setShowTutorial] = useState(true);
+
   return (
     <ErrorBoundary>
       <SafeAreaProvider>
         <ThemeProvider>
           <NavigationContainer>
-            <TabNavigator />
-                          <StatusBar 
-                style="light" 
-                backgroundColor="#4257B2"
+            <Stack.Navigator screenOptions={{ headerShown: false }}>
+              {showTutorial ? (
+                <Stack.Screen 
+                  name="Tutorial" 
+                  component={TutorialScreen}
+                  initialParams={{ onComplete: () => setShowTutorial(false) }}
+                />
+              ) : (
+                <Stack.Screen name="Main" component={TabNavigator} />
+              )}
+            </Stack.Navigator>
+            <StatusBar 
+              style="light" 
+              backgroundColor="#4257B2"
               translucent={false}
               animated={true}
               barStyle="light-content"
