@@ -35,7 +35,7 @@ function TabNavigator() {
               iconName = focused ? 'home' : 'home-outline';
               break;
             case 'Training':
-              iconName = focused ? 'school' : 'school-outline';
+              iconName = focused ? 'location' : 'location-outline';
               break;
             case 'Study':
               iconName = focused ? 'book' : 'book-outline';

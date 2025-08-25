@@ -754,10 +754,7 @@ const StudyScreen = () => {
             <View style={styles.headerIconContainer}>
               <Ionicons name="book" size={20} color="#4257B2" />
             </View>
-            <Text style={[styles.headerTitle, { color: theme.colors.label }, theme.typography.sectionTitle]}>
-              Study Materials
-            </Text>
-            <Text style={[styles.headerSubtitle, { color: theme.colors.secondaryLabel }, theme.typography.body]}>
+            <Text style={[styles.headerSubtitle, { color: theme.colors.label }, theme.typography.sectionTitle, styles.essentialContentText]}>
               Learn the essential content for your security guard training
             </Text>
           </View>
@@ -769,16 +766,15 @@ const StudyScreen = () => {
             <View style={styles.pinnedGuideContainer}>
               <View style={styles.pinnedGuideCard}>
                 <View style={styles.pinnedGuideHeader}>
-                  <Ionicons name="pin" size={20} color="#FFFFFF" />
-                  <Text style={[styles.pinnedGuideTitle, { color: '#FFFFFF' }, theme.typography.cardTitle]}>
+                  <Text style={[styles.pinnedGuideTitle, { color: '#000000' }, styles.quickReferenceTitle]}>
                     Quick Reference Guide
                   </Text>
                 </View>
                 <Text style={[styles.pinnedGuideContent, { color: '#FFFFFF' }, theme.typography.body]}>
-                  This study material is based on the official BSIS Powers to Arrest and Appropriate Use of Force Training Manual (July 2023). Use the button below to access the official PDF manual.
+                  This study material is the official BSIS Powers to Arrest and Appropriate Use of Force Training Manual (July 2023). Use the button below to access the official PDF manual.
                 </Text>
                 <View style={styles.pinnedGuideTips}>
-                  <Text style={[styles.pinnedGuideTipsTitle, { color: '#FFFFFF' }, theme.typography.bodyLarge]}>
+                  <Text style={[styles.pinnedGuideTipsTitle, { color: '#000000' }, styles.studyTipsTitle]}>
                     Study Tips:
                   </Text>
                   <Text style={[styles.pinnedGuideTipsContent, { color: '#FFFFFF' }, theme.typography.body]}>
@@ -874,20 +870,20 @@ const styles = StyleSheet.create({
   header: {
     padding: 20,
     paddingBottom: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F8FAFF',
     borderWidth: 1,
-    borderColor: '#E5E7EB',
-    shadowColor: '#000000',
+    borderColor: '#E1E8FF',
+    shadowColor: '#4257B2',
     shadowOffset: {
       width: 0,
-      height: 1,
+      height: 2,
     },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 3,
     marginBottom: 20,
     alignItems: 'center',
-    borderRadius: 8,
+    borderRadius: 12,
   },
   headerIconContainer: {
     width: 40,
@@ -919,6 +915,33 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     textAlign: 'center',
     opacity: 0.8,
+  },
+  essentialContentText: {
+    fontSize: 24,
+    fontWeight: '900',
+    lineHeight: 28,
+    textAlign: 'center',
+    color: '#4257B2',
+    textShadowColor: 'rgba(66, 87, 178, 0.2)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
+    marginBottom: 8,
+  },
+  quickReferenceTitle: {
+    fontSize: 22,
+    fontWeight: '900',
+    lineHeight: 26,
+    textShadowColor: 'rgba(0, 0, 0, 0.1)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 2,
+  },
+  studyTipsTitle: {
+    fontSize: 20,
+    fontWeight: '900',
+    lineHeight: 24,
+    textShadowColor: 'rgba(0, 0, 0, 0.1)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 2,
   },
 
   content: {

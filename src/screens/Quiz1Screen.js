@@ -623,14 +623,7 @@ const Quiz1Screen = ({ route }) => {
                         No Time Limit
                       </Text>
                     </View>
-                    <View style={styles.statItem}>
-                      <View style={[styles.statIcon, { backgroundColor: theme.colors.systemGreen }]}>
-                        <Ionicons name="trophy" size={20} color="#FFFFFF" />
-                      </View>
-                      <Text style={[styles.statText, { color: theme.colors.label }, theme.typography.body]}>
-                        70% to Pass
-                      </Text>
-                    </View>
+
                   </View>
 
                   {/* Important Disclaimer */}

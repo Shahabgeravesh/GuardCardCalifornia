@@ -30,6 +30,16 @@ const TrainingCentersScreen = () => {
   // Removed searchType state since we show both sections
   const [selectedFacility, setSelectedFacility] = useState(null);
   const [selectedLiveScan, setSelectedLiveScan] = useState(null);
+  const [expandedTraining, setExpandedTraining] = useState(false);
+  const [expandedLiveScan, setExpandedLiveScan] = useState(false);
+
+  const toggleTrainingSection = () => {
+    setExpandedTraining(!expandedTraining);
+  };
+
+  const toggleLiveScanSection = () => {
+    setExpandedLiveScan(!expandedLiveScan);
+  };
 
   const [mapRegion, setMapRegion] = useState({
     latitude: 36.7783, // California center
@@ -467,21 +477,22 @@ const TrainingCentersScreen = () => {
             <View style={styles.legendItem}>
               <View style={[styles.legendPin, { backgroundColor: 'green' }]} />
               <Text style={[styles.legendText, { color: theme.colors.text }]}>
-                Training
+                Training Centers
               </Text>
             </View>
             
             <View style={styles.legendItem}>
               <View style={[styles.legendPin, { backgroundColor: 'purple' }]} />
               <Text style={[styles.legendText, { color: theme.colors.text }]}>
-                LiveScan
+                LiveScan Centers
               </Text>
             </View>
-            
+          </View>
+          <View style={styles.legendRow}>
             <View style={styles.legendItem}>
               <View style={[styles.legendPin, { backgroundColor: theme.colors.primary }]} />
               <Text style={[styles.legendText, { color: theme.colors.text }]}>
-                Location
+                My Location
               </Text>
             </View>
           </View>
@@ -493,24 +504,46 @@ const TrainingCentersScreen = () => {
 
         {/* Training Centers Section */}
         <View style={styles.resultsContainer}>
-          <View style={[styles.resultsTitle, { backgroundColor: '#FAFBFF' }]}>
-            <Ionicons name="school" size={28} color="#4257B2" style={styles.headerIcon} />
-            <Text style={[styles.resultsTitleText, { color: theme.colors.text }, theme.typography.cardTitle]}>
-              Training Centers ({searchResults.length})
-            </Text>
-          </View>
-          {searchResults.map(renderFacility)}
+          <TouchableOpacity 
+            style={[styles.resultsTitle, { backgroundColor: '#FAFBFF' }]}
+            onPress={toggleTrainingSection}
+            activeOpacity={0.7}
+          >
+            <View style={styles.titleRow}>
+              <Ionicons name="school" size={28} color="#4257B2" style={styles.headerIcon} />
+              <Text style={[styles.resultsTitleText, { color: theme.colors.text }, theme.typography.cardTitle]}>
+                Training Centers
+              </Text>
+            </View>
+            <Ionicons 
+              name={expandedTraining ? "chevron-up" : "chevron-down"} 
+              size={20} 
+              color={theme.colors.secondaryLabel} 
+            />
+          </TouchableOpacity>
+          {expandedTraining && searchResults.map(renderFacility)}
         </View>
 
         {/* LiveScan Centers Section */}
         <View style={styles.resultsContainer}>
-          <View style={[styles.resultsTitle, { backgroundColor: '#FAFBFF' }]}>
-            <Ionicons name="finger-print" size={28} color="#4257B2" style={styles.headerIcon} />
-            <Text style={[styles.resultsTitleText, { color: theme.colors.text }, theme.typography.cardTitle]}>
-              LiveScan Centers ({liveScanResults.length})
-            </Text>
-          </View>
-          {liveScanResults.map(renderLiveScanLocation)}
+          <TouchableOpacity 
+            style={[styles.resultsTitle, { backgroundColor: '#FAFBFF' }]}
+            onPress={toggleLiveScanSection}
+            activeOpacity={0.7}
+          >
+            <View style={styles.titleRow}>
+              <Ionicons name="finger-print" size={28} color="#4257B2" style={styles.headerIcon} />
+              <Text style={[styles.resultsTitleText, { color: theme.colors.text }, theme.typography.cardTitle]}>
+                LiveScan Centers
+              </Text>
+            </View>
+            <Ionicons 
+              name={expandedLiveScan ? "chevron-up" : "chevron-down"} 
+              size={20} 
+              color={theme.colors.secondaryLabel} 
+            />
+          </TouchableOpacity>
+          {expandedLiveScan && liveScanResults.map(renderLiveScanLocation)}
         </View>
 
         {/* No Results */}
@@ -597,17 +630,38 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   resultsContainer: {
-    marginBottom: 32,
-    marginTop: 16,
+    marginBottom: 0,
+    marginTop: 0,
     paddingHorizontal: 4,
   },
   resultsTitle: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 0,
+    marginTop: 4,
+    paddingHorizontal: 16,
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  resultsTitleText: {
     fontSize: 22,
     fontWeight: '700',
-    marginBottom: 20,
-    marginTop: 8,
-    paddingHorizontal: 4,
     color: '#2C3E50',
+    marginLeft: 12,
   },
   facilityCard: {
     padding: 24,
@@ -879,7 +933,7 @@ const styles = StyleSheet.create({
   mapLegend: {
     marginHorizontal: 20,
     marginBottom: 16,
-    padding: 12,
+    padding: 8,
     borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
@@ -891,6 +945,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginBottom: 8,
+    gap: 12,
   },
   legendItem: {
     flexDirection: 'row',
@@ -899,15 +955,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   legendPin: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    marginRight: 6,
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    marginRight: 8,
   },
   legendText: {
-    fontSize: 11,
-    fontWeight: '600',
+    fontSize: 14,
+    fontWeight: '700',
     textAlign: 'center',
+    letterSpacing: 0.3,
+    color: '#2C3E50',
   },
   resultsContainer: {
     marginBottom: 32,

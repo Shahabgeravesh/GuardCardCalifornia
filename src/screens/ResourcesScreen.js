@@ -445,10 +445,7 @@ export default function ResourcesScreen() {
           <View style={styles.headerIconContainer}>
             <Ionicons name="library" size={24} color="#4257B2" />
           </View>
-          <Text style={[styles.headerTitle, { color: theme.colors.label }, theme.typography.sectionTitle]}>
-            BSIS Resources
-          </Text>
-          <Text style={[styles.headerSubtitle, { color: theme.colors.secondaryLabel }, theme.typography.body]}>
+          <Text style={[styles.headerSubtitle, { color: theme.colors.label }, theme.typography.sectionTitle, styles.essentialInfoText]}>
             Essential information and forms for your security guard journey
           </Text>
         </View>
@@ -586,6 +583,17 @@ const styles = StyleSheet.create({
   headerSubtitle: {
     textAlign: 'center',
     lineHeight: 20,
+  },
+  essentialInfoText: {
+    fontSize: 24,
+    fontWeight: '900',
+    lineHeight: 28,
+    textAlign: 'center',
+    color: '#4257B2',
+    textShadowColor: 'rgba(66, 87, 178, 0.2)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
+    marginBottom: 8,
   },
   
   // Sections Container
