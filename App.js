@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -187,23 +187,17 @@ function TabNavigator() {
 }
 
 export default function App() {
-  const [showTutorial, setShowTutorial] = useState(true);
-
   return (
     <ErrorBoundary>
       <SafeAreaProvider>
         <ThemeProvider>
           <NavigationContainer>
             <Stack.Navigator screenOptions={{ headerShown: false }}>
-              {showTutorial ? (
-                <Stack.Screen 
-                  name="Tutorial" 
-                  component={TutorialScreen}
-                  initialParams={{ onComplete: () => setShowTutorial(false) }}
-                />
-              ) : (
-                <Stack.Screen name="Main" component={TabNavigator} />
-              )}
+              <Stack.Screen 
+                name="Tutorial" 
+                component={TutorialScreen}
+              />
+              <Stack.Screen name="Main" component={TabNavigator} />
             </Stack.Navigator>
             <StatusBar 
               style="light" 

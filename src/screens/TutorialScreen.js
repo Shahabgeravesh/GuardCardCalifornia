@@ -16,7 +16,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
-const TutorialScreen = ({ navigation }) => {
+const TutorialScreen = ({ navigation, route }) => {
   const theme = useTheme();
   const [currentStep, setCurrentStep] = useState(0);
   const fadeAnim = useRef(new Animated.Value(1)).current;
@@ -149,12 +149,12 @@ const TutorialScreen = ({ navigation }) => {
       animateTransition('next');
     } else {
       // Tutorial complete
-      navigation.navigate('Main');
+      navigation.replace('Main');
     }
   };
 
   const handleSkip = () => {
-    navigation.navigate('Main');
+    navigation.replace('Main');
   };
 
   const currentTutorial = tutorials[currentStep];
