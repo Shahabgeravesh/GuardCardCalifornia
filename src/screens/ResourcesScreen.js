@@ -49,7 +49,6 @@ export default function ResourcesScreen() {
           description: 'What to bring and expect on exam day:',
           details: [
             '• Valid government-issued photo ID',
-            '• Confirmation number from BSIS',
             '• Arrive 30 minutes early',
             '• No electronic devices allowed',
             '• Dress comfortably and professionally'
