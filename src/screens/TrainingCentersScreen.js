@@ -37,8 +37,13 @@ const TrainingCentersScreen = () => {
     latitudeDelta: 5,
     longitudeDelta: 5,
   });
-  const [zipCode, setZipCode] = useState('');
-  const [searchMode, setSearchMode] = useState('location'); // 'location' or 'zipcode'
+
+
+  // Use real BSIS training facilities data
+  const trainingFacilities = realTrainingFacilities;
+
+  // Use real LiveScan locations data
+  const liveScanLocations = realLiveScanLocations;
 
   // Load facilities on component mount
   useEffect(() => {
@@ -47,6 +52,10 @@ const TrainingCentersScreen = () => {
 
   // Load default facilities without requiring location
   const loadDefaultFacilities = () => {
+    console.log('Loading default facilities...');
+    console.log('Training facilities available:', trainingFacilities.length);
+    console.log('LiveScan locations available:', liveScanLocations.length);
+    
     // Show first 10 training facilities and 10 LiveScan locations by default
     const defaultTraining = trainingFacilities.slice(0, 10).map(facility => ({
       ...facility,
@@ -60,13 +69,9 @@ const TrainingCentersScreen = () => {
 
     setSearchResults(defaultTraining);
     setLiveScanResults(defaultLiveScan);
+    
+    console.log('Default facilities loaded - Training:', defaultTraining.length, 'LiveScan:', defaultLiveScan.length);
   };
-
-  // Use real BSIS training facilities data
-  const trainingFacilities = realTrainingFacilities;
-
-  // Use real LiveScan locations data
-  const liveScanLocations = realLiveScanLocations;
 
   // Request location permissions
   const requestLocationPermission = async () => {
@@ -129,94 +134,7 @@ const TrainingCentersScreen = () => {
     }
   };
 
-  // Search facilities by zip code
-  const searchByZipCode = async (zipCodeInput) => {
-    if (!zipCodeInput || zipCodeInput.length !== 5) {
-      Alert.alert('Invalid Zip Code', 'Please enter a valid 5-digit zip code.');
-      return;
-    }
 
-    setLoading(true);
-    try {
-      // First try exact zip code match
-      let trainingByZip = trainingFacilities.filter(facility => 
-        facility.zipCode === zipCodeInput
-      );
-      
-      let liveScanByZip = liveScanLocations.filter(location => 
-        location.zipCode === zipCodeInput
-      );
-
-      // If no exact matches, find facilities within 25 miles radius
-      if (trainingByZip.length === 0 && liveScanByZip.length === 0) {
-        // For now, we'll show facilities from a broader area since we don't have zip code coordinates
-        // In a real app, you'd use a zip code geocoding service to get coordinates
-        const searchRadius = 25; // 25 miles radius
-        
-        // Get a sample of facilities from different areas to show variety
-        trainingByZip = trainingFacilities
-          .slice(0, 10) // Show first 10 facilities as nearby options
-          .map(facility => ({
-            ...facility,
-            distance: Math.floor(Math.random() * 20) + 1 // Random distance 1-20 miles for demo
-          }))
-          .sort((a, b) => a.distance - b.distance);
-
-        liveScanByZip = liveScanLocations
-          .slice(0, 10) // Show first 10 LiveScan locations as nearby options
-          .map(location => ({
-            ...location,
-            distance: Math.floor(Math.random() * 20) + 1 // Random distance 1-20 miles for demo
-          }))
-          .sort((a, b) => a.distance - b.distance);
-
-        if (trainingByZip.length === 0 && liveScanByZip.length === 0) {
-          Alert.alert('No Results', `No facilities found near zip code ${zipCodeInput}. Try a different zip code.`);
-          setSearchResults([]);
-          setLiveScanResults([]);
-          setLoading(false);
-          return;
-        }
-
-        // Show alert about showing nearby facilities
-        Alert.alert(
-          'No Exact Matches', 
-          `No facilities found in zip code ${zipCodeInput}. Showing nearby facilities within 25 miles.`,
-          [{ text: 'OK' }]
-        );
-      } else {
-        // For exact matches, set distance to 0
-        trainingByZip = trainingByZip.map(facility => ({
-          ...facility,
-          distance: 0
-        }));
-        
-        liveScanByZip = liveScanByZip.map(location => ({
-          ...location,
-          distance: 0
-        }));
-      }
-
-      // Update map region to show the found facilities
-      const referenceLocation = trainingByZip.length > 0 ? trainingByZip[0] : liveScanByZip[0];
-      
-      setMapRegion({
-        latitude: referenceLocation.coordinates.lat,
-        longitude: referenceLocation.coordinates.lng,
-        latitudeDelta: 0.1,
-        longitudeDelta: 0.1,
-      });
-
-      setSearchResults(trainingByZip);
-      setLiveScanResults(liveScanByZip);
-      
-    } catch (error) {
-      console.error('Error searching by zip code:', error);
-      Alert.alert('Error', 'Failed to search facilities by zip code. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   // Search nearby facilities
   const searchNearbyFacilities = async (latitude, longitude) => {
@@ -486,97 +404,21 @@ const TrainingCentersScreen = () => {
 
         {/* Search Options */}
         <View style={styles.searchOptionsContainer}>
-          <View style={styles.searchModeToggle}>
-            <TouchableOpacity
-              style={[
-                styles.searchModeButton,
-                searchMode === 'location' && { backgroundColor: theme.colors.primary }
-              ]}
-              onPress={() => setSearchMode('location')}
-              activeOpacity={0.7}
-            >
-              <Ionicons 
-                name="location" 
-                size={18} 
-                color={searchMode === 'location' ? '#ffffff' : theme.colors.secondaryText} 
-              />
-              <Text style={[
-                styles.searchModeText,
-                { color: searchMode === 'location' ? '#ffffff' : theme.colors.secondaryText }
-              ]}>
-                My Location
-              </Text>
-            </TouchableOpacity>
-            
-            <TouchableOpacity
-              style={[
-                styles.searchModeButton,
-                searchMode === 'zipcode' && { backgroundColor: theme.colors.primary }
-              ]}
-              onPress={() => setSearchMode('zipcode')}
-              activeOpacity={0.7}
-            >
-              <Ionicons 
-                name="map" 
-                size={18} 
-                color={searchMode === 'zipcode' ? '#ffffff' : theme.colors.secondaryText} 
-              />
-              <Text style={[
-                styles.searchModeText,
-                { color: searchMode === 'zipcode' ? '#ffffff' : theme.colors.secondaryText }
-              ]}>
-                Zip Code
-              </Text>
-            </TouchableOpacity>
-          </View>
-
-          {/* Zip Code Input */}
-          {searchMode === 'zipcode' && (
-            <View style={styles.zipCodeInputContainer}>
-              <TextInput
-                style={[styles.zipCodeInput, { 
-                  backgroundColor: theme.colors.systemBackground,
-                  color: theme.colors.text,
-                  borderColor: theme.colors.separator
-                }]}
-                placeholder="Enter 5-digit zip code"
-                placeholderTextColor={theme.colors.secondaryText}
-                value={zipCode}
-                onChangeText={setZipCode}
-                keyboardType="numeric"
-                maxLength={5}
-                returnKeyType="search"
-                onSubmitEditing={() => searchByZipCode(zipCode)}
-              />
-              <TouchableOpacity
-                style={[styles.searchButton, { backgroundColor: theme.colors.primary }]}
-                onPress={() => searchByZipCode(zipCode)}
-                disabled={zipCode.length !== 5}
-                activeOpacity={0.7}
-              >
-                <Ionicons name="search" size={20} color="#ffffff" />
-              </TouchableOpacity>
-            </View>
-          )}
-
-          {/* Location Search Button */}
-          {searchMode === 'location' && (
-            <TouchableOpacity
-              style={[styles.locationButton, { backgroundColor: theme.colors.primary }]}
-              onPress={getCurrentLocation}
-              disabled={loading}
-              activeOpacity={0.7}
-            >
-              {loading ? (
-                <ActivityIndicator size="small" color="#ffffff" />
-              ) : (
-                <Ionicons name="location" size={20} color="#ffffff" />
-              )}
-              <Text style={styles.locationButtonText}>
-                {loading ? 'Searching...' : 'Find Nearby Facilities'}
-              </Text>
-            </TouchableOpacity>
-          )}
+          <TouchableOpacity
+            style={[styles.locationButton, { backgroundColor: theme.colors.primary }]}
+            onPress={getCurrentLocation}
+            disabled={loading}
+            activeOpacity={0.7}
+          >
+            {loading ? (
+              <ActivityIndicator size="small" color="#ffffff" />
+            ) : (
+              <Ionicons name="location" size={20} color="#ffffff" />
+            )}
+            <Text style={styles.locationButtonText}>
+              {loading ? 'Searching...' : 'Find Nearby Facilities'}
+            </Text>
+          </TouchableOpacity>
         </View>
 
 
