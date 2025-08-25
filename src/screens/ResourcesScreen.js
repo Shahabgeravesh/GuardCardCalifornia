@@ -5,6 +5,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { Text } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
 import { WebView } from 'react-native-webview';
+import * as FileSystem from 'expo-file-system';
+import * as Sharing from 'expo-sharing';
 
 export default function ResourcesScreen() {
   const theme = useTheme();
@@ -117,7 +119,7 @@ export default function ResourcesScreen() {
     setShowWebViewModal(true);
   };
 
-  const openFormLink = (formType) => {
+  const downloadForm = async (formType) => {
     const formUrls = {
       'registration': { url: 'https://www.bsis.ca.gov/forms_pubs/gappnew.pdf', title: 'Registration Form' },
       'livescan': { url: 'https://www.bsis.ca.gov/forms_pubs/livescan/guard.pdf', title: 'LiveScan Form' },
@@ -125,10 +127,40 @@ export default function ResourcesScreen() {
     };
     
     const formInfo = formUrls[formType];
-    if (formInfo) {
-      openLink(formInfo.url, formInfo.title);
-    } else {
-      openLink('https://www.bsis.ca.gov/forms_pubs/forms/', 'BSIS Forms');
+    if (!formInfo) {
+      Alert.alert('Error', 'Form not found');
+      return;
+    }
+
+    try {
+      // Show loading alert
+      Alert.alert('Downloading...', 'Please wait while the form is being downloaded.');
+      
+      // Download the file
+      const downloadResumable = FileSystem.createDownloadResumable(
+        formInfo.url,
+        FileSystem.documentDirectory + formInfo.title.replace(/\s+/g, '_') + '.pdf',
+        {},
+        (downloadProgress) => {
+          const progress = downloadProgress.totalBytesWritten / downloadProgress.totalBytesExpectedToWrite;
+          console.log(`Downloaded: ${progress * 100}%`);
+        }
+      );
+
+      const { uri } = await downloadResumable.downloadAsync();
+      
+      // Share the downloaded file
+      if (await Sharing.isAvailableAsync()) {
+        await Sharing.shareAsync(uri, {
+          mimeType: 'application/pdf',
+          dialogTitle: `Download ${formInfo.title}`,
+        });
+      } else {
+        Alert.alert('Success', `${formInfo.title} has been downloaded to your device.`);
+      }
+    } catch (error) {
+      console.error('Download error:', error);
+      Alert.alert('Error', 'Failed to download the form. Please try again.');
     }
   };
 
@@ -186,7 +218,7 @@ export default function ResourcesScreen() {
                   <View style={styles.quickActions}>
                     <TouchableOpacity
                       style={[styles.quickActionButton, { backgroundColor: theme.colors.primary }]}
-                      onPress={() => openFormLink('registration')}
+                      onPress={() => downloadForm('registration')}
                       activeOpacity={0.7}
                     >
                       <Ionicons name="download" size={16} color="#FFFFFF" />
@@ -197,7 +229,7 @@ export default function ResourcesScreen() {
                     
                     <TouchableOpacity
                       style={[styles.quickActionButton, { backgroundColor: theme.colors.success }]}
-                      onPress={() => openFormLink('livescan')}
+                      onPress={() => downloadForm('livescan')}
                       activeOpacity={0.7}
                     >
                       <Ionicons name="finger-print" size={16} color="#FFFFFF" />

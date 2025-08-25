@@ -25,91 +25,60 @@ const TutorialScreen = ({ navigation, route }) => {
   const tutorials = [
     {
       id: 'welcome',
-      title: 'Welcome to Guard Card California!',
-      subtitle: 'Your Complete Security Guard Journey',
-      description: 'Get ready to embark on your path to becoming a certified security guard in California. This app is your comprehensive guide to success!',
+      title: 'Welcome',
+      subtitle: 'Guard Card California',
+      description: 'Your complete guide to getting a security guard license.',
       icon: 'shield-checkmark',
-      gradient: ['#667eea', '#764ba2'],
+      gradient: ['#4257B2', '#5B6BC0'],
       features: [
-        'Complete study materials',
+        'Study materials',
         'Practice quizzes',
-        'Training center locator',
-        'Official forms & resources'
-      ],
-      image: null
-    },
-    {
-      id: 'home',
-      title: 'Your Journey Starts Here',
-      subtitle: '3 Simple Steps to Success',
-      description: 'The Home tab guides you through the essential steps to get your guard card. Follow the process and track your progress!',
-      icon: 'home',
-      gradient: ['#f093fb', '#f5576c'],
-      features: [
-        'Step-by-step guidance',
-        'Quick action buttons',
-        'Progress tracking',
-        'Essential information'
+        'Training centers',
+        'Official forms'
       ],
       image: null
     },
     {
       id: 'training',
-      title: 'Find Training Centers',
-      subtitle: 'Locate BSIS-Approved Facilities',
-      description: 'Discover training centers and LiveScan locations near you. Get certified at official BSIS-approved facilities!',
+      title: 'Training Centers',
+      subtitle: 'Find BSIS-approved facilities',
+      description: 'Locate training centers and LiveScan locations near you.',
       icon: 'location',
-      gradient: ['#4facfe', '#00f2fe'],
+      gradient: ['#4257B2', '#6B7280'],
       features: [
-        'Interactive map view',
-        'Distance calculations',
-        'Contact information',
+        'Interactive map',
+        'Distance info',
+        'Contact details',
         'LiveScan locations'
       ],
       image: null
     },
     {
-      id: 'study',
-      title: 'Master Your Knowledge',
-      subtitle: 'Official BSIS Training Materials',
-      description: 'Access the complete Powers to Arrest and Use of Force training manual. Study at your own pace with comprehensive materials!',
+      id: 'study-quiz',
+      title: 'Study & Practice',
+      subtitle: 'Learn and test your knowledge',
+      description: 'Access training materials and take practice quizzes.',
       icon: 'book',
-      gradient: ['#43e97b', '#38f9d7'],
+      gradient: ['#6B7280', '#9CA3AF'],
       features: [
-        'Official training manual',
-        'Interactive PDF viewer',
-        'Study tips & guidance',
-        'Complete curriculum'
-      ],
-      image: null
-    },
-    {
-      id: 'quiz',
-      title: 'Test Your Knowledge',
-      subtitle: 'Practice Makes Perfect',
-      description: 'Take practice quizzes to prepare for your BSIS exam. Build confidence with realistic test questions!',
-      icon: 'help-circle',
-      gradient: ['#fa709a', '#fee140'],
-      features: [
-        '52 practice questions',
-        'Real exam format',
-        'Instant feedback',
+        'Training manual',
+        'PDF viewer',
+        'Practice questions',
         'Progress tracking'
       ],
       image: null
     },
     {
       id: 'resources',
-      title: 'Essential Resources',
-      subtitle: 'Everything You Need',
-      description: 'Access official forms, contact information, and essential resources. Everything is just a tap away!',
+      title: 'Resources',
+      subtitle: 'Forms and information',
+      description: 'Access official forms and contact information.',
       icon: 'library',
-      gradient: ['#a8edea', '#fed6e3'],
+      gradient: ['#4257B2', '#8B9DC3'],
       features: [
-        'Official BSIS forms',
-        'Contact information',
-        'Training requirements',
-        'Useful documents'
+        'Official forms',
+        'Contact info',
+        'BSIS information'
       ],
       image: null
     }
@@ -246,7 +215,7 @@ const TutorialScreen = ({ navigation, route }) => {
                 {currentStep === tutorials.length - 1 ? 'Get Started' : 'Next'}
               </Text>
               <Ionicons
-                name={currentStep === tutorials.length - 1 ? 'rocket' : 'arrow-forward'}
+                name="arrow-forward"
                 size={20}
                 color="#FFFFFF"
               />

@@ -159,6 +159,19 @@ export default function HomeScreen() {
 
 
 
+        {/* Tutorial Button */}
+        <View style={styles.tutorialButtonContainer}>
+          <TouchableOpacity
+            style={styles.tutorialButton}
+            onPress={() => navigation.navigate('Tutorial')}
+            accessibilityRole="button"
+            accessibilityLabel="View app tutorial"
+          >
+            <Ionicons name="play-circle" size={16} color="#4257B2" />
+            <Text style={styles.tutorialButtonText}>Tutorial</Text>
+          </TouchableOpacity>
+        </View>
+
         {/* 3-Step Guard Card Process */}
         <View style={styles.section}>
           <View style={[styles.headerCard, { backgroundColor: '#4257B2' }]}>
@@ -169,15 +182,6 @@ export default function HomeScreen() {
                   How to Get Your Guard Card
                 </Text>
               </View>
-              <TouchableOpacity
-                style={styles.tutorialButton}
-                onPress={() => navigation.navigate('Tutorial')}
-                accessibilityRole="button"
-                accessibilityLabel="View app tutorial"
-              >
-                <Ionicons name="play-circle" size={16} color="#FFFFFF" />
-                <Text style={styles.tutorialButtonText}>Tutorial</Text>
-              </TouchableOpacity>
             </View>
           </View>
           
@@ -513,18 +517,30 @@ const styles = StyleSheet.create({
   headerIcon: {
     marginRight: 12,
   },
+  tutorialButtonContainer: {
+    alignItems: 'center',
+    marginBottom: 16,
+  },
   tutorialButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 20,
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 25,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.3)',
+    borderColor: '#4257B2',
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
   tutorialButtonText: {
-    color: '#FFFFFF',
+    color: '#4257B2',
     fontSize: 14,
     fontWeight: '600',
     marginLeft: 6,
