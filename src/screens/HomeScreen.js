@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
-import { StyleSheet, ScrollView, TouchableOpacity, View, Image, Linking, Alert } from 'react-native';
+import { StyleSheet, ScrollView, TouchableOpacity, View, Image, Linking, Alert, Modal } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Text } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
 import { useNavigation } from '@react-navigation/native';
+import { WebView } from 'react-native-webview';
 
 export default function HomeScreen() {
   const theme = useTheme();
   const navigation = useNavigation();
   const [expandedStep, setExpandedStep] = useState(null);
+  const [showWebViewModal, setShowWebViewModal] = useState(false);
+  const [currentUrl, setCurrentUrl] = useState('');
+  const [currentTitle, setCurrentTitle] = useState('');
   
 
 
@@ -136,14 +140,9 @@ export default function HomeScreen() {
   };
 
   const openBSISWebsite = () => {
-    const url = 'https://www.bsis.ca.gov/';
-    Linking.canOpenURL(url).then(supported => {
-      if (supported) {
-        Linking.openURL(url);
-      } else {
-        Alert.alert('Error', 'Unable to open BSIS website');
-      }
-    });
+    setCurrentUrl('https://www.breeze.ca.gov/');
+    setCurrentTitle('BSIS Application Portal');
+    setShowWebViewModal(true);
   };
 
 
@@ -284,16 +283,6 @@ export default function HomeScreen() {
                               <>
                                 <TouchableOpacity
                                   style={[styles.stepActionCard, { backgroundColor: theme.colors.systemBackground }, theme.shadows.sm]}
-                                  onPress={() => navigation.navigate('Training')}
-                                  activeOpacity={0.7}
-                                >
-                                  <Ionicons name="location" size={20} color={theme.colors.systemGreen} />
-                                  <Text style={[styles.stepActionText, { color: theme.colors.label }, theme.typography.body]}>
-                                    Find Training Centers
-                                  </Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                  style={[styles.stepActionCard, { backgroundColor: theme.colors.systemBackground }, theme.shadows.sm]}
                                   onPress={() => navigation.navigate('Study')}
                                   activeOpacity={0.7}
                                 >
@@ -304,7 +293,7 @@ export default function HomeScreen() {
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                   style={[styles.stepActionCard, { backgroundColor: theme.colors.systemBackground }, theme.shadows.sm]}
-                                  onPress={() => navigation.navigate('Quiz')}
+                                  onPress={() => navigation.navigate('Quiz1')}
                                   activeOpacity={0.7}
                                 >
                                   <Ionicons name="help-circle" size={20} color={theme.colors.systemPurple} />
@@ -318,16 +307,6 @@ export default function HomeScreen() {
                               <>
                                 <TouchableOpacity
                                   style={[styles.stepActionCard, { backgroundColor: theme.colors.systemBackground }, theme.shadows.sm]}
-                                  onPress={() => navigation.navigate('Quiz')}
-                                  activeOpacity={0.7}
-                                >
-                                  <Ionicons name="help-circle" size={20} color={theme.colors.systemPurple} />
-                                  <Text style={[styles.stepActionText, { color: theme.colors.label }, theme.typography.footnote]}>
-                                    Practice Quiz
-                                  </Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                  style={[styles.stepActionCard, { backgroundColor: theme.colors.systemBackground }, theme.shadows.sm]}
                                   onPress={() => navigation.navigate('Resources')}
                                   activeOpacity={0.7}
                                 >
@@ -338,7 +317,7 @@ export default function HomeScreen() {
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                   style={[styles.stepActionCard, { backgroundColor: theme.colors.systemBackground }, theme.shadows.sm]}
-                                  onPress={openBSISWebsite}
+                                  onPress={() => openBSISWebsite()}
                                   activeOpacity={0.7}
                                 >
                                   <Ionicons name="globe" size={20} color={theme.colors.systemOrange} />
@@ -389,6 +368,45 @@ export default function HomeScreen() {
 
 
       </ScrollView>
+
+      {/* WebView Modal */}
+      <Modal
+        visible={showWebViewModal}
+        animationType="slide"
+        presentationStyle="pageSheet"
+        onRequestClose={() => setShowWebViewModal(false)}
+      >
+        <SafeAreaView style={styles.modalContainer}>
+          <View style={styles.modalHeader}>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setShowWebViewModal(false)}
+              accessibilityRole="button"
+              accessibilityLabel="Close web viewer"
+              accessibilityHint="Double tap to close the website viewer"
+            >
+              <Ionicons name="close" size={24} color={theme.colors.label} />
+            </TouchableOpacity>
+            <Text style={[styles.modalTitle, { color: theme.colors.label }, theme.typography.cardTitle]}>
+              {currentTitle}
+            </Text>
+            <View style={styles.placeholder} />
+          </View>
+          
+          <WebView
+            source={{ uri: currentUrl }}
+            style={styles.webView}
+            startInLoadingState={true}
+            renderLoading={() => (
+              <View style={styles.loadingContainer}>
+                <Text style={[styles.loadingText, { color: theme.colors.secondaryLabel }]}>
+                  Loading...
+                </Text>
+              </View>
+            )}
+          />
+        </SafeAreaView>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -816,5 +834,48 @@ const styles = StyleSheet.create({
   },
   linkSubtitle: {
     lineHeight: 18,
+  },
+  
+  // WebView Modal Styles
+  modalContainer: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E5E7EB',
+    backgroundColor: '#FFFFFF',
+  },
+  closeButton: {
+    padding: 8,
+    minWidth: 44, // iOS minimum touch target
+    minHeight: 44, // iOS minimum touch target
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+  placeholder: {
+    width: 40,
+  },
+  webView: {
+    flex: 1,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F8F9FA',
+  },
+  loadingText: {
+    fontSize: 16,
+    fontWeight: '500',
   },
 });

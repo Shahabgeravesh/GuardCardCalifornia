@@ -200,11 +200,11 @@ export default function App() {
               <Stack.Screen name="Main" component={TabNavigator} />
             </Stack.Navigator>
             <StatusBar 
-              style="light" 
-              backgroundColor="#4257B2"
-              translucent={false}
+              style="dark" 
+              backgroundColor="transparent"
+              translucent={true}
               animated={true}
-              barStyle="light-content"
+              barStyle="dark-content"
             />
           </NavigationContainer>
         </ThemeProvider>

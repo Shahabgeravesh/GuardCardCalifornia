@@ -119,6 +119,34 @@ export default function ResourcesScreen() {
     setShowWebViewModal(true);
   };
 
+  const openPhone = (phoneNumber) => {
+    Linking.openURL(`tel:${phoneNumber}`);
+  };
+
+  const openEmail = (emailAddress) => {
+    Linking.openURL(`mailto:${emailAddress}`);
+  };
+
+  const openMaps = (address) => {
+    const encodedAddress = encodeURIComponent(address);
+    Linking.openURL(`https://maps.apple.com/?address=${encodedAddress}`);
+  };
+
+  const openFormLink = (formType) => {
+    const formUrls = {
+      'registration': { url: 'https://www.bsis.ca.gov/forms_pubs/gappnew.pdf', title: 'Registration Form' },
+      'livescan': { url: 'https://www.bsis.ca.gov/forms_pubs/livescan/guard.pdf', title: 'LiveScan Form' },
+      'renewal': { url: 'https://www.bsis.ca.gov/forms_pubs/forms/security_guard_renewal.shtml', title: 'Renewal Form' }
+    };
+    
+    const formInfo = formUrls[formType];
+    if (formInfo) {
+      openLink(formInfo.url, formInfo.title);
+    } else {
+      openLink('https://www.bsis.ca.gov/forms_pubs/forms/', 'BSIS Forms');
+    }
+  };
+
   const downloadForm = async (formType) => {
     const formUrls = {
       'registration': { url: 'https://www.bsis.ca.gov/forms_pubs/gappnew.pdf', title: 'Registration Form' },
@@ -206,37 +234,171 @@ export default function ResourcesScreen() {
                   {item.description}
                 </Text>
                 <View style={styles.detailsContainer}>
-                  {item.details.map((detail, detailIndex) => (
-                    <Text key={detailIndex} style={[styles.detailText, { color: theme.colors.tertiaryLabel }, theme.typography.body]}>
-                      {detail}
-                    </Text>
-                  ))}
+                  {item.details.map((detail, detailIndex) => {
+                    // Check if this is an address
+                    const addressMatch = detail.match(/Address: (.+)/);
+                    if (addressMatch) {
+                      return (
+                        <View key={detailIndex} style={styles.detailRow}>
+                          <Text style={[styles.detailText, { color: theme.colors.tertiaryLabel }, theme.typography.body]}>
+                            • Address: 
+                          </Text>
+                          <TouchableOpacity 
+                            onPress={() => openMaps(addressMatch[1])}
+                            accessibilityRole="button"
+                            accessibilityLabel={`Open maps for address: ${addressMatch[1]}`}
+                            accessibilityHint="Double tap to open maps with directions to this address"
+                          >
+                            <Text style={[styles.clickableText, { color: '#4257B2' }, theme.typography.body]}>
+                              {addressMatch[1]}
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                      );
+                    }
+                    
+                    // Check if this is a phone number
+                    const phoneMatch = detail.match(/Phone: (.+)/);
+                    if (phoneMatch) {
+                      return (
+                        <View key={detailIndex} style={styles.detailRow}>
+                          <Text style={[styles.detailText, { color: theme.colors.tertiaryLabel }, theme.typography.body]}>
+                            • Phone: 
+                          </Text>
+                          <TouchableOpacity 
+                            onPress={() => openPhone(phoneMatch[1])}
+                            accessibilityRole="button"
+                            accessibilityLabel={`Call phone number: ${phoneMatch[1]}`}
+                            accessibilityHint="Double tap to call this phone number"
+                          >
+                            <Text style={[styles.clickableText, { color: '#4257B2' }, theme.typography.body]}>
+                              {phoneMatch[1]}
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                      );
+                    }
+                    
+                    // Check if this is a fax number
+                    const faxMatch = detail.match(/Fax: (.+)/);
+                    if (faxMatch) {
+                      return (
+                        <View key={detailIndex} style={styles.detailRow}>
+                          <Text style={[styles.detailText, { color: theme.colors.tertiaryLabel }, theme.typography.body]}>
+                            • Fax: 
+                          </Text>
+                          <TouchableOpacity 
+                            onPress={() => openPhone(faxMatch[1])}
+                            accessibilityRole="button"
+                            accessibilityLabel={`Call fax number: ${faxMatch[1]}`}
+                            accessibilityHint="Double tap to call this fax number"
+                          >
+                            <Text style={[styles.clickableText, { color: '#4257B2' }, theme.typography.body]}>
+                              {faxMatch[1]}
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                      );
+                    }
+                    
+                    // Check if this is an email address
+                    const emailMatch = detail.match(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/);
+                    if (emailMatch) {
+                      const beforeEmail = detail.substring(0, detail.indexOf(emailMatch[1]));
+                      const afterEmail = detail.substring(detail.indexOf(emailMatch[1]) + emailMatch[1].length);
+                      return (
+                        <View key={detailIndex} style={styles.detailRow}>
+                          <Text style={[styles.detailText, { color: theme.colors.tertiaryLabel }, theme.typography.body]}>
+                            {beforeEmail}
+                          </Text>
+                          <TouchableOpacity 
+                            onPress={() => openEmail(emailMatch[1])}
+                            accessibilityRole="button"
+                            accessibilityLabel={`Send email to: ${emailMatch[1]}`}
+                            accessibilityHint="Double tap to compose an email to this address"
+                          >
+                            <Text style={[styles.clickableText, { color: '#4257B2' }, theme.typography.body]}>
+                              {emailMatch[1]}
+                            </Text>
+                          </TouchableOpacity>
+                          <Text style={[styles.detailText, { color: theme.colors.tertiaryLabel }, theme.typography.body]}>
+                            {afterEmail}
+                          </Text>
+                        </View>
+                      );
+                    }
+                    
+                    // Regular text (not clickable)
+                    return (
+                      <Text key={detailIndex} style={[styles.detailText, { color: theme.colors.tertiaryLabel }, theme.typography.body]}>
+                        {detail}
+                      </Text>
+                    );
+                  })}
                 </View>
                 
                 {/* Quick action buttons for important forms */}
                 {resource.id === 'useful-forms' && item.title === 'Security Guard Registration Forms' && (
                   <View style={styles.quickActions}>
-                    <TouchableOpacity
-                      style={[styles.quickActionButton, { backgroundColor: theme.colors.primary }]}
-                      onPress={() => downloadForm('registration')}
-                      activeOpacity={0.7}
-                    >
-                      <Ionicons name="download" size={16} color="#FFFFFF" />
-                      <Text style={[styles.quickActionText, { color: '#FFFFFF' }, theme.typography.body]}>
-                        Registration Form
-                      </Text>
-                    </TouchableOpacity>
+                    <View style={styles.formButtonGroup}>
+                      <TouchableOpacity
+                        style={styles.quickActionButton}
+                        onPress={() => openFormLink('registration')}
+                        activeOpacity={0.7}
+                        accessibilityRole="button"
+                        accessibilityLabel="View Registration Form"
+                        accessibilityHint="Double tap to view the registration form in the app"
+                      >
+                        <Ionicons name="eye" size={18} color="#4257B2" />
+                        <Text style={[styles.quickActionText, { color: '#4257B2' }, theme.typography.body]}>
+                          Registration Form
+                        </Text>
+                      </TouchableOpacity>
+                      
+                      <TouchableOpacity
+                        style={styles.downloadButton}
+                        onPress={() => downloadForm('registration')}
+                        activeOpacity={0.7}
+                        accessibilityRole="button"
+                        accessibilityLabel="Download Registration Form"
+                        accessibilityHint="Double tap to download the registration form"
+                      >
+                        <Ionicons name="download" size={18} color="#4257B2" />
+                        <Text style={[styles.quickActionText, { color: '#4257B2' }, theme.typography.body]}>
+                          Download
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
                     
-                    <TouchableOpacity
-                      style={[styles.quickActionButton, { backgroundColor: theme.colors.success }]}
-                      onPress={() => downloadForm('livescan')}
-                      activeOpacity={0.7}
-                    >
-                      <Ionicons name="finger-print" size={16} color="#FFFFFF" />
-                      <Text style={[styles.quickActionText, { color: '#FFFFFF' }, theme.typography.body]}>
-                        LiveScan Form
-                      </Text>
-                    </TouchableOpacity>
+                    <View style={styles.formButtonGroup}>
+                      <TouchableOpacity
+                        style={styles.quickActionButton}
+                        onPress={() => openFormLink('livescan')}
+                        activeOpacity={0.7}
+                        accessibilityRole="button"
+                        accessibilityLabel="View LiveScan Form"
+                        accessibilityHint="Double tap to view the LiveScan form in the app"
+                      >
+                        <Ionicons name="eye" size={18} color="#4257B2" />
+                        <Text style={[styles.quickActionText, { color: '#4257B2' }, theme.typography.body]}>
+                          LiveScan Form
+                        </Text>
+                      </TouchableOpacity>
+                      
+                      <TouchableOpacity
+                        style={styles.downloadButton}
+                        onPress={() => downloadForm('livescan')}
+                        activeOpacity={0.7}
+                        accessibilityRole="button"
+                        accessibilityLabel="Download LiveScan Form"
+                        accessibilityHint="Double tap to download the LiveScan form"
+                      >
+                        <Ionicons name="download" size={18} color="#4257B2" />
+                        <Text style={[styles.quickActionText, { color: '#4257B2' }, theme.typography.body]}>
+                          Download
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
                   </View>
                 )}
                 
@@ -335,6 +497,7 @@ export default function ResourcesScreen() {
               onPress={() => setShowWebViewModal(false)}
               accessibilityRole="button"
               accessibilityLabel="Close web viewer"
+              accessibilityHint="Double tap to close the document viewer"
             >
               <Ionicons name="close" size={24} color={theme.colors.label} />
             </TouchableOpacity>
@@ -496,29 +659,67 @@ const styles = StyleSheet.create({
   detailText: {
     lineHeight: 18,
   },
+  detailRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+  },
+  clickableText: {
+    textDecorationLine: 'underline',
+    fontWeight: '500',
+  },
   
   // Quick Actions
   quickActions: {
+    marginTop: 16,
+    gap: 8,
+  },
+  formButtonGroup: {
     flexDirection: 'row',
     gap: 8,
-    marginTop: 16,
-    flexWrap: 'wrap',
+    marginBottom: 6,
   },
   quickActionButton: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     paddingVertical: 10,
     paddingHorizontal: 16,
     borderRadius: 8,
-    minWidth: 120,
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
     shadowColor: '#000000',
     shadowOffset: {
       width: 0,
       height: 1,
     },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.05,
     shadowRadius: 2,
     elevation: 1,
+    minHeight: 44, // iOS minimum touch target
+  },
+  downloadButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    minWidth: 90,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
+    minHeight: 44, // iOS minimum touch target
   },
   quickActionText: {
     marginLeft: 8,
@@ -595,6 +796,10 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     padding: 8,
+    minWidth: 44, // iOS minimum touch target
+    minHeight: 44, // iOS minimum touch target
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   modalTitle: {
     fontWeight: '600',
