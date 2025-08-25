@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
-import { StyleSheet, ScrollView, TouchableOpacity, View, Linking, Alert } from 'react-native';
+import { StyleSheet, ScrollView, TouchableOpacity, View, Linking, Alert, Modal } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Text } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
+import { WebView } from 'react-native-webview';
 
 export default function ResourcesScreen() {
   const theme = useTheme();
   const [expandedSection, setExpandedSection] = useState(null);
+  const [showWebViewModal, setShowWebViewModal] = useState(false);
+  const [currentUrl, setCurrentUrl] = useState('');
+  const [currentTitle, setCurrentTitle] = useState('');
 
   const resources = [
     {
@@ -199,30 +203,26 @@ export default function ResourcesScreen() {
     setExpandedSection(expandedSection === sectionId ? null : sectionId);
   };
 
-  const openLink = (url) => {
-    Linking.canOpenURL(url).then(supported => {
-      if (supported) {
-        Linking.openURL(url);
-      } else {
-        Alert.alert('Error', 'Unable to open link');
-      }
-    });
+  const openLink = (url, title = 'BSIS Website') => {
+    setCurrentUrl(url);
+    setCurrentTitle(title);
+    setShowWebViewModal(true);
   };
 
   const openFormLink = (formType) => {
     const formUrls = {
-      'registration': 'https://www.bsis.ca.gov/forms_pubs/gappnew.pdf',
-      'livescan': 'https://www.bsis.ca.gov/forms_pubs/livescan/guard.pdf',
-      'renewal': 'https://www.bsis.ca.gov/forms_pubs/forms/security_guard_renewal.shtml',
-      'handbook': 'https://www.bsis.ca.gov/forms_pubs/publications/security_guard_handbook.shtml',
-      'regulations': 'https://www.bsis.ca.gov/forms_pubs/publications/regulations.shtml'
+      'registration': { url: 'https://www.bsis.ca.gov/forms_pubs/gappnew.pdf', title: 'Registration Form' },
+      'livescan': { url: 'https://www.bsis.ca.gov/forms_pubs/livescan/guard.pdf', title: 'LiveScan Form' },
+      'renewal': { url: 'https://www.bsis.ca.gov/forms_pubs/forms/security_guard_renewal.shtml', title: 'Renewal Form' },
+      'handbook': { url: 'https://www.bsis.ca.gov/forms_pubs/publications/security_guard_handbook.shtml', title: 'Security Guard Handbook' },
+      'regulations': { url: 'https://www.bsis.ca.gov/forms_pubs/publications/regulations.shtml', title: 'BSIS Regulations' }
     };
     
-    const url = formUrls[formType];
-    if (url) {
-      openLink(url);
+    const formInfo = formUrls[formType];
+    if (formInfo) {
+      openLink(formInfo.url, formInfo.title);
     } else {
-      openLink('https://www.bsis.ca.gov/forms_pubs/forms/');
+      openLink('https://www.bsis.ca.gov/forms_pubs/forms/', 'BSIS Forms');
     }
   };
 
@@ -382,6 +382,49 @@ export default function ResourcesScreen() {
           </View>
         </View>
       </ScrollView>
+
+      {/* WebView Modal */}
+      <Modal
+        visible={showWebViewModal}
+        animationType="slide"
+        presentationStyle="pageSheet"
+        onRequestClose={() => setShowWebViewModal(false)}
+      >
+        <SafeAreaView style={styles.modalContainer}>
+          <View style={styles.modalHeader}>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setShowWebViewModal(false)}
+              accessibilityRole="button"
+              accessibilityLabel="Close web viewer"
+            >
+              <Ionicons name="close" size={24} color={theme.colors.label} />
+            </TouchableOpacity>
+            <Text style={[styles.modalTitle, { color: theme.colors.label }, theme.typography.cardTitle]}>
+              {currentTitle}
+            </Text>
+            <View style={styles.placeholder} />
+          </View>
+          
+          <WebView
+            source={{ uri: currentUrl }}
+            style={styles.webView}
+            startInLoadingState={true}
+            renderLoading={() => (
+              <View style={styles.loadingContainer}>
+                <Text style={[styles.loadingText, { color: theme.colors.secondaryLabel }]}>
+                  Loading...
+                </Text>
+              </View>
+            )}
+            onError={(syntheticEvent) => {
+              const { nativeEvent } = syntheticEvent;
+              console.warn('WebView error: ', nativeEvent);
+              Alert.alert('Error', 'Unable to load the content. Please check your internet connection.');
+            }}
+          />
+        </SafeAreaView>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -596,6 +639,43 @@ const styles = StyleSheet.create({
   },
   websiteButtonText: {
     marginLeft: 8,
+    fontWeight: '500',
+  },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E5E7EB',
+    backgroundColor: '#FFFFFF',
+  },
+  closeButton: {
+    padding: 8,
+  },
+  modalTitle: {
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+  placeholder: {
+    width: 40,
+  },
+  webView: {
+    flex: 1,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F8F9FA',
+  },
+  loadingText: {
+    fontSize: 16,
     fontWeight: '500',
   },
 });
