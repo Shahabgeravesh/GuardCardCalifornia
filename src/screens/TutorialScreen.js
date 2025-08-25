@@ -186,41 +186,47 @@ const TutorialScreen = ({ navigation, route }) => {
         </View>
 
         {/* Content */}
-        <Animated.View
-          style={[
-            styles.content,
-            {
-              opacity: fadeAnim,
-              transform: [{ translateX: slideAnim }],
-            },
-          ]}
+        <ScrollView 
+          style={styles.scrollView}
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
         >
-          {/* Icon */}
-          <View style={styles.iconContainer}>
-            <View style={styles.iconBackground}>
-              <Ionicons name={currentTutorial.icon} size={60} color="#FFFFFF" />
-            </View>
-          </View>
-
-          {/* Title */}
-          <Text style={styles.title}>{currentTutorial.title}</Text>
-          <Text style={styles.subtitle}>{currentTutorial.subtitle}</Text>
-
-          {/* Description */}
-          <Text style={styles.description}>{currentTutorial.description}</Text>
-
-          {/* Features */}
-          <View style={styles.featuresContainer}>
-            {currentTutorial.features.map((feature, index) => (
-              <View key={index} style={styles.featureItem}>
-                <View style={styles.featureIcon}>
-                  <Ionicons name="checkmark-circle" size={20} color="#FFFFFF" />
-                </View>
-                <Text style={styles.featureText}>{feature}</Text>
+          <Animated.View
+            style={[
+              styles.content,
+              {
+                opacity: fadeAnim,
+                transform: [{ translateX: slideAnim }],
+              },
+            ]}
+          >
+            {/* Icon */}
+            <View style={styles.iconContainer}>
+              <View style={styles.iconBackground}>
+                <Ionicons name={currentTutorial.icon} size={60} color="#FFFFFF" />
               </View>
-            ))}
-          </View>
-        </Animated.View>
+            </View>
+
+            {/* Title */}
+            <Text style={styles.title}>{currentTutorial.title}</Text>
+            <Text style={styles.subtitle}>{currentTutorial.subtitle}</Text>
+
+            {/* Description */}
+            <Text style={styles.description}>{currentTutorial.description}</Text>
+
+            {/* Features */}
+            <View style={styles.featuresContainer}>
+              {currentTutorial.features.map((feature, index) => (
+                <View key={index} style={styles.featureItem}>
+                  <View style={styles.featureIcon}>
+                    <Ionicons name="checkmark-circle" size={20} color="#FFFFFF" />
+                  </View>
+                  <Text style={styles.featureText}>{feature}</Text>
+                </View>
+              ))}
+            </View>
+          </Animated.View>
+        </ScrollView>
 
         {/* Footer */}
         <View style={styles.footer}>
@@ -290,10 +296,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     width: 24,
   },
-  content: {
+  scrollView: {
     flex: 1,
+  },
+  scrollContent: {
+    paddingVertical: 40,
     paddingHorizontal: 30,
-    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  content: {
+    width: '100%',
     alignItems: 'center',
   },
   iconContainer: {
@@ -342,6 +354,7 @@ const styles = StyleSheet.create({
   featuresContainer: {
     width: '100%',
     gap: 16,
+    marginBottom: 20,
   },
   featureItem: {
     flexDirection: 'row',
@@ -364,6 +377,8 @@ const styles = StyleSheet.create({
   footer: {
     paddingHorizontal: 30,
     paddingBottom: 40,
+    paddingTop: 20,
+    backgroundColor: 'rgba(0, 0, 0, 0.1)',
   },
   buttonContainer: {
     flexDirection: 'row',
