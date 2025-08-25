@@ -168,18 +168,7 @@ export default function ResourcesScreen() {
             '• Name Change Request (Form 31A-13) - Required for legal name changes'
           ]
         },
-        {
-          title: 'Firearms & Weapons Forms',
-          description: 'Forms for armed security positions and weapon permits:',
-          details: [
-            '• Firearms Qualification Card Application (Form 31A-3) - Required for armed positions',
-            '• Firearms Training Certificate (Form 31A-8) - 14-hour training requirement',
-            '• Baton Training Certificate Application (Form 31A-4) - Required for baton use',
-            '• Baton Training Certificate (Form 31A-9) - 4-hour training requirement',
-            '• Tear Gas Training Certificate Application (Form 31A-5) - Required for tear gas use',
-            '• Tear Gas Training Certificate (Form 31A-10) - 4-hour training requirement'
-          ]
-        },
+
         {
           title: 'Training & Education Forms',
           description: 'Forms related to training schools and continuing education:',
@@ -222,11 +211,8 @@ export default function ResourcesScreen() {
 
   const openFormLink = (formType) => {
     const formUrls = {
-      'registration': 'https://www.bsis.ca.gov/forms_pubs/forms/security_guard_registration.shtml',
-      'livescan': 'https://www.bsis.ca.gov/forms_pubs/forms/live_scan_fingerprint.shtml',
-      'firearms': 'https://www.bsis.ca.gov/forms_pubs/forms/firearms_qualification.shtml',
-      'baton': 'https://www.bsis.ca.gov/forms_pubs/forms/baton_training.shtml',
-      'teargas': 'https://www.bsis.ca.gov/forms_pubs/forms/tear_gas_training.shtml',
+      'registration': 'https://www.bsis.ca.gov/forms_pubs/gappnew.pdf',
+      'livescan': 'https://www.bsis.ca.gov/forms_pubs/livescan/guard.pdf',
       'renewal': 'https://www.bsis.ca.gov/forms_pubs/forms/security_guard_renewal.shtml',
       'handbook': 'https://www.bsis.ca.gov/forms_pubs/publications/security_guard_handbook.shtml',
       'regulations': 'https://www.bsis.ca.gov/forms_pubs/publications/regulations.shtml'
@@ -259,9 +245,9 @@ export default function ResourcesScreen() {
               <Ionicons name={resource.icon} size={24} color="#FFFFFF" />
             </View>
             <View style={styles.resourceTitleContainer}>
-              <Text style={[styles.resourceTitle, { color: theme.colors.label }, theme.typography.headline]}>
-                {resource.title}
-              </Text>
+                          <Text style={[styles.resourceTitle, { color: theme.colors.label }, theme.typography.cardTitle]}>
+              {resource.title}
+            </Text>
             </View>
             <Ionicons
               name={isExpanded ? 'chevron-up' : 'chevron-down'}
@@ -275,7 +261,7 @@ export default function ResourcesScreen() {
           <View style={[styles.expandedContent, { backgroundColor: theme.colors.secondarySystemBackground }]}>
             {resource.content.map((item, index) => (
               <View key={index} style={styles.contentItem}>
-                <Text style={[styles.contentTitle, { color: theme.colors.label }, theme.typography.title3]}>
+                <Text style={[styles.contentTitle, { color: theme.colors.label }, theme.typography.bodyLarge]}>
                   {item.title}
                 </Text>
                 <Text style={[styles.contentDescription, { color: theme.colors.secondaryLabel }, theme.typography.body]}>
@@ -283,7 +269,7 @@ export default function ResourcesScreen() {
                 </Text>
                 <View style={styles.detailsContainer}>
                   {item.details.map((detail, detailIndex) => (
-                    <Text key={detailIndex} style={[styles.detailText, { color: theme.colors.tertiaryLabel }, theme.typography.subheadline]}>
+                    <Text key={detailIndex} style={[styles.detailText, { color: theme.colors.tertiaryLabel }, theme.typography.body]}>
                       {detail}
                     </Text>
                   ))}
@@ -298,7 +284,7 @@ export default function ResourcesScreen() {
                       activeOpacity={0.7}
                     >
                       <Ionicons name="download" size={16} color="#FFFFFF" />
-                      <Text style={[styles.quickActionText, { color: '#FFFFFF' }, theme.typography.footnote]}>
+                      <Text style={[styles.quickActionText, { color: '#FFFFFF' }, theme.typography.body]}>
                         Registration Form
                       </Text>
                     </TouchableOpacity>
@@ -309,38 +295,14 @@ export default function ResourcesScreen() {
                       activeOpacity={0.7}
                     >
                       <Ionicons name="finger-print" size={16} color="#FFFFFF" />
-                      <Text style={[styles.quickActionText, { color: '#FFFFFF' }, theme.typography.footnote]}>
+                      <Text style={[styles.quickActionText, { color: '#FFFFFF' }, theme.typography.body]}>
                         LiveScan Form
                       </Text>
                     </TouchableOpacity>
                   </View>
                 )}
                 
-                {resource.id === 'useful-forms' && item.title === 'Firearms & Weapons Forms' && (
-                  <View style={styles.quickActions}>
-                    <TouchableOpacity
-                      style={[styles.quickActionButton, { backgroundColor: theme.colors.error }]}
-                      onPress={() => openFormLink('firearms')}
-                      activeOpacity={0.7}
-                    >
-                      <Ionicons name="shield" size={16} color="#FFFFFF" />
-                      <Text style={[styles.quickActionText, { color: '#FFFFFF' }, theme.typography.footnote]}>
-                        Firearms Form
-                      </Text>
-                    </TouchableOpacity>
-                    
-                    <TouchableOpacity
-                      style={[styles.quickActionButton, { backgroundColor: theme.colors.warning }]}
-                      onPress={() => openFormLink('baton')}
-                      activeOpacity={0.7}
-                    >
-                      <Ionicons name="fitness" size={16} color="#FFFFFF" />
-                      <Text style={[styles.quickActionText, { color: '#FFFFFF' }, theme.typography.footnote]}>
-                        Baton Form
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                )}
+
                 
                 {resource.id === 'useful-forms' && item.title === 'Important Documents & Guides' && (
                   <View style={styles.quickActions}>
@@ -350,7 +312,7 @@ export default function ResourcesScreen() {
                       activeOpacity={0.7}
                     >
                       <Ionicons name="book" size={16} color="#FFFFFF" />
-                      <Text style={[styles.quickActionText, { color: '#FFFFFF' }, theme.typography.footnote]}>
+                      <Text style={[styles.quickActionText, { color: '#FFFFFF' }, theme.typography.body]}>
                         Handbook
                       </Text>
                     </TouchableOpacity>
@@ -361,7 +323,7 @@ export default function ResourcesScreen() {
                       activeOpacity={0.7}
                     >
                       <Ionicons name="document-text" size={16} color="#FFFFFF" />
-                      <Text style={[styles.quickActionText, { color: '#FFFFFF' }, theme.typography.footnote]}>
+                      <Text style={[styles.quickActionText, { color: '#FFFFFF' }, theme.typography.body]}>
                         Regulations
                       </Text>
                     </TouchableOpacity>
@@ -378,48 +340,45 @@ export default function ResourcesScreen() {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.systemGroupedBackground }]} edges={['left', 'right', 'bottom']}>
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
+        
+        {/* Header Section */}
+        <View style={styles.header}>
+          <View style={styles.headerIconContainer}>
+            <Ionicons name="library" size={24} color="#4257B2" />
+          </View>
+          <Text style={[styles.headerTitle, { color: theme.colors.label }, theme.typography.sectionTitle]}>
+            BSIS Resources
+          </Text>
+          <Text style={[styles.headerSubtitle, { color: theme.colors.secondaryLabel }, theme.typography.body]}>
+            Essential information and forms for your security guard journey
+          </Text>
+        </View>
 
+        {/* Resources Sections */}
         <View style={styles.sectionsContainer}>
           {resources.map(renderResourceSection)}
         </View>
 
+        {/* Footer Section */}
         <View style={styles.footer}>
-          <Text style={[styles.footerText, { color: theme.colors.quaternaryLabel }, theme.typography.footnote]}>
-            For the most up-to-date information, always refer to the official BSIS website
-          </Text>
-          <View style={styles.footerButtons}>
-            <TouchableOpacity
-              style={styles.websiteButton}
-              onPress={() => openLink('https://www.bsis.ca.gov')}
-              activeOpacity={0.7}
-            >
-              <Ionicons name="globe" size={16} color={theme.colors.primary} />
-              <Text style={[styles.websiteButtonText, { color: theme.colors.primary }, theme.typography.footnote]}>
-                Visit BSIS Website
-              </Text>
-            </TouchableOpacity>
-            
-            <TouchableOpacity
-              style={styles.websiteButton}
-              onPress={() => openLink('https://www.bsis.ca.gov/forms_pubs/forms/')}
-              activeOpacity={0.7}
-            >
-              <Ionicons name="document-text" size={16} color={theme.colors.primary} />
-              <Text style={[styles.websiteButtonText, { color: theme.colors.primary }, theme.typography.footnote]}>
-                Download Forms
-              </Text>
-            </TouchableOpacity>
-            
-            <TouchableOpacity
-              style={styles.websiteButton}
-              onPress={() => openLink('https://www.bsis.ca.gov/forms_pubs/publications/')}
-              activeOpacity={0.7}
-            >
-              <Ionicons name="book" size={16} color={theme.colors.primary} />
-              <Text style={[styles.websiteButtonText, { color: theme.colors.primary }, theme.typography.footnote]}>
-                Publications
-              </Text>
-            </TouchableOpacity>
+          <View style={styles.footerCard}>
+            <Text style={[styles.footerText, { color: theme.colors.secondaryLabel }, theme.typography.body]}>
+              For the most up-to-date information, always refer to the official BSIS website
+            </Text>
+            <View style={styles.footerButtons}>
+              <TouchableOpacity
+                style={styles.websiteButton}
+                onPress={() => openLink('https://www.bsis.ca.gov')}
+                activeOpacity={0.7}
+              >
+                <Ionicons name="globe" size={18} color="#4257B2" />
+                <Text style={[styles.websiteButtonText, { color: '#4257B2' }, theme.typography.buttonText]}>
+                  Visit BSIS Website
+                </Text>
+              </TouchableOpacity>
+              
+
+            </View>
           </View>
         </View>
       </ScrollView>
@@ -436,29 +395,69 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
-    paddingBottom: 96,
-    paddingTop: 4,
+    paddingBottom: 40,
+    paddingTop: 16,
   },
+  
+  // Header Section
   header: {
     paddingHorizontal: 20,
-    paddingBottom: 24,
+    paddingVertical: 24,
+    backgroundColor: '#FFFFFF',
+    marginHorizontal: 16,
+    marginBottom: 20,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
+    alignItems: 'center',
+  },
+  headerIconContainer: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: 'rgba(66, 87, 178, 0.1)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 12,
+    shadowColor: '#4257B2',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 2,
   },
   headerTitle: {
     marginBottom: 8,
+    textAlign: 'center',
   },
   headerSubtitle: {
-    lineHeight: 22,
+    textAlign: 'center',
+    lineHeight: 20,
   },
+  
+  // Sections Container
   sectionsContainer: {
-    paddingHorizontal: 20,
-    gap: 20,
+    paddingHorizontal: 16,
+    gap: 16,
   },
   sectionWrapper: {
-    marginBottom: 20,
+    marginBottom: 16,
   },
+  
+  // Resource Cards
   resourceCard: {
     padding: 20,
-    borderRadius: 8,
+    borderRadius: 12,
     shadowColor: '#000000',
     shadowOffset: {
       width: 0,
@@ -468,7 +467,6 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 1,
     backgroundColor: '#FFFFFF',
-    marginBottom: 16,
     borderWidth: 1,
     borderColor: '#E5E7EB',
   },
@@ -477,9 +475,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   resourceIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 12,
+    width: 44,
+    height: 44,
+    borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 16,
@@ -490,13 +488,18 @@ const styles = StyleSheet.create({
   resourceTitle: {
     fontWeight: '600',
   },
+  
+  // Expanded Content
   expandedContent: {
     padding: 20,
-    borderRadius: 16,
-    marginTop: 8,
+    borderRadius: 8,
+    marginTop: 16,
+    backgroundColor: '#F8F9FA',
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
   },
   contentItem: {
-    marginBottom: 24,
+    marginBottom: 20,
   },
   contentTitle: {
     marginBottom: 8,
@@ -504,14 +507,16 @@ const styles = StyleSheet.create({
   },
   contentDescription: {
     marginBottom: 12,
-    lineHeight: 22,
-  },
-  detailsContainer: {
-    gap: 8,
-  },
-  detailText: {
     lineHeight: 20,
   },
+  detailsContainer: {
+    gap: 6,
+  },
+  detailText: {
+    lineHeight: 18,
+  },
+  
+  // Quick Actions
   quickActions: {
     flexDirection: 'row',
     gap: 8,
@@ -521,24 +526,49 @@ const styles = StyleSheet.create({
   quickActionButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 8,
-    paddingHorizontal: 12,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
     borderRadius: 8,
     minWidth: 120,
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 1,
   },
   quickActionText: {
-    marginLeft: 6,
+    marginLeft: 8,
     fontWeight: '500',
   },
+  
+  // Footer Section
   footer: {
-    paddingHorizontal: 20,
-    paddingTop: 24,
+    paddingHorizontal: 16,
+    paddingTop: 20,
+  },
+  footerCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 24,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
     alignItems: 'center',
   },
   footerText: {
     textAlign: 'center',
-    marginBottom: 16,
-    lineHeight: 18,
+    marginBottom: 20,
+    lineHeight: 20,
   },
   footerButtons: {
     flexDirection: 'row',
@@ -549,10 +579,20 @@ const styles = StyleSheet.create({
   websiteButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 8,
-    paddingHorizontal: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
     borderRadius: 8,
-    backgroundColor: 'rgba(0, 122, 255, 0.1)',
+    backgroundColor: 'rgba(66, 87, 178, 0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(66, 87, 178, 0.2)',
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
   },
   websiteButtonText: {
     marginLeft: 8,
