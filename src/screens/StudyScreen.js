@@ -284,7 +284,7 @@ Post-arrest procedures:
 • Document all actions taken
 • Cooperate with law enforcement investigation
 • Follow company reporting procedures`,
-    icon: 'handcuffs',
+    icon: 'lock-closed',
     color: '#FF9500',
     duration: '2 hours',
     category: 'Procedures'
