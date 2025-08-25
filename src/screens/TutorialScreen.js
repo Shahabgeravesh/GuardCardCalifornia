@@ -39,21 +39,6 @@ const TutorialScreen = ({ navigation, route }) => {
       image: null
     },
     {
-      id: 'training',
-      title: 'Training Centers',
-      subtitle: 'Find BSIS-approved facilities',
-      description: 'Locate training centers and LiveScan locations near you.',
-      icon: 'location',
-      gradient: ['#4257B2', '#6B7280'],
-      features: [
-        'Interactive map',
-        'Distance info',
-        'Contact details',
-        'LiveScan locations'
-      ],
-      image: null
-    },
-    {
       id: 'study-quiz',
       title: 'Study & Practice',
       subtitle: 'Learn and test your knowledge',
@@ -65,6 +50,21 @@ const TutorialScreen = ({ navigation, route }) => {
         'PDF viewer',
         'Practice questions',
         'Progress tracking'
+      ],
+      image: null
+    },
+    {
+      id: 'training',
+      title: 'Training Centers',
+      subtitle: 'Find BSIS-approved facilities',
+      description: 'Locate training centers and LiveScan locations near you.',
+      icon: 'location',
+      gradient: ['#4257B2', '#6B7280'],
+      features: [
+        'Interactive map',
+        'Distance info',
+        'Contact details',
+        'LiveScan locations'
       ],
       image: null
     },

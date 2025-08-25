@@ -275,9 +275,6 @@ export default function HomeScreen() {
 
                         {/* Quick Actions for each step */}
                         <View style={styles.stepQuickActions}>
-                          <Text style={[styles.quickActionsTitle, { color: theme.colors.label }, theme.typography.bodyLarge]}>
-                            Quick Actions
-                          </Text>
                           <View style={styles.quickActionsRow}>
                             {step.id === 1 && (
                               <>
@@ -293,7 +290,7 @@ export default function HomeScreen() {
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                   style={[styles.stepActionCard, { backgroundColor: theme.colors.systemBackground }, theme.shadows.sm]}
-                                  onPress={() => navigation.navigate('Quiz1')}
+                                  onPress={() => navigation.navigate('Quiz1', { resetToLanding: true })}
                                   activeOpacity={0.7}
                                 >
                                   <Ionicons name="help-circle" size={20} color={theme.colors.systemPurple} />
@@ -306,23 +303,23 @@ export default function HomeScreen() {
                             {step.id === 2 && (
                               <>
                                 <TouchableOpacity
-                                  style={[styles.stepActionCard, { backgroundColor: theme.colors.systemBackground }, theme.shadows.sm]}
+                                  style={[styles.stepActionCardBold, { backgroundColor: theme.colors.systemBackground }]}
                                   onPress={() => navigation.navigate('Resources')}
                                   activeOpacity={0.7}
                                 >
-                                  <Ionicons name="document-text" size={20} color={theme.colors.systemTeal} />
+                                  <Ionicons name="download" size={26} color={theme.colors.systemTeal} />
                                   <Text style={[styles.stepActionText, { color: theme.colors.label }, theme.typography.footnote]}>
-                                    Download Forms
+                                    Forms
                                   </Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity
-                                  style={[styles.stepActionCard, { backgroundColor: theme.colors.systemBackground }, theme.shadows.sm]}
+                                  style={[styles.stepActionCardBold, { backgroundColor: theme.colors.systemBackground }]}
                                   onPress={() => openBSISWebsite()}
                                   activeOpacity={0.7}
                                 >
-                                  <Ionicons name="globe" size={20} color={theme.colors.systemOrange} />
+                                  <Ionicons name="send" size={26} color={theme.colors.systemOrange} />
                                   <Text style={[styles.stepActionText, { color: theme.colors.label }, theme.typography.footnote]}>
-                                    Submit Application
+                                    Application
                                   </Text>
                                 </TouchableOpacity>
                               </>
@@ -646,7 +643,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     backgroundColor: '#FFFFFF',
     borderRadius: 8,
-    padding: 24,
+    padding: 12,
     borderWidth: 1,
     borderColor: '#E5E7EB',
     shadowColor: '#000000',
@@ -719,6 +716,7 @@ const styles = StyleSheet.create({
   stepDetails: {
     marginTop: 20,
     paddingTop: 20,
+    paddingHorizontal: 0,
     borderTopWidth: 1,
     borderTopColor: 'rgba(0, 0, 0, 0.1)',
   },
@@ -727,8 +725,8 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   stepImage: {
-    width: 200,
-    height: 120,
+    width: 280,
+    height: 168,
     borderRadius: 12,
     shadowColor: '#000000',
     shadowOffset: {
@@ -754,25 +752,40 @@ const styles = StyleSheet.create({
   },
   detailsSection: {
     marginBottom: 16,
+    paddingHorizontal: 0,
+    marginLeft: -24,
+    alignItems: 'flex-start',
   },
   detailsTitle: {
-    marginBottom: 8,
+    marginBottom: 12,
+    fontWeight: '900',
+    fontSize: 20,
+    textShadowColor: 'rgba(0, 0, 0, 0.1)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 1,
   },
   detailRow: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    marginBottom: 8,
+    marginBottom: 6,
+    paddingRight: 0,
+    marginLeft: -16,
+    justifyContent: 'flex-start',
   },
   detailDot: {
     width: 6,
     height: 6,
     borderRadius: 3,
     marginTop: 6,
-    marginRight: 12,
+    marginRight: 8,
+    flexShrink: 0,
   },
   detailText: {
     flex: 1,
-    lineHeight: 18,
+    lineHeight: 12,
+    paddingRight: 0,
+    textAlign: 'left',
+    fontSize: 12,
   },
   stepQuickActions: {
     marginTop: 20,
@@ -786,16 +799,22 @@ const styles = StyleSheet.create({
   },
   quickActionsRow: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
     gap: 8,
+    flexWrap: 'wrap',
+    marginLeft: -24,
   },
   stepActionCard: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 14,
     borderRadius: 12,
-    minHeight: 44,
+    minHeight: 48,
+    flex: 1,
+    maxWidth: '48%',
     backgroundColor: '#FFFFFF',
     shadowColor: '#000000',
     shadowOffset: {
@@ -809,8 +828,56 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(0, 0, 0, 0.05)',
   },
   stepActionText: {
-    marginLeft: 6,
-    fontWeight: '500',
+    marginLeft: 8,
+    fontWeight: '900',
+    fontSize: 20,
+    textShadowColor: 'rgba(0, 0, 0, 0.1)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 1,
+  },
+  stepActionCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    borderRadius: 12,
+    minHeight: 48,
+    flex: 1,
+    maxWidth: '48%',
+    backgroundColor: '#FFFFFF',
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 3,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.05)',
+  },
+  stepActionCardBold: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 18,
+    paddingVertical: 16,
+    borderRadius: 12,
+    minHeight: 52,
+    flex: 1,
+    maxWidth: '48%',
+    backgroundColor: '#FFFFFF',
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 5,
+    borderWidth: 2,
+    borderColor: 'rgba(0, 0, 0, 0.1)',
   },
   linksContainer: {
     gap: 12,

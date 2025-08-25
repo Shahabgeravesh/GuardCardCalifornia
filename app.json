@@ -8,10 +8,27 @@
     "scheme": "guardcardcalifornia",
     "userInterfaceStyle": "automatic",
     "main": "./index.js",
+    "sdkVersion": "53.0.0",
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "privacy": "public",
+    "description": "Complete guide to getting your California Security Guard Card. Find training centers, study materials, practice quizzes, and submit your application.",
+    "keywords": [
+      "security",
+      "guard",
+      "california",
+      "bsis",
+      "training",
+      "license",
+      "certification"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.guardcardcalifornia.app",
       "buildNumber": "1",
+      "appStoreUrl": "https://apps.apple.com/app/guardcard-california/id1234567890",
       "infoPlist": {
         "CFBundleDisplayName": "GuardCard California",
         "CFBundleName": "GuardCard California",
@@ -23,8 +40,19 @@
         "UIBackgroundModes": [],
         "NSLocationAlwaysAndWhenInUseUsageDescription": "This app uses location to find training centers near you and show them on the map.",
         "UIViewControllerBasedStatusBarAppearance": false,
-        "UISupportedInterfaceOrientations": ["portrait"],
-        "UISupportedInterfaceOrientations~ipad": ["portrait", "landscape-left", "landscape-right"]
+        "UISupportedInterfaceOrientations": [
+          "portrait",
+          "portrait"
+        ],
+        "UISupportedInterfaceOrientations~ipad": [
+          "portrait",
+          "landscape-left",
+          "landscape-right",
+          "portrait",
+          "landscape-left",
+          "landscape-right"
+        ],
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
@@ -53,6 +81,11 @@
           "backgroundColor": "#ffffff"
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "84dbaeea-96f2-4ac2-bd29-7d9117627b42"
+      }
+    }
   }
 }

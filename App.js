@@ -140,17 +140,6 @@ function TabNavigator() {
       />
 
       <Tab.Screen 
-        name="Training" 
-        component={TrainingCentersScreen} 
-        options={{ 
-          title: 'Training & LiveScan Centers',
-          tabBarLabel: 'Training',
-          tabBarAccessibilityLabel: 'Training tab. Find nearby BSIS-approved training centers and LiveScan locations.',
-          tabBarAccessibilityHint: 'Double tap to find training facilities and LiveScan centers near you.'
-        }}
-      />
-
-      <Tab.Screen 
         name="Study" 
         component={StudyScreen} 
         options={{ 
@@ -169,6 +158,17 @@ function TabNavigator() {
           tabBarLabel: 'Quiz',
           tabBarAccessibilityLabel: 'Quiz tab. Take the Power to Arrest training quiz.',
           tabBarAccessibilityHint: 'Double tap to take the PTA training quiz.'
+        }}
+      />
+
+      <Tab.Screen 
+        name="Training" 
+        component={TrainingCentersScreen} 
+        options={{ 
+          title: 'Training & LiveScan Centers',
+          tabBarLabel: 'Facilities',
+          tabBarAccessibilityLabel: 'Facilities tab. Find nearby BSIS-approved training centers and LiveScan locations.',
+          tabBarAccessibilityHint: 'Double tap to find training facilities and LiveScan centers near you.'
         }}
       />
       

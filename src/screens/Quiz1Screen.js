@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -433,11 +433,20 @@ const studyQuestions = [
   }
 ];
 
-const Quiz1Screen = () => {
+const Quiz1Screen = ({ route }) => {
   const theme = useTheme();
   const [quizStarted, setQuizStarted] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState([]);
+
+  // Reset to landing page if coming from Home screen
+  useEffect(() => {
+    if (route.params?.resetToLanding) {
+      setQuizStarted(false);
+      setCurrentQuestion(0);
+      setSelectedAnswers([]);
+    }
+  }, [route.params?.resetToLanding]);
 
   const startQuiz = () => {
     setQuizStarted(true);
