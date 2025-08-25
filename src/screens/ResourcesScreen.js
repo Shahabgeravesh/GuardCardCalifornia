@@ -23,10 +23,10 @@ export default function ResourcesScreen() {
       content: [
         {
           title: 'Exam Overview',
-          description: 'The BSIS security guard exam consists of 100 multiple-choice questions covering essential topics for security professionals.',
+          description: 'The BSIS Power to Arrest (PTA) exam consists of multiple-choice questions covering essential topics for security professionals.',
           details: [
             '• Passing score: 70% or higher',
-            '• Time limit: 2 hours',
+            '• Time limit: 1 hour',
             '• Topics: Legal basis, arrest procedures, use of force, liability, reporting',
             '• Computer-based testing available at approved locations'
           ]
@@ -73,17 +73,7 @@ export default function ResourcesScreen() {
             '• Hours: Monday-Friday, 8:00 AM - 5:00 PM'
           ]
         },
-        {
-          title: 'Online Services',
-          description: 'Access BSIS services online:',
-          details: [
-            '• Website: www.bsis.ca.gov',
-            '• Breeze System: breeze.ca.gov (Online applications)',
-            '• License verification: www.bsis.ca.gov/online_services/ccld/',
-            '• Forms and applications available online',
-            '• Live Scan locations: www.bsis.ca.gov/online_services/live_scan/'
-          ]
-        },
+
         {
           title: 'Email Support',
           description: 'Contact BSIS via email:',
@@ -94,15 +84,7 @@ export default function ResourcesScreen() {
             '• Response time: 3-5 business days'
           ]
         },
-        {
-          title: 'Emergency Contact',
-          description: 'For urgent matters:',
-          details: [
-            '• Emergency hotline: (916) 322-4000',
-            '• After hours: Leave message for next business day',
-            '• For immediate security threats: Contact local law enforcement'
-          ]
-        }
+
       ]
     },
     {
@@ -116,36 +98,11 @@ export default function ResourcesScreen() {
           title: 'Security Guard Registration Forms',
           description: 'Essential forms for initial security guard licensing:',
           details: [
-            '• Security Guard Registration Application (Form 31A-1) - Required for initial registration',
-            '• Live Scan Fingerprint Form (Form 31A-2) - Must be completed at approved LiveScan location',
-            '• Security Guard Registration Renewal (Form 31A-11) - Required every 2 years',
-            '• Address Change Notification (Form 31A-12) - Must be submitted within 30 days',
-            '• Name Change Request (Form 31A-13) - Required for legal name changes'
+            '• Security Guard Registration Application (Form 31A-1)',
+            '• Live Scan Fingerprint Form (Form 31A-2)'
           ]
         },
 
-        {
-          title: 'Training & Education Forms',
-          description: 'Forms related to training schools and continuing education:',
-          details: [
-            '• Training School Application (Form 31A-6) - For becoming a licensed training provider',
-            '• Training Certificate (Form 31A-7) - Proof of completed training',
-            '• Continuing Education Certificate (Form 31A-15) - Required for renewal',
-            '• Duplicate License Request (Form 31A-14) - For lost or damaged cards',
-            '• Training School Directory - List of approved training facilities'
-          ]
-        },
-        {
-          title: 'Important Documents & Guides',
-          description: 'Essential reference materials and instructions:',
-          details: [
-            '• Live Scan Fingerprint Instructions - Step-by-step process guide',
-            '• Security Guard Handbook - Complete guide to duties and responsibilities',
-            '• Use of Force Guidelines - Legal requirements and best practices',
-            '• Reporting Requirements Guide - When and how to report incidents',
-            '• BSIS Regulations - Complete regulatory requirements'
-          ]
-        }
       ]
     }
   ];
@@ -164,9 +121,7 @@ export default function ResourcesScreen() {
     const formUrls = {
       'registration': { url: 'https://www.bsis.ca.gov/forms_pubs/gappnew.pdf', title: 'Registration Form' },
       'livescan': { url: 'https://www.bsis.ca.gov/forms_pubs/livescan/guard.pdf', title: 'LiveScan Form' },
-      'renewal': { url: 'https://www.bsis.ca.gov/forms_pubs/forms/security_guard_renewal.shtml', title: 'Renewal Form' },
-      'handbook': { url: 'https://www.bsis.ca.gov/forms_pubs/publications/security_guard_handbook.shtml', title: 'Security Guard Handbook' },
-      'regulations': { url: 'https://www.bsis.ca.gov/forms_pubs/publications/regulations.shtml', title: 'BSIS Regulations' }
+      'renewal': { url: 'https://www.bsis.ca.gov/forms_pubs/forms/security_guard_renewal.shtml', title: 'Renewal Form' }
     };
     
     const formInfo = formUrls[formType];
