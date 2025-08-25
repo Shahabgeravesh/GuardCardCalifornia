@@ -55,56 +55,7 @@ export default function ResourcesScreen() {
         }
       ]
     },
-    {
-      id: 'additional-training',
-      title: 'Additional BSIS Training Required',
-      icon: 'school',
-      color: theme.colors.gradientSecondary,
-      gradientEnd: theme.colors.gradientSecondaryEnd,
-      content: [
-        {
-          title: 'Firearms Training (If Applicable)',
-          description: 'Additional training required for armed security positions:',
-          details: [
-            '• 14-hour firearms training course',
-            '• Live fire qualification',
-            '• Annual renewal required',
-            '• Must be completed at BSIS-approved facility',
-            '• Additional background check required'
-          ]
-        },
-        {
-          title: 'Baton Training (If Applicable)',
-          description: 'Training required for baton certification:',
-          details: [
-            '• 4-hour baton training course',
-            '• Practical demonstration required',
-            '• Annual renewal required',
-            '• Must be completed at BSIS-approved facility'
-          ]
-        },
-        {
-          title: 'Tear Gas Training (If Applicable)',
-          description: 'Training required for tear gas certification:',
-          details: [
-            '• 4-hour tear gas training course',
-            '• Practical demonstration required',
-            '• Annual renewal required',
-            '• Must be completed at BSIS-approved facility'
-          ]
-        },
-        {
-          title: 'Ongoing Training Requirements',
-          description: 'Continuing education requirements:',
-          details: [
-            '• 8 hours of continuing education every 2 years',
-            '• Must be completed before license renewal',
-            '• Topics must be BSIS-approved',
-            '• Keep certificates for 2 years'
-          ]
-        }
-      ]
-    },
+
     {
       id: 'contact-info',
       title: 'BSIS Contact Information',
